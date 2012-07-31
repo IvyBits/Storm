@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.Icyene.Storm.Hail.Hail;
 import com.github.Icyene.Storm.Lightning.Lightning;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
 import com.github.Icyene.Storm.Snow.Snow;
@@ -42,7 +41,7 @@ public class Storm extends JavaPlugin
 	    Snow.load(this);
 	    AcidRain.load(this);
 	    Lightning.load(this);
-	    Hail.load(this);
+	  //  Hail.load(this);
 	      
 	    //final World defWorld = Bukkit.getServer().getWorld("world"); 
 

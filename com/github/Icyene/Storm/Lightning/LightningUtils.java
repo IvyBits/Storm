@@ -22,7 +22,7 @@ public class LightningUtils {
 
     final Random rand = new Random();
     Storm storm;
-    public ArrayList<Integer> targetBlocks = new ArrayList<Integer>();//TODO: POPULATE ME! 
+    public static ArrayList<Integer> targetBlocks = new ArrayList<Integer>();//TODO: POPULATE ME! 
     
     public LightningUtils(Storm storm) {
     	this.storm = storm;
@@ -33,11 +33,9 @@ public class LightningUtils {
     	if(chunk != null){
     		Location loc = pickLightningRod(chunk);
     		if(loc != null){
-    			loc.getWorld().strikeLightning(loc);
     			return loc;
     		}
     	}
-    	oldLoc.getWorld().strikeLightning(oldLoc);
     	return oldLoc;
     }
     

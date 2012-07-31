@@ -1,38 +1,41 @@
 package com.github.Icyene.Storm.Meteors;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
-import org.bukkit.Location;
-import org.bukkit.Server;
+import org.bukkit.World;
 
-import org.bukkit.entity.Player;
+import org.bukkit.craftbukkit.CraftWorld;
+
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.Icyene.Storm.Meteors.Entities.CustomFireball;
+import com.github.Icyene.Storm.Meteors.Entities.EntityMeteor;
 
-
-
-
-public class MeteorSpawner extends JavaPlugin {
-    Logger log = Logger.getLogger("Minecraft");
-
-    public static Server server;
-    public int distance = 50;
-    public int radius = 10;
-    public int spawnChance = 8;
-    public int spawnDelay = 1200;
-    public int yield = 5;
-    // Materials left behind when meteor explodes. Left is the IDs, right is
-    // chance to spawn
-    public int[][] explosionMaterials = { { 49, 73, 14, 15, 56 },
-	    { 200, 48, 31, 64, 15 } };
-    // How far away from the explosion radius ores will be left behind
-    public int oreThreshold = 2;
-
+public class MeteorSpawner {
+ 
     
-    public static void makeMeteor(Player player) {
-	
-    }
+    //TODO MAKE LESS MASSIVELY HACKY
    
+
+    public void makeMeteor(World world, double x, double z)
+    {
+	Random rand = new Random();
+
+	net.minecraft.server.World meteoriteWorld = ((CraftWorld) world).getHandle(); //get world
+
+	EntityMeteor meteor = new EntityMeteor(meteoriteWorld);
+
+	meteor.setPosition(x, 190, z);
+	meteor.yaw = (float) rand.nextInt(360);
+	meteor.pitch = (float) -15;
+	meteor.yield = 5;
+	meteor.explosionPower = (float) 2.0;
+	meteor.impactPower = (float) 30.0;
+
+	meteoriteWorld.addEntity(meteor, SpawnReason.CUSTOM);
+
+	meteor.setDirection(meteor.getDirection().setY(-1));
+    }
 
 }

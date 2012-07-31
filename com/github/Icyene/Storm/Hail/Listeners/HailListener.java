@@ -7,12 +7,15 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
@@ -31,7 +34,7 @@ public class HailListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
-    public void acidicWeatherListener(WeatherChangeEvent event) {		
+    public void onWeatherChange(WeatherChangeEvent event) {		
 		World world = event.getWorld();
 		if(!AcidRain.acidicWorlds.get(world)){
 			if((event.toWeatherState())) {
@@ -41,7 +44,12 @@ public class HailListener implements Listener {
 			}
 		}	
     }
-
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onItemPickup(PlayerPickupItemEvent e){
+		
+	}
+	
 	@SuppressWarnings("static-access")
 	private void startHail(World world) {
 		affectedWorlds.add(world);
@@ -65,7 +73,9 @@ public class HailListener implements Listener {
 			    public void run() {
 			    	for(World w : affectedWorlds){
 			    		for(Location loc : getRandomBlocks(w)){
-			    			
+			    			Item tmp = w.dropItem(loc, new ItemStack(Material.SNOW_BALL));
+			    			tmp.setVelocity(1);
+			    			hailStones.add(w.dropItem(loc, new ItemStack(Material.SNOW_BALL)));
 			    		}
 			    	}
 			    }

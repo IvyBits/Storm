@@ -3,6 +3,8 @@ package com.github.Icyene.Storm.Lightning;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.server.Block;
+
 import org.bukkit.plugin.PluginManager;
 
 import com.github.Icyene.Storm.Storm;
@@ -25,6 +27,10 @@ public class Lightning {
     {
 	PluginManager pm = storm.getServer().getPluginManager();
 	pm.registerEvents(new StrikeListener(storm), storm);
+	LightningUtils.targetBlocks.add(Block.IRON_BLOCK.id);
+	LightningUtils.targetBlocks.add(Block.DIAMOND_BLOCK.id);
+	LightningUtils.targetBlocks.add(Block.GOLD_BLOCK.id);
+	LightningUtils.targetBlocks.add(Block.DIODE_ON.id);
 
     }
 

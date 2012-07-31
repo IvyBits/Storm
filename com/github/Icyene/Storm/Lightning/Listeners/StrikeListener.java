@@ -12,13 +12,13 @@ import com.github.Icyene.Storm.Lightning.Lightning;
 import com.github.Icyene.Storm.Lightning.LightningUtils;
 
 public class StrikeListener implements Listener {
-	
-	LightningUtils util;
-	Storm storm;
-	
+
+    LightningUtils util;
+    Storm storm;
+
     public StrikeListener(Storm storm) {
-    	this.util = new LightningUtils(storm);
-    	this.storm = storm;
+	this.util = new LightningUtils(storm);
+	this.storm = storm;
     }
 
     @EventHandler
@@ -26,16 +26,20 @@ public class StrikeListener implements Listener {
 
 	if (strike.isCancelled())
 	    return;
-	
-	strike.setCancelled(true);
-	
-	Location strikeLocation = util.hitMetal(strike.getLightning().getLocation());
 
+	strike.setCancelled(true);
+
+	Location strikeLocation = util.hitMetal(strike.getLightning()
+		.getLocation());
+	strike.getWorld().strikeLightning(strikeLocation);
 	util.damageNearbyPlayers(strikeLocation,
 		Lightning.strikeRadius);
 
 	util.melt(strikeLocation.getBlock());
 
+	strike.getWorld().strikeLightningEffect(strikeLocation);
+
     }
 
 }
+
