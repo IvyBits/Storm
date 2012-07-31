@@ -170,9 +170,9 @@ public class EntityMeteor extends EntityFireball {
 	setDirection(direction.getX(), direction.getY(), direction.getZ());
     }
 
-    public void setDirection(double d0, double d1, double d2)
+    public void setDirection(double x, double y, double z)
     {
-	super.setDirection(d0, d1, d2);
+	super.setDirection(x, y, z);
     }
 
     private int e;
