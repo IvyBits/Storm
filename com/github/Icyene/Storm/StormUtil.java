@@ -7,7 +7,7 @@ public class StormUtil
 {
     public static final Logger log = Logger.getLogger("Minecraft");
     static final String prefix = "[Storm] ";
-    
+
     public static void log(String logM)
     {
 	log.log(Level.INFO, prefix + logM);
@@ -18,5 +18,4 @@ public class StormUtil
 	log.log(level, prefix + logM);
     }
 
-      
 }

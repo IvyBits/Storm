@@ -19,6 +19,7 @@
 package com.github.Icyene.Storm.Snow.Insubstantial;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.*;
@@ -29,24 +30,28 @@ import org.bukkit.event.world.ChunkLoadEvent;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.Icyene.Storm.GlobalVariables;
+import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
+
 public class SnowThroughBlocks extends JavaPlugin implements Listener
 {
     static List<Integer> passThru = new ArrayList<Integer>();
 
-    int data = 0;
-
     public SnowThroughBlocks()
     {
-	passThru.add(18);
+	passThru = Arrays
+		.asList(GlobalVariables.storm_snow_insubstantial_passThroughBlockIds);
     }
 
     public void snowifyLoadedChunks()
     {
 	for (final World world : getServer().getWorlds())
 	{
-	    for (final Chunk chunk : world.getLoadedChunks())
-	    {
-		chunkSnowifier(chunk);
+	    if (MultiWorldManager.checkWorld(world, GlobalVariables.storm_snow_insubstantial_allowedWorlds)) {
+		for (final Chunk chunk : world.getLoadedChunks())
+		{
+		    chunkSnowifier(chunk);
+		}
 	    }
 	}
     }
@@ -54,15 +59,21 @@ public class SnowThroughBlocks extends JavaPlugin implements Listener
     @EventHandler(ignoreCancelled = true)
     public void chunkLoad(final ChunkLoadEvent event)
     {
-	chunkSnowifier(event.getChunk());
+	if (MultiWorldManager.checkWorld(event.getWorld(),
+		GlobalVariables.storm_snow_insubstantial_allowedWorlds)) {
+	    chunkSnowifier(event.getChunk());
+	}
     }
 
     @EventHandler(ignoreCancelled = true)
     public void snowForm(final BlockFormEvent event)
     {
-	if (event.getNewState().getTypeId() != 78)
-	    return;
-	placeSnow(event.getBlock());
+	if (MultiWorldManager.checkWorld(event.getBlock().getWorld(),
+		GlobalVariables.storm_snow_insubstantial_allowedWorlds)) {
+	    if (event.getNewState().getTypeId() != 78)
+		return;
+	    placeSnow(event.getBlock());
+	}
     }
 
     private void chunkSnowifier(final Chunk chunk)
@@ -170,8 +181,7 @@ public class SnowThroughBlocks extends JavaPlugin implements Listener
 	    case MELON_BLOCK:
 	    case NETHER_BRICK:
 	    case ENDER_STONE:
-	    case REDSTONE_LAMP_OFF:
-	    {
+	    case REDSTONE_LAMP_OFF: {
 		if (lastType == 0)
 		    chunk.getBlock(x, y + 1, z).setTypeId(78);
 		return;

@@ -1,6 +1,7 @@
 package com.github.Icyene.Storm.Lightning;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -9,20 +10,19 @@ import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 
 public class LightningUtils {
 
     final Random rand = new Random();
     Storm storm;
-    public static ArrayList<Integer> targetBlocks = new ArrayList<Integer>();//TODO: POPULATE ME! 
     
     public LightningUtils(Storm storm) {
     	this.storm = storm;
@@ -51,8 +51,8 @@ public class LightningUtils {
 	    if (p.getGameMode() != GameMode.CREATIVE) {
 			if (Storm.debug);
 			System.out.println("Damaging " + p.getName());		
-			p.damage((p.getHealth() - Lightning.strikeDamage));
-			p.sendMessage(ChatColor.GRAY + Lightning.strikeMessage);
+			p.damage((p.getHealth() - GlobalVariables.storm_lightning_damage_strikeDamage));
+			p.sendMessage(ChatColor.GRAY + GlobalVariables.storm_lightning_damage_strikeMessage);
 	    }
 	}
     }
@@ -71,35 +71,17 @@ public class LightningUtils {
 
 	return playerList;
     }
-
-    public void melt(Block toMelt)
-    {
-	switch (toMelt.getType())
-	{
-	case SAND: {
-		if(Storm.debug)
-	    System.out.println("Melting SAND: " + toMelt);
-	    toMelt.setType(Material.GLASS);
-
-	    break;
-	}
-	case ICE: {
-		if(Storm.debug)
-	    System.out.println("Melting ICE: " + toMelt);
-	    toMelt.setType(Material.WATER);
-
-	    break;
-	}
-
-	}
-    }
    
     public Location pickLightningRod(Chunk chunk)
     {
       ChunkSnapshot snapshot = chunk.getChunkSnapshot(true, false, false);
+      List<Location> list = findLightningRods(chunk);
+      if ((list != null) && (!list.isEmpty())) {
+    	  Location tmp = list.get(rand.nextInt(list.size()));
+          return tmp;
+      }
       Entity[] entities = chunk.getEntities();
-      if (entities != null)
-      {
+      if (entities != null){
         for (Entity entity : entities)
         {
           Location loc = entity.getLocation();
@@ -114,10 +96,6 @@ public class LightningUtils {
             return loc;
           }
         }
-      }
-      List<Location> list = findLightningRods(chunk);
-      if ((list != null) && (!list.isEmpty())) {
-          return list.get(rand.nextInt(list.size()));
       }
 
       return null;
@@ -136,14 +114,14 @@ public class LightningUtils {
           int y = snapshot.getHighestBlockYAt(x, z);
           int type = snapshot.getBlockTypeId(x, y, z);
 
-          if(targetBlocks.contains(type)) {
+          if(Arrays.asList(GlobalVariables.storm_lightning_attraction_blocks_attractors).contains(type)) {
             list.add(chunk.getBlock(x, y, z).getLocation()); } else {
             if (y <= 0) {
               continue;
             }
             y--; 
             type = snapshot.getBlockTypeId(x, y, z);
-            if(targetBlocks.contains(type)) {
+            if(Arrays.asList(GlobalVariables.storm_lightning_attraction_blocks_attractors).contains(type)) {
               list.add(chunk.getBlock(x, y, z).getLocation());
             }
           }

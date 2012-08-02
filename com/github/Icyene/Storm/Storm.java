@@ -23,7 +23,9 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.Icyene.Storm.Configuration.ReflectConfiguration;
 import com.github.Icyene.Storm.Lightning.Lightning;
+import com.github.Icyene.Storm.Meteors.MeteorSpawner;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
 import com.github.Icyene.Storm.Snow.Snow;
 
@@ -33,20 +35,24 @@ public class Storm extends JavaPlugin
     public final Logger log = Logger.getLogger("Minecraft");
     static final String prefix = "[Storm] ";
     public static boolean debug = true;
-    
+
     @Override
     public void onEnable()
     {
+	ReflectConfiguration.load(this, GlobalVariables.class);
+	
+	
+
 	try {
 	    Snow.load(this);
 	    AcidRain.load(this);
 	    Lightning.load(this);
-	  //  Hail.load(this);
-	      
-	    //final World defWorld = Bukkit.getServer().getWorld("world"); 
+	    MeteorSpawner.load(this);
+	    
+	    // Hail.load(this);
 
-	    
-	    
+	    // final World defWorld = Bukkit.getServer().getWorld("world");
+
 	} catch (Exception e) {
 
 	    e.printStackTrace();
@@ -60,26 +66,26 @@ public class Storm extends JavaPlugin
 	StormUtil.log(Level.SEVERE, prefix + crash + " Storm disabled.");
 	this.setEnabled(false);
     }
+
 }
 
-
-
-//final List<Triple<Double, Double, Double>> plots = PlotPoints.pointOnCircle(0.4, 1, 70, 1, 5, 0.2, 0.25, 8.0);
+// final List<Triple<Double, Double, Double>> plots =
+// PlotPoints.pointOnCircle(0.4, 1, 70, 1, 5, 0.2, 0.25, 8.0);
 //
-//Bukkit.getScheduler()
-//.scheduleSyncRepeatingTask(this,
-//	    new Runnable()
-//	    {
-//		@Override
-//		public void run()
-//		{
-//		    
-//		    for(Triple<Double, Double, Double> t : plots ) {
-//			
-//			PlotPoints.smoke(new Location(defWorld, t.x, t.y, t.z), 4, 200);
-//		
-//			
-//		    }
-//		    
-//		}
-//	    }, 0, 50);
+// Bukkit.getScheduler()
+// .scheduleSyncRepeatingTask(this,
+// new Runnable()
+// {
+// @Override
+// public void run()
+// {
+//
+// for(Triple<Double, Double, Double> t : plots ) {
+//
+// PlotPoints.smoke(new Location(defWorld, t.x, t.y, t.z), 4, 200);
+//
+//
+// }
+//
+// }
+// }, 0, 50);

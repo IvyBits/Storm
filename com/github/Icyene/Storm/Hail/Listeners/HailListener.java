@@ -21,76 +21,82 @@ import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
 
 public class HailListener implements Listener {
-	
-	Storm storm;
-	Random ran = new Random();
-	public ArrayList<World> affectedWorlds = new ArrayList<World>();
-	public ArrayList<Item> hailStones = new ArrayList<Item>();
-	long hailDelayTicks = 60;
-	
-	public HailListener(Storm storm) {
-		this.storm = storm;
-		run();
-	}
-	
-	@EventHandler(priority = EventPriority.LOW)
-    public void onWeatherChange(WeatherChangeEvent event) {		
-		World world = event.getWorld();
-		if(!AcidRain.acidicWorlds.get(world)){
-			if((event.toWeatherState())) {
-				startHail(world);
-			}else if(affectedWorlds.contains(world) && !event.toWeatherState()){
-				stopHail(world);
-			}
-		}	
+
+    Storm storm;
+    Random ran = new Random();
+    public ArrayList<World> affectedWorlds = new ArrayList<World>();
+    public ArrayList<Item> hailStones = new ArrayList<Item>();
+    long hailDelayTicks = 60;
+
+    public HailListener(Storm storm) {
+	this.storm = storm;
+	run();
     }
-	
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onItemPickup(PlayerPickupItemEvent e){
-		
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onWeatherChange(WeatherChangeEvent event) {
+	World world = event.getWorld();
+	if (!AcidRain.acidicWorlds.get(world)) {
+	    if ((event.toWeatherState())) {
+		startHail(world);
+	    } else if (affectedWorlds.contains(world)
+		    && !event.toWeatherState()) {
+		stopHail(world);
+	    }
 	}
-	
-	@SuppressWarnings("static-access")
-	private void startHail(World world) {
-		affectedWorlds.add(world);
-		if(storm.debug){
-			storm.log.info("Starting hail storm on " + world.getName());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onItemPickup(PlayerPickupItemEvent e) {
+
+    }
+
+    @SuppressWarnings("static-access")
+    private void startHail(World world) {
+	affectedWorlds.add(world);
+	if (storm.debug) {
+	    storm.log.info("Starting hail storm on " + world.getName());
+	}
+    }
+
+    @SuppressWarnings("static-access")
+    private void stopHail(World world) {
+	affectedWorlds.remove(world);
+	if (storm.debug) {
+	    storm.log.info("Stopping hail storm on " + world.getName());
+	}
+    }
+
+    private void run() {
+
+	Bukkit.getScheduler().scheduleSyncRepeatingTask(storm, new Runnable() {
+	    @Override
+	    public void run() {
+		for (World w : affectedWorlds) {
+		    for (Location loc : getRandomBlocks(w)) {
+			Item tmp = w.dropItem(loc, new ItemStack(
+				Material.SNOW_BALL));
+			//tmp.setVelocity(1);
+			hailStones.add(w.dropItem(loc, new ItemStack(
+				Material.SNOW_BALL)));
+		    }
 		}
+	    }
+
 	}
-	
-	@SuppressWarnings("static-access")
-	private void stopHail(World world) {
-		affectedWorlds.remove(world);
-		if(storm.debug){
-			storm.log.info("Stopping hail storm on " + world.getName());
-		}
+		, 0, hailDelayTicks);
+    }
+
+    private HashSet<Location> getRandomBlocks(World w) {
+	HashSet<Location> locs = new HashSet<Location>();
+	for (Chunk chunk : w.getLoadedChunks()) {
+	    for (int i = 1; i <= 4; i++) {
+		locs.add(chunk.getBlock(ran.nextInt(16), 255, ran.nextInt(16))
+			.getLocation());
+	    }
 	}
-	
-	private void run(){
-		
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(storm,new Runnable(){
-			    @Override
-			    public void run() {
-			    	for(World w : affectedWorlds){
-			    		for(Location loc : getRandomBlocks(w)){
-			    			Item tmp = w.dropItem(loc, new ItemStack(Material.SNOW_BALL));
-			    			tmp.setVelocity(1);
-			    			hailStones.add(w.dropItem(loc, new ItemStack(Material.SNOW_BALL)));
-			    		}
-			    	}
-			    }
-							
-			}
-			, 0, hailDelayTicks);
-	}
-	
-	private HashSet<Location> getRandomBlocks(World w){
-		HashSet<Location> locs = new HashSet<Location>();
-		for(Chunk chunk : w.getLoadedChunks()){
-			for(int i=1;i<=4;i++){
-				locs.add(chunk.getBlock(ran.nextInt(16), 255, ran.nextInt(16)).getLocation());
-			}
-		}
-		return locs;
-	}
+	return locs;
+    }
 }
+
+

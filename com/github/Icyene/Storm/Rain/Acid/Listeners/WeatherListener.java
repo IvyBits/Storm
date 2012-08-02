@@ -28,37 +28,40 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.potion.*;
 
 import com.github.Icyene.Storm.Storm;
+import com.github.Icyene.Storm.GlobalVariables;
+import com.github.Icyene.Storm.StormUtil;
+import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
+import com.github.Icyene.Storm.Transformations.BlockChanger;
 
 public class WeatherListener implements Listener
 {
-    public static String acidRainMessage = "Acid has started to fall from the sky!";
-    public static String acidRainPoisonMessage = "You have been damaged and poisoned by the acidic downfall!";
-    public static String acidRainHurtMessage = "You have been damaged by the acidic downfall!";
+    public static String acidRainMessage = GlobalVariables.storm_rain_acid_acidRainMessage;
+    public static String acidRainPoisonMessage = GlobalVariables.storm_rain_acid_damager_acidRainPoisonMessage;
+    public static String acidRainHurtMessage = GlobalVariables.storm_rain_acid_damager_acidRainHurtMessage;
 
-    public static int blocksPerChunk = 10;
-    public static int chunkDissolveChance = 100;
-    public static int chunksToCalculate = 4;
+    public static int blocksPerChunk = GlobalVariables.storm_rain_acid_dissolver_blocksPerChunk;
+    public static int chunkDissolveChance = GlobalVariables.storm_rain_acid_dissolver_chunkDissolveChance;
+    public static int chunksToCalculate = GlobalVariables.storm_rain_acid_dissolver_chunksToCalculate;
 
-    public static int acidRainChance = 100;
-    public static int deteriorationChance = 100;
-    public static int playerDamageChance = 100;
-    public static int playerHungerChance = 100;
-    public static int entityDamageChance = 100;
+    public static int acidRainChance = GlobalVariables.storm_rain_acid_acidRainChance;
+    public static int deteriorationChance = GlobalVariables.storm_rain_acid_dissolver_deteriorationChance;
+    public static int playerDamageChance = GlobalVariables.storm_rain_acid_damager_playerDamageChance;
+    public static int playerHungerChance = GlobalVariables.storm_rain_acid_damager_playerHungerChance;
 
     public static Biome deteriorationBiome;
     public static Chunk chunkToDissolve;
     public static Chunk[] loadedChunk;
 
-    public static int damagerDamage = 2;
-    public static int hungerTicks = 300;
-    public static boolean getHungry = true;
+    public static int damagerDamage = GlobalVariables.storm_rain_acid_damager_damagerDamage;
+    public static int hungerTicks = GlobalVariables.storm_rain_acid_damager_hungerTicks;
+    public static boolean getHungry = GlobalVariables.storm_rain_acid_damager_getHungry;
 
     public static int playerDamagerSchedulerId = -1;
-    public static int playerDamagerDelayTicks = 500;
+    public static int playerDamagerDelayTicks = GlobalVariables.storm_rain_acid_scheduler_playerDamagerDelayTicks;
 
     public static int dissolverSchedulerId = -1;
-    public static int dissolverDelayTicks = 100;
+    public static int dissolverDelayTicks = GlobalVariables.storm_rain_acid_scheduler_dissolverDelayTicks;
 
     public static final Random rand = new Random();
     public static Block toDeteriorate;
@@ -85,12 +88,21 @@ public class WeatherListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void acidicWeatherListener(WeatherChangeEvent event)
     {
+
+	if (event.isCancelled()) {
+	    return;
+	}
+
 	final World affectedWorld = event.getWorld();
 
-	if ((event.toWeatherState())) {
+	if (event.toWeatherState()) {// gets if its set to raining
 
 	    if (rand.nextInt(100) <= acidRainChance) {
 
+		if (!MultiWorldManager.checkWorld(affectedWorld,
+			GlobalVariables.storm_rain_acid_allowedWorlds)) {
+		    return;
+		}
 		AcidRain.acidicWorlds.put(affectedWorld, Boolean.TRUE);
 
 		storm.getServer().broadcastMessage(
@@ -101,6 +113,7 @@ public class WeatherListener implements Listener
 	    }
 	}
 	else if (!event.toWeatherState()) {
+
 	    AcidRain.acidicWorlds.put(affectedWorld, Boolean.FALSE);
 
 	    // Cancel damaging tasks for specific world
@@ -108,7 +121,7 @@ public class WeatherListener implements Listener
 		Bukkit.getScheduler().cancelTask(
 			dissolverMap.get(affectedWorld));
 		Bukkit.getScheduler().cancelTask(damagerMap.get(affectedWorld));
-		System.out.println("Cleared schedulers.");
+		StormUtil.log("Cleared schedulers.");
 	    } catch (Exception e) {
 
 	    }
@@ -194,7 +207,10 @@ public class WeatherListener implements Listener
 							System.out
 								.println("Pushed block to deteriorator: "
 									+ toDeteriorate);
-						    AcidRain.dissolve(toDeteriorate);
+						    BlockChanger
+							    .transform(
+								    toDeteriorate,
+								    GlobalVariables.storm_rain_acid_dissolver_blockTransformations);
 						}
 
 					    }
@@ -205,15 +221,6 @@ public class WeatherListener implements Listener
 			}, 0, dissolverDelayTicks);
 
 	dissolverMap.put(affectedWorld, dissolverSchedulerId);
-
-	// DISSOLVER END
-
-	/*
-	 * 
-	 * This thread takes charge of hurting players.
-	 * 
-	 * DAMAGER START
-	 */
 
 	playerDamagerSchedulerId = Bukkit.getScheduler()
 		.scheduleSyncRepeatingTask(storm,

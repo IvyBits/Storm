@@ -22,12 +22,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
 import org.bukkit.plugin.PluginManager;
 
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Rain.Acid.Listeners.FormListener;
 import com.github.Icyene.Storm.Rain.Acid.Listeners.GrowthListener;
@@ -36,13 +35,13 @@ import com.github.Icyene.Storm.Rain.Acid.Listeners.WeatherListener;
 public class AcidRain
 {
     public static HashMap<World, Boolean> acidicWorlds = new HashMap<World, Boolean>();
-    
+
     public static List<Biome> rainyBiomes,
 	    snowyBiomes = new ArrayList<Biome>();
 
-    public static boolean acidSnow = true;
-    public static boolean acidRain = true;
-    
+    public static boolean acidSnow = GlobalVariables.storm_rain_acid_acidRain;
+    public static boolean acidRain = GlobalVariables.storm_rain_acid_acidRain;
+
     public static void load(Storm storm)
     {
 	PluginManager pm = storm.getServer().getPluginManager();
@@ -62,48 +61,6 @@ public class AcidRain
 		Biome.FROZEN_RIVER, Biome.ICE_DESERT, Biome.ICE_MOUNTAINS,
 		Biome.ICE_PLAINS });
 
-    }
-
-    public static void dissolve(Block toDissolve)
-    {
-	switch (toDissolve.getType())
-	{
-	case GRASS:
-	{
-	    System.out.println("Dissolving GRASS: " + toDissolve);
-	    toDissolve.setType(Material.DIAMOND_BLOCK);
-
-	    break;
-	}
-	case LEAVES:
-	{
-	    System.out.println("Dissolving LEAVES: " + toDissolve);
-	    toDissolve.setType(Material.DIAMOND_BLOCK);
-
-	    break;
-	}
-	case LOG:
-	{
-	    System.out.println("Dissolving LOGS: " + toDissolve);
-	    toDissolve.setType(Material.DIAMOND_BLOCK);
-
-	    break;
-	}
-	case WHEAT:
-	{
-	    System.out.println("Dissolving WHEAT: " + toDissolve);
-	    toDissolve.setType(Material.DIAMOND_BLOCK);
-	    break;
-	}
-	case ICE:
-	{
-	    System.out.println("Dissolving ICE: " + toDissolve);
-	    toDissolve.setType(Material.DIAMOND_BLOCK);
-
-	    break;
-	}
-
-	}
-    }
+    }    
 
 }
