@@ -68,8 +68,14 @@ public class GlobalVariables {
 
     // Snow configuration
 
-    public static Integer[] storm_snow_insubstantial_passThroughBlockIds = new Integer[] { 18 };
+    
     public static String[] storm_snow_insubstantial_allowedWorlds = new String[] { "world" };
+    public static Integer[] storm_snow_insubstantial_passThroughBlockIds = new Integer[] { 18 };
+    
+    public static String[] storm_snow_piling_allowedWorlds = new String[] { "world" };
+    public static int storm_snow_piling_pilerDelayTicks = 30;
+    public static int storm_snow_piling_chunksToCalculate = 4;
+    public static int storm_snow_piling_blocksPerChunk = 3;
 
     // End snow configuration
 

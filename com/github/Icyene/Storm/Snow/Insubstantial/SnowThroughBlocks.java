@@ -56,16 +56,17 @@ public class SnowThroughBlocks extends JavaPlugin implements Listener
 	}
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void chunkLoad(final ChunkLoadEvent event)
     {
-	if (MultiWorldManager.checkWorld(event.getWorld(),
-		GlobalVariables.storm_snow_insubstantial_allowedWorlds)) {
-	    chunkSnowifier(event.getChunk());
+	if (!MultiWorldManager.checkWorld(event.getWorld(),
+		GlobalVariables.storm_snow_insubstantial_allowedWorlds)) {	
+	    return;
 	}
+	chunkSnowifier(event.getChunk()); //LINE 62
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void snowForm(final BlockFormEvent event)
     {
 	if (MultiWorldManager.checkWorld(event.getBlock().getWorld(),
@@ -78,7 +79,7 @@ public class SnowThroughBlocks extends JavaPlugin implements Listener
 
     private void chunkSnowifier(final Chunk chunk)
     {
-	final ChunkSnapshot snowifierChunk = chunk.getChunkSnapshot(true,
+	final ChunkSnapshot snowifierChunk = chunk.getChunkSnapshot(true, //line 81
 		false, false);
 
 	for (int x = 0; x < 16; x++)

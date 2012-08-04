@@ -32,6 +32,34 @@ import com.github.Icyene.Storm.Snow.Snow;
 public class Storm extends JavaPlugin
 {
 
+    /**
+     * @author Icyene, hammale
+     * 
+     *         WORKING:
+     * 
+     *         - Acid Rain - Meteors - Multiworld - Configuration
+     * 
+     *         NOT WORKING:
+     * 
+     *         - Lightning - Snow Under Trees: NPE
+     * 
+     *         TODO:
+     * 
+     *         - Puddles - Piling Snow - Hail
+     * 
+     * @specification
+     * 
+     *                Puddles will be formed with a modified acid-rain based
+     *                code, and their locations stored in a sqlite database, to
+     *                be dried (deleted) when the world stops raining
+     * 
+     * 
+     * @see That is all that will be included in V0.1, with perhaps Earthquakes.
+     * 
+     * 
+     * 
+     */
+
     public final Logger log = Logger.getLogger("Minecraft");
     static final String prefix = "[Storm] ";
     public static boolean debug = true;
@@ -40,15 +68,13 @@ public class Storm extends JavaPlugin
     public void onEnable()
     {
 	ReflectConfiguration.load(this, GlobalVariables.class);
-	
-	
 
 	try {
-	    Snow.load(this);
+	    // Snow.load(this);
 	    AcidRain.load(this);
-	    Lightning.load(this);
+	    // Lightning.load(this);
 	    MeteorSpawner.load(this);
-	    
+
 	    // Hail.load(this);
 
 	    // final World defWorld = Bukkit.getServer().getWorld("world");

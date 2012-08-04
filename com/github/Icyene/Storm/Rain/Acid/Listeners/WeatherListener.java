@@ -101,6 +101,7 @@ public class WeatherListener implements Listener
 
 		if (!MultiWorldManager.checkWorld(affectedWorld,
 			GlobalVariables.storm_rain_acid_allowedWorlds)) {
+		    System.out.println("World not enabled in config for acid rain.");
 		    return;
 		}
 		AcidRain.acidicWorlds.put(affectedWorld, Boolean.TRUE);
@@ -108,8 +109,7 @@ public class WeatherListener implements Listener
 		storm.getServer().broadcastMessage(
 			ChatColor.GRAY + acidRainMessage);
 
-		// Has acid rain
-
+		
 	    }
 	}
 	else if (!event.toWeatherState()) {
