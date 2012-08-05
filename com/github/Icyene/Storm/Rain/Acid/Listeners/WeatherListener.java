@@ -36,32 +36,32 @@ import com.github.Icyene.Storm.Transformations.BlockChanger;
 
 public class WeatherListener implements Listener
 {
-    public static String acidRainMessage = GlobalVariables.storm_rain_acid_acidRainMessage;
-    public static String acidRainPoisonMessage = GlobalVariables.storm_rain_acid_damager_acidRainPoisonMessage;
-    public static String acidRainHurtMessage = GlobalVariables.storm_rain_acid_damager_acidRainHurtMessage;
+    public static String acidRainMessage = GlobalVariables.rain_acid_acidRainMessage;
+    public static String acidRainPoisonMessage = GlobalVariables.rain_acid_damager_acidRainPoisonMessage;
+    public static String acidRainHurtMessage = GlobalVariables.rain_acid_damager_acidRainHurtMessage;
 
-    public static int blocksPerChunk = GlobalVariables.storm_rain_acid_dissolver_blocksPerChunk;
-    public static int chunkDissolveChance = GlobalVariables.storm_rain_acid_dissolver_chunkDissolveChance;
-    public static int chunksToCalculate = GlobalVariables.storm_rain_acid_dissolver_chunksToCalculate;
+    public static int blocksPerChunk = GlobalVariables.rain_acid_dissolver_blocksPerChunk;
+    public static int chunkDissolveChance = GlobalVariables.rain_acid_dissolver_chunkDissolveChance;
+    public static int chunksToCalculate = GlobalVariables.rain_acid_dissolver_chunksToCalculate;
 
-    public static int acidRainChance = GlobalVariables.storm_rain_acid_acidRainChance;
-    public static int deteriorationChance = GlobalVariables.storm_rain_acid_dissolver_deteriorationChance;
-    public static int playerDamageChance = GlobalVariables.storm_rain_acid_damager_playerDamageChance;
-    public static int playerHungerChance = GlobalVariables.storm_rain_acid_damager_playerHungerChance;
+    public static int acidRainChance = GlobalVariables.rain_acid_acidRainChance;
+    public static int deteriorationChance = GlobalVariables.rain_acid_dissolver_deteriorationChance;
+    public static int playerDamageChance = GlobalVariables.rain_acid_damager_playerDamageChance;
+    public static int playerHungerChance = GlobalVariables.rain_acid_damager_playerHungerChance;
 
     public static Biome deteriorationBiome;
     public static Chunk chunkToDissolve;
     public static Chunk[] loadedChunk;
 
-    public static int damagerDamage = GlobalVariables.storm_rain_acid_damager_damagerDamage;
-    public static int hungerTicks = GlobalVariables.storm_rain_acid_damager_hungerTicks;
-    public static boolean getHungry = GlobalVariables.storm_rain_acid_damager_getHungry;
+    public static int damagerDamage = GlobalVariables.rain_acid_damager_damagerDamage;
+    public static int hungerTicks = GlobalVariables.rain_acid_damager_hungerTicks;
+    public static boolean getHungry = GlobalVariables.rain_acid_damager_getHungry;
 
     public static int playerDamagerSchedulerId = -1;
-    public static int playerDamagerDelayTicks = GlobalVariables.storm_rain_acid_scheduler_playerDamagerDelayTicks;
+    public static int playerDamagerDelayTicks = GlobalVariables.rain_acid_scheduler_playerDamagerDelayTicks;
 
     public static int dissolverSchedulerId = -1;
-    public static int dissolverDelayTicks = GlobalVariables.storm_rain_acid_scheduler_dissolverDelayTicks;
+    public static int dissolverDelayTicks = GlobalVariables.rain_acid_scheduler_dissolverDelayTicks;
 
     public static final Random rand = new Random();
     public static Block toDeteriorate;
@@ -100,8 +100,9 @@ public class WeatherListener implements Listener
 	    if (rand.nextInt(100) <= acidRainChance) {
 
 		if (!MultiWorldManager.checkWorld(affectedWorld,
-			GlobalVariables.storm_rain_acid_allowedWorlds)) {
-		    System.out.println("World not enabled in config for acid rain.");
+			GlobalVariables.rain_acid_allowedWorlds)) {
+		    System.out
+			    .println("World not enabled in config for acid rain.");
 		    return;
 		}
 		AcidRain.acidicWorlds.put(affectedWorld, Boolean.TRUE);
@@ -109,7 +110,6 @@ public class WeatherListener implements Listener
 		storm.getServer().broadcastMessage(
 			ChatColor.GRAY + acidRainMessage);
 
-		
 	    }
 	}
 	else if (!event.toWeatherState()) {
@@ -186,6 +186,27 @@ public class WeatherListener implements Listener
 							    .contains(deteriorationBiome))
 					    {
 
+						if (rand.nextInt(100) < deteriorationChance)
+						{
+						    if (Storm.debug)
+							System.out
+								.println(toDeteriorate);
+
+						    if (toDeteriorate
+							    .getTypeId() != 0)
+						    {
+							if (Storm.debug)
+							    System.out
+								    .println("Pushed block to deteriorator: "
+									    + toDeteriorate);
+							BlockChanger
+								.transform(
+									toDeteriorate,
+									GlobalVariables.rain_acid_dissolver_blockTransformations);
+						    }
+
+						}
+
 					    } else
 					    {
 						if (Storm.debug)
@@ -194,26 +215,6 @@ public class WeatherListener implements Listener
 						return;
 					    }
 
-					    if (rand.nextInt(100) < deteriorationChance)
-					    {
-						if (Storm.debug)
-						    System.out
-							    .println(toDeteriorate);
-
-						if (toDeteriorate
-							.getTypeId() != 0)
-						{
-						    if (Storm.debug)
-							System.out
-								.println("Pushed block to deteriorator: "
-									+ toDeteriorate);
-						    BlockChanger
-							    .transform(
-								    toDeteriorate,
-								    GlobalVariables.storm_rain_acid_dissolver_blockTransformations);
-						}
-
-					    }
 					}
 				    }
 				}

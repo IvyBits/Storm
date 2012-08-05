@@ -18,15 +18,7 @@ public class EntityMeteor extends EntityFireball {
 
     public EntityMeteor(World world) {
 	super(world);
-	e = -1;
-        f = -1;
-        g = -1;
-        h = 0;
-        i = false;
-        an = 0;
-        yield = 1.0F;
-        isIncendiary = true;
-        a(1.0F, 1.0F);
+	a(1.0F, 1.0F);
     }
 
     @Override
@@ -36,7 +28,7 @@ public class EntityMeteor extends EntityFireball {
 	final Fireball fireball = (Fireball) this.getBukkitEntity();
 
 	fireball.getWorld().createExplosion(fireball.getLocation(),
-		GlobalVariables.storm_meteorites_meteor_trailPower);
+		GlobalVariables.meteorites_meteor_trailPower);
 	System.out.println("Exploding trail.");
 
 	super.h_();
@@ -62,13 +54,13 @@ public class EntityMeteor extends EntityFireball {
 			locX,
 			locY,
 			locZ,
-			GlobalVariables.storm_meteorites_meteor_impactExplosionRadius,
+			GlobalVariables.meteorites_meteor_impactExplosionRadius,
 			event.getFire());
 
 		Bukkit.getServer()
 			.broadcastMessage(
 				ChatColor.GRAY
-					+ GlobalVariables.storm_meteorites_meteor_impactMessage
+					+ GlobalVariables.meteorites_meteor_impactMessage
 						.replace("<x>", locX + "")
 						.replace("<y>", locY + "")
 						.replace("<z>", locZ + ""));
@@ -81,7 +73,7 @@ public class EntityMeteor extends EntityFireball {
     // Brightness
     public float c(float f)
     {
-	return GlobalVariables.storm_meteorites_meteor_brightness;
+	return GlobalVariables.meteorites_meteor_brightness;
     }
 
     public Vector getDirection() {
@@ -103,14 +95,4 @@ public class EntityMeteor extends EntityFireball {
     public double dirZ;
     public float yield;
     public boolean isIncendiary;
-    private int e;
-    private int f;
-    private int g;
-    private int h;
-    private boolean i;
-    private int j;
-    private int an;
-
-    
-    
 }

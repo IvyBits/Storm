@@ -11,9 +11,9 @@ public class MultiWorldManager {
     public static boolean checkWorld(World world, String[] worlds) {
    	System.out.println(world.getName());
    	System.out.println(Arrays
-   		.asList(GlobalVariables.storm_lightning_allowedWorlds));
+   		.asList(GlobalVariables.lightning_allowedWorlds));
 
-   	if (Arrays.asList(GlobalVariables.storm_lightning_allowedWorlds)
+   	if (Arrays.asList(GlobalVariables.lightning_allowedWorlds)
    		.contains(world.getName())) {
    	    return true;
    	} else {

@@ -51,8 +51,8 @@ public class LightningUtils {
 	    if (p.getGameMode() != GameMode.CREATIVE) {
 			if (Storm.debug);
 			System.out.println("Damaging " + p.getName());		
-			p.damage((p.getHealth() - GlobalVariables.storm_lightning_damage_strikeDamage));
-			p.sendMessage(ChatColor.GRAY + GlobalVariables.storm_lightning_damage_strikeMessage);
+			p.damage((p.getHealth() - GlobalVariables.lightning_damage_strikeDamage));
+			p.sendMessage(ChatColor.GRAY + GlobalVariables.lightning_damage_strikeMessage);
 	    }
 	}
     }
@@ -114,14 +114,14 @@ public class LightningUtils {
           int y = snapshot.getHighestBlockYAt(x, z);
           int type = snapshot.getBlockTypeId(x, y, z);
 
-          if(Arrays.asList(GlobalVariables.storm_lightning_attraction_blocks_attractors).contains(type)) {
+          if(Arrays.asList(GlobalVariables.lightning_attraction_blocks_attractors).contains(type)) {
             list.add(chunk.getBlock(x, y, z).getLocation()); } else {
             if (y <= 0) {
               continue;
             }
             y--; 
             type = snapshot.getBlockTypeId(x, y, z);
-            if(Arrays.asList(GlobalVariables.storm_lightning_attraction_blocks_attractors).contains(type)) {
+            if(Arrays.asList(GlobalVariables.lightning_attraction_blocks_attractors).contains(type)) {
               list.add(chunk.getBlock(x, y, z).getLocation());
             }
           }

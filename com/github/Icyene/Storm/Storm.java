@@ -67,13 +67,13 @@ public class Storm extends JavaPlugin
     @Override
     public void onEnable()
     {
-	ReflectConfiguration.load(this, GlobalVariables.class);
+	ReflectConfiguration.load(this, GlobalVariables.class, "storm_");
 
 	try {
-	    // Snow.load(this);
+	   // Snow.load(this);
 	    AcidRain.load(this);
 	    // Lightning.load(this);
-	    MeteorSpawner.load(this);
+	  //  MeteorSpawner.load(this);
 
 	    // Hail.load(this);
 

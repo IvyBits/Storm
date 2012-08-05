@@ -33,18 +33,18 @@ public class StrikeListener implements Listener {
 
 	if (strike.isCancelled())
 	    return;
-	if (MultiWorldManager.checkWorld(strike.getWorld(), GlobalVariables.storm_lightning_allowedWorlds)) {
+	if (MultiWorldManager.checkWorld(strike.getWorld(), GlobalVariables.lightning_allowedWorlds)) {
 	    return;
 	}
-	if(GlobalVariables.storm_lightning_attraction_blocks_attractionChance >= 100 
-    		|| ran.nextInt((int) (1000-GlobalVariables.storm_lightning_attraction_blocks_attractionChance*10)) == 0){
+	if(GlobalVariables.lightning_attraction_blocks_attractionChance >= 100 
+    		|| ran.nextInt((int) (1000-GlobalVariables.lightning_attraction_blocks_attractionChance*10)) == 0){
 		Location strikeLocation = util.hitMetal(strike.getLightning()
 			.getLocation());
 		strike.getLightning().teleport(strikeLocation);
 		util.damageNearbyPlayers(strikeLocation,
-			GlobalVariables.storm_lightning_damage_strikeRadius);
+			GlobalVariables.lightning_damage_strikeRadius);
 	
-		 BlockChanger.transform(strikeLocation.getBlock(), GlobalVariables.storm_lightning_melter_blockTransformations);
+		 BlockChanger.transform(strikeLocation.getBlock(), GlobalVariables.lightning_melter_blockTransformations);
 	}else{
 		return;
 	}

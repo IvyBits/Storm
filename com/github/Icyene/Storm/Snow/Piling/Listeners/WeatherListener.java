@@ -39,7 +39,7 @@ public class WeatherListener {
 
 	
 	    if (!MultiWorldManager.checkWorld(affectedWorld,
-			GlobalVariables.storm_snow_piling_allowedWorlds)) {
+			GlobalVariables.snow_piling_allowedWorlds)) {
 		    System.out.println("World not enabled in config for snow pileup.");
 		    return;
 		}
