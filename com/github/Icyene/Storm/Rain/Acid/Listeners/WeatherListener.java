@@ -107,8 +107,7 @@ public class WeatherListener implements Listener
 		}
 		AcidRain.acidicWorlds.put(affectedWorld, Boolean.TRUE);
 
-		storm.getServer().broadcastMessage(
-			ChatColor.GRAY + acidRainMessage);
+		StormUtil.broadcast(acidRainMessage);
 
 	    }
 	}
@@ -269,13 +268,11 @@ public class WeatherListener implements Listener
 					    damagee.addPotionEffect(new PotionEffect(
 						    PotionEffectType.HUNGER,
 						    hungerTicks, 1));
-					    damagee.sendMessage(ChatColor.GRAY
-						    + acidRainPoisonMessage);
+					    StormUtil.message(damagee, acidRainPoisonMessage);
 
 					} else
 					{
-					    damagee.sendMessage(ChatColor.GRAY
-						    + acidRainHurtMessage);
+					    StormUtil.message(damagee, acidRainHurtMessage);
 					}
 
 				    }

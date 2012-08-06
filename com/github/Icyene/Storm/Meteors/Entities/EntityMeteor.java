@@ -11,6 +11,7 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.util.Vector;
 
 import com.github.Icyene.Storm.GlobalVariables;
+import com.github.Icyene.Storm.StormUtil;
 
 import net.minecraft.server.*;
 
@@ -57,10 +58,7 @@ public class EntityMeteor extends EntityFireball {
 			GlobalVariables.meteorites_meteor_impactExplosionRadius,
 			event.getFire());
 
-		Bukkit.getServer()
-			.broadcastMessage(
-				ChatColor.GRAY
-					+ GlobalVariables.meteorites_meteor_impactMessage
+		StormUtil.broadcast(GlobalVariables.meteorites_meteor_impactMessage
 						.replace("<x>", locX + "")
 						.replace("<y>", locY + "")
 						.replace("<z>", locZ + ""));

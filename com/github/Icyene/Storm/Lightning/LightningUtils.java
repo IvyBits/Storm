@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 
 import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
+import com.github.Icyene.Storm.StormUtil;
 
 public class LightningUtils {
 
@@ -52,7 +53,7 @@ public class LightningUtils {
 			if (Storm.debug);
 			System.out.println("Damaging " + p.getName());		
 			p.damage((p.getHealth() - GlobalVariables.lightning_damage_strikeDamage));
-			p.sendMessage(ChatColor.GRAY + GlobalVariables.lightning_damage_strikeMessage);
+			StormUtil.message(p, GlobalVariables.lightning_damage_strikeMessage);
 	    }
 	}
     }
