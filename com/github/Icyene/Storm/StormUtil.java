@@ -1,15 +1,12 @@
 package com.github.Icyene.Storm;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+
 
 public class StormUtil
 {
@@ -37,27 +34,4 @@ public class StormUtil
     public static String parseColors(String msg) {
 	return ChatColor.translateAlternateColorCodes('&', msg);
     }
-
-    public static void addConfigToStats(final Plugin plugin,
-	    Class<?> toConfigurate, String base) {
-
-	for (Field field : toConfigurate.getDeclaredFields()) {
-	    final int mod = field.getModifiers();
-	    if (Modifier.isStatic(mod)
-		    && !Modifier.isTransient(mod) && !Modifier.isVolatile(mod)) {
-
-		final String path = field.getName().replaceAll("_", ".");
-		final String basePath = base + path;
-		try {
-
-		    Storm.stats.add(basePath + ": " + field.get(null));
-
-		} catch (Exception e) {
-
-		}
-	    }
-	}
-
-    }
-
 }

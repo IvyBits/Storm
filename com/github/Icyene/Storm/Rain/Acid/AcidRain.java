@@ -44,6 +44,7 @@ public class AcidRain
 
     public static void load(Storm storm)
     {
+	
 	PluginManager pm = storm.getServer().getPluginManager();
 	pm.registerEvents(new WeatherListener(storm), storm);
 	pm.registerEvents(new GrowthListener(), storm);

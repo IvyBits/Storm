@@ -4,6 +4,12 @@ import net.minecraft.server.Block;
 
 public class GlobalVariables {
 
+    public static boolean rain_acid_enabled = true;
+    public static boolean lightning_enabled = true;
+    public static boolean meteorites_meteor_enabled = true;
+    public static boolean snow_insubstantial_enabled = true;
+    public static boolean snow_piling_enabled = true;
+    
     public static String[] rain_acid_allowedWorlds = new String[] { "world" };
     public static int rain_acid_acidRainChance = 100;
     public static boolean rain_acid_acidRain = true;
