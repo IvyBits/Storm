@@ -39,7 +39,7 @@ public class AcidRain
     public static List<Biome> rainyBiomes,
 	    snowyBiomes = new ArrayList<Biome>();
 
-    public static boolean acidSnow = GlobalVariables.rain_acid_acidRain;
+    public static boolean acidSnow = GlobalVariables.rain_acid_acidSnow;
     public static boolean acidRain = GlobalVariables.rain_acid_acidRain;
 
     public static void load(Storm storm)

@@ -10,7 +10,6 @@ public class GlobalVariables {
 
     // TODO Put a list/Int[] of all children of
 
-
     public static String[] rain_acid_allowedWorlds = new String[] { "world" };
     public static int rain_acid_acidRainChance = 100;
     public static boolean rain_acid_acidRain = true;
@@ -27,10 +26,7 @@ public class GlobalVariables {
     public static String rain_acid_damager_acidRainHurtMessage = "You have been damaged by the acidic downfall!";
 
     public static Integer[][] rain_acid_dissolver_blockTransformations = new Integer[][] {
-	    new Integer[] {
-		    18, 0 }, new Integer[] {
-		    2, 3 }, new Integer[] {
-		    1, 4 } };
+	    { 18, 0 }, { 2, 3 }, { 1, 4 } };
 
     public static int rain_acid_dissolver_chunkDissolveChance = 100;
     public static int rain_acid_dissolver_chunksToCalculate = 4;
@@ -44,7 +40,7 @@ public class GlobalVariables {
     // end acid rain config
 
     // Lightning
- 
+
     public static String[] lightning_allowedWorlds = new String[] { "world" };
     public static int lightning_damage_strikeDamage = 5;
     public static int lightning_damage_strikeRadius = 10;
@@ -52,8 +48,7 @@ public class GlobalVariables {
 
     public static int lightning_attraction_blocks_attractionChance = 100;
 
-    public static Integer[] lightning_attraction_blocks_attractors = new Integer[] {
-	    Block.IRON_BLOCK.id };
+    public static Integer[] lightning_attraction_blocks_attractors = new Integer[] {Block.IRON_BLOCK.id};
 
     // public static Integer[]
     // lightning_melter_blockTransformations_sandToGlass = new Integer[] {
@@ -61,8 +56,7 @@ public class GlobalVariables {
     // public static Integer[]
     // lightning_melter_blockTransformations_glassToAir = new Integer[] {
     // 20, 0 };
-    public static Integer[][] lightning_melter_blockTransformations = new Integer[][] {
-	    new Integer[] { 12, 20 }, new Integer[] { 20, 0 } };
+    public static Integer[][] lightning_melter_blockTransformations = new Integer[][] {{ 12, 20 },  { 20, 0 } };
 
     // TODO Add block transformations in config, add player attraction
 
@@ -70,10 +64,9 @@ public class GlobalVariables {
 
     // Snow configuration
 
-
     public static String[] snow_insubstantial_allowedWorlds = new String[] { "world" };
     public static Integer[] snow_insubstantial_passThroughBlockIds = new Integer[] { 18 };
-    
+
     public boolean snow_piling = true;
     public static String[] snow_piling_allowedWorlds = new String[] { "world" };
     public static int snow_piling_pilerDelayTicks = 30;
@@ -83,7 +76,7 @@ public class GlobalVariables {
     // End snow configuration
 
     // Meteor config
-   
+
     public static String[] meteorites_meteor_allowedWorlds = new String[] { "world" };
     public static float meteorites_meteor_trailPower = 3.0F;
     public static float meteorites_meteor_impactExplosionRadius = 30;
@@ -93,7 +86,7 @@ public class GlobalVariables {
     public static float meteorites_meteor_pitch = -10;
     public static float meteorites_meteor_brightness = 50;
     public static float meteorites_meteor_accelarationY = -1;
-    public static float meteorites_meteor_yield = 0;
+    public static float meteorites_meteor_yield = 0.1F;
     public static String meteorites_meteor_impactMessage = "A meteor has exploded at <x>, <y>, <z>.";
 
 }

@@ -41,7 +41,7 @@ public class Storm extends JavaPlugin
      * 
      *         NOT WORKING:
      * 
-     *         - Lightning - Snow Under Trees: NPE
+     *         - Lightning - Snow Under Trees: Fixed as of dev build #2292
      * 
      *         TODO:
      * 
