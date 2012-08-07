@@ -18,6 +18,9 @@
 
 package com.github.Icyene.Storm;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,17 +66,45 @@ public class Storm extends JavaPlugin
     public final Logger log = Logger.getLogger("Minecraft");
     static final String prefix = "[Storm] ";
     public static boolean debug = true;
+    
+   public static List<String> stats = new ArrayList<String>();
 
     @Override
     public void onEnable()
     {
 	ReflectConfiguration.load(this, GlobalVariables.class, "storm_");
+	StormUtil.addConfigToStats(this, GlobalVariables.class, "storm_");
+	
+	// Stats
+	
+	try {
+	    Metrics metrics = new Metrics(this);
+	    // Custom plotter for each item
+	    for (int i = 0; i < stats.size(); i++) {
+		final String name = stats.get(i);
+		metrics.addCustomData(new Metrics.Plotter() {
+		    @Override
+		    public String getColumnName() {
+			return name;
+		    }
+
+		    @Override
+		    public int getValue() {
+			return 1;
+		    }
+		});
+	    }
+	    metrics.start();
+	    StormUtil.addConfigToStats(this, GlobalVariables.class, "storm_");
+	} catch (IOException e) {
+	
+	}
 
 	try {
-	   // Snow.load(this);
+	    // Snow.load(this);
 	    AcidRain.load(this);
 	    // Lightning.load(this);
-	  //  MeteorSpawner.load(this);
+	    // MeteorSpawner.load(this);
 
 	    // Hail.load(this);
 
