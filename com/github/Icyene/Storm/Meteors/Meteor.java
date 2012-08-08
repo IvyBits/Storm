@@ -3,8 +3,6 @@ package com.github.Icyene.Storm.Meteors;
 import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.logging.Level;
-
-import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.StormUtil;
 import com.github.Icyene.Storm.Meteors.Entities.EntityMeteor;
@@ -18,13 +16,6 @@ public class Meteor {
 
     public static void load(Storm sStorm) {
 	storm = sStorm;
-	
-	if(!GlobalVariables.snow_insubstantial_enabled) {  
-	    return;
-	}
-	
-	 Storm.stats.add("Meteors");
-	
 	try {
 
 	    Method a = net.minecraft.server.EntityTypes.class
@@ -37,9 +28,6 @@ public class Meteor {
 	} catch (Exception e) {
 	    StormUtil.log(Level.SEVERE, "Failed to create meteor entity!");
 	}
-	
-	 MeteorSpawner.load(sStorm);
-	
     }
 
 }

@@ -44,7 +44,6 @@ public class AcidRain
 
     public static void load(Storm storm)
     {
-	
 	PluginManager pm = storm.getServer().getPluginManager();
 	pm.registerEvents(new WeatherListener(storm), storm);
 	pm.registerEvents(new GrowthListener(), storm);
@@ -54,12 +53,12 @@ public class AcidRain
 	{ Biome.EXTREME_HILLS, Biome.FOREST, Biome.FOREST_HILLS, Biome.JUNGLE,
 		Biome.JUNGLE_HILLS, Biome.MUSHROOM_ISLAND,
 		Biome.MUSHROOM_SHORE,
-		Biome.PLAINS, Biome.OCEAN, Biome.SEASONAL_FOREST, Biome.RIVER,
+		Biome.PLAINS, Biome.OCEAN, Biome.RIVER,
 		Biome.SWAMPLAND, Biome.SKY, Biome.SMALL_MOUNTAINS });
 
 	snowyBiomes = Arrays.asList(new Biome[]
-	{ Biome.TAIGA_HILLS, Biome.TAIGA, Biome.TUNDRA, Biome.FROZEN_OCEAN,
-		Biome.FROZEN_RIVER, Biome.ICE_DESERT, Biome.ICE_MOUNTAINS,
+	{ Biome.TAIGA_HILLS, Biome.TAIGA, Biome.FROZEN_OCEAN,
+		Biome.FROZEN_RIVER, Biome.ICE_MOUNTAINS,
 		Biome.ICE_PLAINS });
 
     }    

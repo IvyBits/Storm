@@ -28,8 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.Icyene.Storm.Configuration.ReflectConfiguration;
 import com.github.Icyene.Storm.Lightning.Lightning;
-import com.github.Icyene.Storm.Rain.Rain;
-import com.github.Icyene.Storm.Snow.Snow;
+import com.github.Icyene.Storm.Rain.Acid.AcidRain;
 
 public class Storm extends JavaPlugin
 {
@@ -72,7 +71,7 @@ public class Storm extends JavaPlugin
     public void onEnable()
     {
 	ReflectConfiguration.load(this, GlobalVariables.class, "storm_");
-
+	StormUtil.addConfigToStats(this, GlobalVariables.class, "storm_");
 	
 	// Stats
 	
@@ -94,18 +93,18 @@ public class Storm extends JavaPlugin
 		});
 	    }
 	    metrics.start();
-	    
+	    StormUtil.addConfigToStats(this, GlobalVariables.class, "storm_");
 	} catch (IOException e) {
 	
 	}
 
 	try {
-	    Snow.load(this);
-	    Rain.load(this);
+	    // Snow.load(this);
+	    AcidRain.load(this);
 	    Lightning.load(this);
-	   
+	    // MeteorSpawner.load(this);
 
-	    //Hail.load(this);
+	    // Hail.load(this);
 
 	    // final World defWorld = Bukkit.getServer().getWorld("world");
 
