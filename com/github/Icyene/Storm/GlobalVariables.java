@@ -1,6 +1,7 @@
 package com.github.Icyene.Storm;
 
 import net.minecraft.server.Block;
+import net.minecraft.server.Item;
 
 public class GlobalVariables {
 
@@ -29,6 +30,8 @@ public class GlobalVariables {
     public static String lightning_damage_strikeMessage = "You were zapped by lightning. Ouch!";
     public static int lightning_attraction_blocks_attractionChance = 100;
     public static Integer[] lightning_attraction_blocks_attractors = new Integer[] {Block.IRON_BLOCK.id};
+    public static int lightning_attraction_players_attractionChance = 100;
+    public static Integer[] lightning_attraction_players_attractors = new Integer[] {Item.IRON_AXE.id};
     public static Integer[][] lightning_melter_blockTransformations = new Integer[][] {{ 12, 20 },  { 20, 0 } };
     public static String[] snow_insubstantial_allowedWorlds = new String[] { "world" };
     public static Integer[] snow_insubstantial_passThroughBlockIds = new Integer[] { 18 };
