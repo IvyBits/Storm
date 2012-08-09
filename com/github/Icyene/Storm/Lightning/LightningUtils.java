@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
@@ -38,6 +39,22 @@ public class LightningUtils {
     	}
     	return oldLoc;
     }
+    
+	public Location hitPlayers(Location oldLoc) {
+		Location chunk = pickChunk(oldLoc.getWorld()).getBlock(8,255,8).getLocation();
+		for(Player p : storm.getServer().getOnlinePlayers()){
+			Location ploc = new Location(p.getWorld(),p.getLocation().getX(),255,p.getLocation().getZ());
+			if(chunk.distance(ploc) <= 40){
+				for(int id : GlobalVariables.lightning_attraction_players_attractors){
+					if(p.getInventory().getItemInHand().getTypeId() == id
+							|| Arrays.asList(p.getInventory().getArmorContents()).contains(new ItemStack(id))){
+						return p.getLocation();
+					}
+				}
+			}
+		}
+		return oldLoc;
+	}
     
     public void damageNearbyPlayers(Location location, double radius) {
 

@@ -30,18 +30,25 @@ public class StrikeListener implements Listener {
 
     @EventHandler
     public void strikeLightningListener(LightningStrikeEvent strike) {
-	if (strike.isCancelled())
-	    return;
-	if (!MultiWorldManager.checkWorld(strike.getWorld(), GlobalVariables.lightning_allowedWorlds)) {
-	    return;
-	}
-	Location strikeLocation = strike.getLightning().getLocation();
-	if(GlobalVariables.lightning_attraction_blocks_attractionChance >= 100 
-    		|| ran.nextInt((int) (1000-GlobalVariables.lightning_attraction_blocks_attractionChance*10)) == 0){
-		strikeLocation = util.hitMetal(strike.getLightning()
-			.getLocation());
-		strike.getLightning().teleport(strikeLocation);
-	}
+		if (strike.isCancelled())
+		    return;
+		if (!MultiWorldManager.checkWorld(strike.getWorld(), GlobalVariables.lightning_allowedWorlds)) {
+		    return;
+		}
+		Location strikeLocation = strike.getLightning().getLocation();
+		
+		if(GlobalVariables.lightning_attraction_players_attractionChance >= 100 
+	    		|| ran.nextInt((int) (1000-GlobalVariables.lightning_attraction_players_attractionChance*10)) == 0){
+			strikeLocation = util.hitPlayers(strike.getLightning()
+					.getLocation());
+				strike.getLightning().teleport(strikeLocation);
+		}else if(GlobalVariables.lightning_attraction_blocks_attractionChance >= 100 
+	    		|| ran.nextInt((int) (1000-GlobalVariables.lightning_attraction_blocks_attractionChance*10)) == 0){
+			strikeLocation = util.hitMetal(strike.getLightning()
+				.getLocation());
+			strike.getLightning().teleport(strikeLocation);
+		}
+	
 		util.damageNearbyPlayers(strikeLocation,
 			GlobalVariables.lightning_damage_strikeRadius);
 	
