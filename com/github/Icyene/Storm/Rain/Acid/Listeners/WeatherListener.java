@@ -32,7 +32,6 @@ import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.StormUtil;
 import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
-import com.github.Icyene.Storm.Transformations.BlockChanger;
 
 public class WeatherListener implements Listener
 {
@@ -198,8 +197,7 @@ public class WeatherListener implements Listener
 							    System.out
 								    .println("Pushed block to deteriorator: "
 									    + toDeteriorate);
-							BlockChanger
-								.transform(
+							StormUtil.transform(
 									toDeteriorate,
 									GlobalVariables.rain_acid_dissolver_blockTransformations);
 						    }

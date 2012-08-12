@@ -38,40 +38,7 @@ public class LightningUtils {
     	}
     	return oldLoc;
     }
-    
-    public void damageNearbyPlayers(Location location, double radius) {
-
-	ArrayList<Player> damagees = getNearbyPlayers(location, radius);
-	
-	if (Storm.debug);
-	System.out.println(damagees.toString());
-
-	for (Player p : damagees) {
-
-	    if (p.getGameMode() != GameMode.CREATIVE) {
-			if (Storm.debug);
-			System.out.println("Damaging " + p.getName());		
-			p.damage((p.getHealth() - GlobalVariables.lightning_damage_strikeDamage));
-			StormUtil.message(p, GlobalVariables.lightning_damage_strikeMessage);
-	    }
-	}
-    }
-
-    public ArrayList<Player> getNearbyPlayers(Location location, double radius) {
-
-	ArrayList<Player> playerList = new ArrayList<Player>();
-
-	for (Player p : storm.getServer().getOnlinePlayers()) {
-	    Location ploc = p.getLocation();
-	    ploc.setY(location.getY());
-	    if (ploc.distance(location) <= radius) {
-		playerList.add(p);
-	    }
-	}
-
-	return playerList;
-    }
-   
+     
     public Location pickLightningRod(Chunk chunk)
     {
       ChunkSnapshot snapshot = chunk.getChunkSnapshot(true, false, false);

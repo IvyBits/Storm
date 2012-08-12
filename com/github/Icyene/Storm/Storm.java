@@ -28,7 +28,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.Icyene.Storm.Configuration.ReflectConfiguration;
 import com.github.Icyene.Storm.Lightning.Lightning;
+import com.github.Icyene.Storm.Meteors.MeteorSpawner;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
+import com.github.Icyene.Storm.Snow.Snow;
 
 public class Storm extends JavaPlugin
 {
@@ -46,7 +48,7 @@ public class Storm extends JavaPlugin
      * 
      *         TODO:
      * 
-     *         - Puddles - Piling Snow - Hail
+     *         - Puddles - Piling Snow - Hail -Damage players in range when meteor falls
      * 
      * @specification
      * 
@@ -70,9 +72,7 @@ public class Storm extends JavaPlugin
     @Override
     public void onEnable()
     {
-	ReflectConfiguration.load(this, GlobalVariables.class, "storm_");
-	StormUtil.addConfigToStats(this, GlobalVariables.class, "storm_");
-	
+	ReflectConfiguration.load(this, GlobalVariables.class, "storm_");	
 	// Stats
 	
 	try {
@@ -92,21 +92,17 @@ public class Storm extends JavaPlugin
 		    }
 		});
 	    }
-	    metrics.start();
-	    StormUtil.addConfigToStats(this, GlobalVariables.class, "storm_");
+	    metrics.start();	  
 	} catch (IOException e) {
 	
 	}
 
 	try {
-	    // Snow.load(this);
+	    Snow.load(this);
 	    AcidRain.load(this);
 	    Lightning.load(this);
-	    // MeteorSpawner.load(this);
+	    MeteorSpawner.load(this);
 
-	    // Hail.load(this);
-
-	    // final World defWorld = Bukkit.getServer().getWorld("world");
 
 	} catch (Exception e) {
 

@@ -40,16 +40,19 @@ public class GlobalVariables {
     public static int snow_piling_pilerDelayTicks = 30;
     public static int snow_piling_chunksToCalculate = 4;
     public static int snow_piling_blocksPerChunk = 3;
-    public static String[] meteorites_meteor_allowedWorlds = new String[] { "world" };
-    public static float meteorites_meteor_trailPower = 3.0F;
+    public static String[] naturalDisasters_meteorites_meteor_allowedWorlds = new String[] { "world" };
+    public static float naturalDisasters_meteorites_meteor_trailPower = 3.0F;
     public static float meteorites_meteor_impactExplosionRadius = 30;
-    public static double meteorites_meteor_spawnChance = 100;
-    public static long meteorites_meteor_recalculationDelayTicks = 200;
-    public static int meteorites_meteor_spawnHeight = 160;
-    public static float meteorites_meteor_pitch = -10;
-    public static float meteorites_meteor_brightness = 50;
-    public static float meteorites_meteor_accelarationY = -1;
-    public static float meteorites_meteor_yield = 0.1F;
-    public static String meteorites_meteor_impactMessage = "A meteor has exploded at <x>, <y>, <z>.";
+    public static double naturalDisasters_meteorites_meteor_spawnChance = 100;
+    public static long naturalDisasters_meteorites_meteor_recalculationDelayTicks = 200;
+    public static int naturalDisasters_meteorites_meteor_spawnHeight = 160;
+    public static float naturalDisasters_meteorites_meteor_pitch = -10;
+    public static float naturalDisasters_meteorites_meteor_brightness = 50;
+    public static float naturalDisasters_meteorites_meteor_accelarationY = -1;
+    public static float naturalDisasters_meteorites_meteor_yield = 0.1F;
+    public static String naturalDisasters_meteorites_meteor_impactMessage = "A meteor has exploded at <x>, <y>, <z>.";
+    public static int naturalDisasters_meteorites_meteor_strikeDamage = 10;
+    public static int naturalDisasters_meteorites_meteor_strikeRadius = 10;
+    public static String naturalDisasters_meteorites_meteor_playerHitMessage = "You have been flattened by a meteor!";
 
 }
