@@ -59,7 +59,8 @@ public class Storm extends JavaPlugin
      * 
      * @see That is all that will be included in V0.1, with perhaps Earthquakes.
      * 
-     * 
+     * @SNOWRULES
+     * Do not pile if any block in any direction is air, or has a data difference of greater than 1,.
      * 
      */
 

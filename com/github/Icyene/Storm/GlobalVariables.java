@@ -36,10 +36,16 @@ public class GlobalVariables {
     public static String[] snow_insubstantial_allowedWorlds = new String[] { "world" };
     public static Integer[] snow_insubstantial_passThroughBlockIds = new Integer[] { 18 };
     public boolean snow_piling = true;
-    public static String[] snow_piling_allowedWorlds = new String[] { "world" };
+    public static String[] snow_piling_allowedWorlds = new String[] { "world" };    
     public static int snow_piling_pilerDelayTicks = 30;
     public static int snow_piling_chunksToCalculate = 4;
     public static int snow_piling_blocksPerChunk = 3;
+    
+    public static String[] snow_trampable_allowedWorlds = new String[] { "world" };
+    public static double snow_trampable_motionDecreaseX = 0.4;
+    public static double snow_trampable_motionDecreaseZ = 0.4;
+    public static int snow_trampable_trampleChance = 10;
+    
     public static String[] naturalDisasters_meteorites_meteor_allowedWorlds = new String[] { "world" };
     public static float naturalDisasters_meteorites_meteor_trailPower = 3.0F;
     public static float meteorites_meteor_impactExplosionRadius = 30;
