@@ -73,7 +73,7 @@ public class Storm extends JavaPlugin
     @Override
     public void onEnable()
     {
-	ReflectConfiguration.load(this, GlobalVariables.class, "storm_");	
+	ReflectConfiguration.load(this, GlobalVariables.class, "storm.");	
 	// Stats
 	
 	try {

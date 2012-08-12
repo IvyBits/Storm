@@ -2,7 +2,7 @@ package com.github.Icyene.Storm.Snow.RealisticSnow;
 
 import java.lang.reflect.Method;
 
-import com.github.Icyene.Storm.Snow.RealisticSnow.Blocks.Snow;
+import com.github.Icyene.Storm.Snow.Blocks.Snow;
 
 import net.minecraft.server.Block;
 import net.minecraft.server.StepSound;

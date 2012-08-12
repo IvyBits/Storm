@@ -31,16 +31,16 @@ public class MeteorSpawner {
 
 	meteor.setPosition(
 		x,
-		com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteorites_meteor_spawnHeight,
+		com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteor_spawnHeight,
 		z);
 	meteor.yaw = (float) rand.nextInt(360); // GET RANDOM DIRECTION
-	meteor.pitch = GlobalVariables.naturalDisasters_meteorites_meteor_pitch; // FACE
+	meteor.pitch = GlobalVariables.naturalDisasters_meteor_pitch; // FACE
 								      // EARTH
-	meteor.yield = GlobalVariables.naturalDisasters_meteorites_meteor_yield; // Items dropped
+	meteor.yield = GlobalVariables.naturalDisasters_meteor_yield; // Items dropped
 
 	meteoriteWorld.addEntity(meteor, SpawnReason.DEFAULT);
 
-	meteor.setDirection(meteor.getDirection().setY(GlobalVariables.naturalDisasters_meteorites_meteor_accelarationY));
+	meteor.setDirection(meteor.getDirection().setY(GlobalVariables.naturalDisasters_meteor_accelarationY));
 
 	System.out.println("Meteor generated.");
     }
@@ -52,8 +52,8 @@ public class MeteorSpawner {
 		new Runnable() {
 		    @Override
 		    public void run() {
-			if (com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteorites_meteor_spawnChance >= 100
-				|| rand.nextInt((int) (1000 - com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteorites_meteor_spawnChance * 10)) == 0) {
+			if (com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteor_spawnChance >= 100
+				|| rand.nextInt((int) (1000 - com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteor_spawnChance * 10)) == 0) {
 
 			    Chunk chunk = pickChunk(pickWorld(storm));
 
@@ -69,8 +69,8 @@ public class MeteorSpawner {
 
 		}
 		,
-		com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteorites_meteor_recalculationDelayTicks,
-		com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteorites_meteor_recalculationDelayTicks);
+		com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteor_recalculationDelayTicks,
+		com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteor_recalculationDelayTicks);
 	System.out.println("Thread meteor started.");
     }
 
@@ -83,7 +83,7 @@ public class MeteorSpawner {
 	ArrayList<World> worlds = new ArrayList<World>();
 	for (World w : storm.getServer().getWorlds()) {
 	    if (MultiWorldManager.checkWorld(w,
-		    GlobalVariables.naturalDisasters_meteorites_meteor_allowedWorlds)) {
+		    GlobalVariables.naturalDisasters_meteor_allowedWorlds)) {
 		worlds.add(w);
 	    }
 	}

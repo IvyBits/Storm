@@ -31,7 +31,7 @@ public class EntityMeteor extends EntityFireball {
 	final Fireball fireball = (Fireball) this.getBukkitEntity();
 
 	fireball.getWorld().createExplosion(fireball.getLocation(),
-		GlobalVariables.naturalDisasters_meteorites_meteor_trailPower);
+		GlobalVariables.naturalDisasters_meteor_trailPower);
 	System.out.println("Exploding trail.");
 
 	super.h_();
@@ -57,18 +57,18 @@ public class EntityMeteor extends EntityFireball {
 			locX,
 			locY,
 			locZ,
-			GlobalVariables.meteorites_meteor_impactExplosionRadius,
+			GlobalVariables.naturalDisasters_meteor_impactExplosionRadius,
 			event.getFire());
 
 		StormUtil
 			.damageNearbyPlayers(
 				new Location(world.getWorld(), locX, locY, locZ),
-				GlobalVariables.naturalDisasters_meteorites_meteor_strikeRadius,
-				GlobalVariables.naturalDisasters_meteorites_meteor_strikeDamage,
-				GlobalVariables.naturalDisasters_meteorites_meteor_playerHitMessage);
+				GlobalVariables.naturalDisasters_meteor_strikeRadius,
+				GlobalVariables.naturalDisasters_meteor_strikeDamage,
+				GlobalVariables.naturalDisasters_meteor_playerHitMessage);
 
 		StormUtil
-			.broadcast(GlobalVariables.naturalDisasters_meteorites_meteor_impactMessage
+			.broadcast(GlobalVariables.naturalDisasters_meteor_impactMessage
 				.replace("<x>", locX + "")
 				.replace("<y>", locY + "")
 				.replace("<z>", locZ + ""));
@@ -81,7 +81,7 @@ public class EntityMeteor extends EntityFireball {
     // Brightness
     public float c(float f)
     {
-	return GlobalVariables.naturalDisasters_meteorites_meteor_brightness;
+	return GlobalVariables.naturalDisasters_meteor_brightness;
     }
 
     public Vector getDirection() {
