@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
@@ -38,7 +39,60 @@ public class LightningUtils {
     	}
     	return oldLoc;
     }
+<<<<<<< HEAD
      
+=======
+    
+	public Location hitPlayers(Location oldLoc) {
+		Location chunk = pickChunk(oldLoc.getWorld()).getBlock(8,255,8).getLocation();
+		for(Player p : storm.getServer().getOnlinePlayers()){
+			Location ploc = new Location(p.getWorld(),p.getLocation().getX(),255,p.getLocation().getZ());
+			if(chunk.distance(ploc) <= 40){
+				for(int id : GlobalVariables.lightning_attraction_players_attractors){
+					if(p.getInventory().getItemInHand().getTypeId() == id
+							|| Arrays.asList(p.getInventory().getArmorContents()).contains(new ItemStack(id))){
+						return p.getLocation();
+					}
+				}
+			}
+		}
+		return oldLoc;
+	}
+    
+    public void damageNearbyPlayers(Location location, double radius) {
+
+	ArrayList<Player> damagees = getNearbyPlayers(location, radius);
+	
+	if (Storm.debug);
+	System.out.println(damagees.toString());
+
+	for (Player p : damagees) {
+
+	    if (p.getGameMode() != GameMode.CREATIVE) {
+			if (Storm.debug);
+			System.out.println("Damaging " + p.getName());		
+			p.damage((p.getHealth() - GlobalVariables.lightning_damage_strikeDamage));
+			StormUtil.message(p, GlobalVariables.lightning_damage_strikeMessage);
+	    }
+	}
+    }
+
+    public ArrayList<Player> getNearbyPlayers(Location location, double radius) {
+
+	ArrayList<Player> playerList = new ArrayList<Player>();
+
+	for (Player p : storm.getServer().getOnlinePlayers()) {
+	    Location ploc = p.getLocation();
+	    ploc.setY(location.getY());
+	    if (ploc.distance(location) <= radius) {
+		playerList.add(p);
+	    }
+	}
+
+	return playerList;
+    }
+   
+>>>>>>> 49208d3b5db4671415deaeeb67f5378c5173e535
     public Location pickLightningRod(Chunk chunk)
     {
       ChunkSnapshot snapshot = chunk.getChunkSnapshot(true, false, false);
