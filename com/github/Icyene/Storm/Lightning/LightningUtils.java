@@ -7,7 +7,6 @@ import java.util.Random;
 
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -18,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
-import com.github.Icyene.Storm.StormUtil;
 
 public class LightningUtils {
 
@@ -41,7 +39,7 @@ public class LightningUtils {
     }
 
     public Location hitPlayers(Location oldLoc) {
-	Location chunk = pickChunk(oldLoc.getWorld()).getBlock(8, 255, 8)
+	final Location chunk = pickChunk(oldLoc.getWorld()).getBlock(8, 255, 8)
 		.getLocation();
 	for (Player p : storm.getServer().getOnlinePlayers()) {
 	    Location ploc = new Location(p.getWorld(), p.getLocation().getX(),
@@ -85,7 +83,7 @@ public class LightningUtils {
 		}
 	    }
 	}
-
+	
 	return null;
     }
 

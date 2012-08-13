@@ -4,6 +4,7 @@ import org.bukkit.plugin.PluginManager;
 
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Snow.Insubstantial.SnowThroughBlocks;
+import com.github.Icyene.Storm.Snow.RealisticSnow.ModSnow;
 
 public class Snow
 {
@@ -13,6 +14,8 @@ public class Snow
 
 	PluginManager pm = storm.getServer().getPluginManager();
 	pm.registerEvents(new SnowThroughBlocks(), storm);
+	
+	//ModSnow.mod(true);
 
     }
 

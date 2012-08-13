@@ -19,9 +19,8 @@ public class StrikeListener implements Listener {
 
     LightningUtils util;
     Storm storm;
-    boolean recursion;
 
-    Random ran = new Random();
+    Random rand = new Random();
 
     public StrikeListener(Storm storm) {
 	this.util = new LightningUtils(storm);
@@ -29,24 +28,21 @@ public class StrikeListener implements Listener {
     }
 
     @EventHandler
-    public void strikeLightningListener(LightningStrikeEvent strike) {
+    public void strikeLightningListener(final LightningStrikeEvent strike) {
 
-	if (strike.isCancelled())
+	if (strike.isCancelled()) {
+	  //  System.out.println("Strike cancelled.");
 	    return;
+	}
 	if (!MultiWorldManager.checkWorld(strike.getWorld(),
 		GlobalVariables.lightning_allowedWorlds)) {
+	  //  System.out.println("Invalid world: " + strike.getWorld().getName()
+		  //  + ": " + GlobalVariables.lightning_allowedWorlds);
 	    return;
 	}
-	
 
-	
 	Location strikeLocation = strike.getLightning().getLocation();
-	if (GlobalVariables.lightning_attraction_blocks_attractionChance >= 100
-		|| ran.nextInt((int) (1000 - GlobalVariables.lightning_attraction_blocks_attractionChance * 10)) == 0) {
-	    strikeLocation = util.hitMetal(strike.getLightning()
-		    .getLocation());
-	    strike.getLightning().teleport(strikeLocation);
-	}
+
 	StormUtil.damageNearbyPlayers(strikeLocation,
 		GlobalVariables.lightning_damage_strikeRadius,
 		GlobalVariables.lightning_damage_strikeDamage,
@@ -54,6 +50,24 @@ public class StrikeListener implements Listener {
 
 	StormUtil.transform(strikeLocation.getBlock(),
 		GlobalVariables.lightning_melter_blockTransformations);
+	
+	if (rand.nextInt(100) <= GlobalVariables.lightning_attraction_blocks_attractionChance) {
+	    strikeLocation = util.hitMetal(strike.getLightning()
+		    .getLocation());
+	    strike.getLightning().teleport(strikeLocation);
+	    return;
+	}
+	
+	if (rand.nextInt(100) <= GlobalVariables.lightning_attraction_players_attractionChance) {
+	    strikeLocation = util.hitPlayers(strike.getLightning()
+		    .getLocation());
+	    strike.getLightning().teleport(strikeLocation);
+	    return;
+	}
+	
+	
+	
+	
 
     }
 

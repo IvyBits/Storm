@@ -32,8 +32,7 @@ public class EntityMeteor extends EntityFireball {
 
 	fireball.getWorld().createExplosion(fireball.getLocation(),
 		GlobalVariables.naturalDisasters_meteor_trailPower);
-	System.out.println("Exploding trail.");
-
+	//System.out.println("Exploding trail.");
 	super.h_();
 
     }

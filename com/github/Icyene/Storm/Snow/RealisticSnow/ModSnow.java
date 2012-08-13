@@ -2,14 +2,14 @@ package com.github.Icyene.Storm.Snow.RealisticSnow;
 
 import java.lang.reflect.Method;
 
-import com.github.Icyene.Storm.Snow.Blocks.Snow;
+import com.github.Icyene.Storm.Snow.Blocks.SnowLayer;
 
 import net.minecraft.server.Block;
 import net.minecraft.server.StepSound;
 
 public class ModSnow {
 
-    public void mod(boolean doMod) {
+    public static void mod(boolean doMod) {
 
 	try {
 	    Method v = Block.class.getDeclaredMethod("v");
@@ -24,7 +24,7 @@ public class ModSnow {
 	    h.setAccessible(true);
 	    if (doMod) {
 		Block.byId[Block.SNOW.id] = null;
-		Block SNOW = ((Snow) (new Snow(78, 66)).b("snow"));
+		Block SNOW = ((SnowLayer) (new SnowLayer(78, 66)).b("snow"));
 
 		SNOW = (Block) v.invoke(SNOW);
 		SNOW = (Block) p.invoke(SNOW);

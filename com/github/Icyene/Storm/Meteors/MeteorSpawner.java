@@ -52,8 +52,7 @@ public class MeteorSpawner {
 		new Runnable() {
 		    @Override
 		    public void run() {
-			if (com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteor_spawnChance >= 100
-				|| rand.nextInt((int) (1000 - com.github.Icyene.Storm.GlobalVariables.naturalDisasters_meteor_spawnChance * 10)) == 0) {
+			if (rand.nextInt(100) <= GlobalVariables.naturalDisasters_meteor_spawnChance) {
 
 			    Chunk chunk = pickChunk(pickWorld(storm));
 

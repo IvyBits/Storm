@@ -64,6 +64,9 @@ public class Storm extends JavaPlugin
      * 
      */
 
+    
+    //Dear future me. I cannot even begin to tell you how bad I feel for you.    
+    
     public final Logger log = Logger.getLogger("Minecraft");
     static final String prefix = "[Storm] ";
     public static boolean debug = true;
