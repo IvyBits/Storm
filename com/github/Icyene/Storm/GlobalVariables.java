@@ -1,5 +1,7 @@
 package com.github.Icyene.Storm;
 
+import java.util.List;
+
 import net.minecraft.server.Block;
 import net.minecraft.server.Item;
 
@@ -37,7 +39,6 @@ public class GlobalVariables {
 	    { 12, 20 }, { 20, 0 } };
     public static String[] snow_insubstantial_allowedWorlds = new String[] { "world" };
     public static Integer[] snow_insubstantial_passThroughBlockIds = new Integer[] { 18 };
-    public boolean snow_piling = true;
     public static String[] snow_piling_allowedWorlds = new String[] { "world" };
     public static int snow_piling_pilerDelayTicks = 30;
     public static int snow_piling_chunksToCalculate = 4;
@@ -79,5 +80,18 @@ public class GlobalVariables {
     public static int naturalDisasters_meteor_strikeDamage = 10;
     public static int naturalDisasters_meteor_strikeRadius = 10;
     public static String naturalDisasters_meteor_playerHitMessage = "You have been flattened by a meteor!";
+
+    public static String[] naturalDisasters_wildfire_allowedWorlds = new String[] { "world", "nether" };
+    public static Integer[] naturalDisasters_wildfire_burnableBlocks = new Integer[] {
+
+	    Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
+	    Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
+	    Block.TNT.id, Block.GRASS.id, Block.WOOL.id, Block.VINE.id,
+	    Block.WORKBENCH.id, Block.BIRCH_WOOD_STAIRS.id,
+	    Block.BROWN_MUSHROOM.id, Block.CROPS.id, Block.RED_MUSHROOM.id,
+	    Block.FENCE_GATE.id, Block.BREWING_STAND.id, Block.NETHERRACK.id
+
+    };
+    public static int naturalDisasters_wildfire_spreadLimit = 2;
 
 }
