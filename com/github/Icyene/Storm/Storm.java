@@ -103,9 +103,9 @@ public class Storm extends JavaPlugin
 
 	try {
 	    Snow.load(this);
-	    //AcidRain.load(this);
-	   // Lightning.load(this);
-	   // MeteorSpawner.load(this);
+	    AcidRain.load(this);
+	    Lightning.load(this);
+	    MeteorSpawner.load(this);
 
 
 	} catch (Exception e) {

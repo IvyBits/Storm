@@ -1,7 +1,5 @@
 package com.github.Icyene.Storm;
 
-import java.util.List;
-
 import net.minecraft.server.Block;
 import net.minecraft.server.Item;
 

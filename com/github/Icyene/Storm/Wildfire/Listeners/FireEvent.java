@@ -3,7 +3,9 @@ package com.github.Icyene.Storm.Wildfire.Listeners;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -14,11 +16,14 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
 import com.github.Icyene.Storm.GlobalVariables;
+import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 
 public class FireEvent implements Listener {
 
     // TO USE: Create a fire block and add it to infernink
+
+    private Storm storm;
 
     // Private final, so people can't fuck with it without reflection!
     private final int spreadLimit = GlobalVariables.naturalDisasters_wildfire_spreadLimit;
@@ -26,8 +31,13 @@ public class FireEvent implements Listener {
     private final int radiuski = 3;
     private int C = 0;
     private List<Block> infernink = new ArrayList<Block>();
+    private final Random rand = new Random();
     List<Integer> canBurn = Arrays
 	    .asList(GlobalVariables.naturalDisasters_wildfire_burnableBlocks);
+
+    public FireEvent(Storm sStorm) {
+	storm = sStorm;
+    }
 
     // Dear future me. Please forgive me.
     // I can't even begin to express how sorry I am.
@@ -38,21 +48,22 @@ public class FireEvent implements Listener {
 	if (!event.getCause().equals(IgniteCause.SPREAD)) {
 	    return;
 	}
-	
+
 	final Location loc = event.getBlock().getLocation();
 	final World w = loc.getWorld();
-	
-	if(!MultiWorldManager.checkWorld(w, GlobalVariables.naturalDisasters_wildfire_allowedWorlds)) {
+
+	if (!MultiWorldManager.checkWorld(w,
+		GlobalVariables.naturalDisasters_wildfire_allowedWorlds)) {
 	    return;
 	}
-	
+
 	for (int x = -radiuski; x <= radiuski; x++) {
 	    for (int y = -radiuski; y <= radiuski; y++) {
 		for (int z = -radiuski; z <= radiuski; z++) {
 
 		    if (infernink.contains(new Location(w, x, y, z).getBlock())) {
 
-			    scanForIgnitables(loc, w);			
+			scanForIgnitables(loc, w);
 
 		    }
 
@@ -90,35 +101,41 @@ public class FireEvent implements Listener {
 
 		    bR = bR.getRelative(0, -1, 0);
 
-		    if (canBurn.contains(bR.getTypeId()) && (C < this.spreadLimit)) {
+		    if (canBurn.contains(bR.getTypeId())
+			    && (C < this.spreadLimit)) {
 			burn(bR);
-			C++; //For those paranoid of inefficiency, substitute with ++C
+			C++; // For those paranoid of inefficiency, substitute
+			     // with ++C
 		    }
 
 		    bR = bR.getRelative(-1, 0, 0);
 
-		    if (canBurn.contains(bR.getTypeId())  && (C < this.spreadLimit)) {
+		    if (canBurn.contains(bR.getTypeId())
+			    && (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(1, 0, 0);
 
-		    if (canBurn.contains(bR.getTypeId()) && (C < this.spreadLimit)) {
+		    if (canBurn.contains(bR.getTypeId())
+			    && (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(0, 0, -1);
 
-		    if (canBurn.contains(bR.getTypeId()) && (C < this.spreadLimit)) {
+		    if (canBurn.contains(bR.getTypeId())
+			    && (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(0, 0, 1);
 
-		    if (canBurn.contains(bR.getTypeId()) || (C < this.spreadLimit)) {
+		    if (canBurn.contains(bR.getTypeId())
+			    || (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
@@ -133,10 +150,14 @@ public class FireEvent implements Listener {
 
     public void burn(final Block toBurn) {
 
-        //TODO: Add delay to burn, if block under is air, burn sides.
+	storm.getServer().getScheduler()
+		.scheduleSyncDelayedTask(storm, new Runnable() {
 
-	toBurn.setTypeId(51);
-	infernink.add(toBurn);
+		    public void run() {
+			toBurn.setTypeId(51);
+			infernink.add(toBurn);
+		    }
+		}, rand.nextInt(2000) + 500);
 
     }
 

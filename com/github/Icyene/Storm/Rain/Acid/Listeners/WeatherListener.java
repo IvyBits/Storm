@@ -69,7 +69,6 @@ public class WeatherListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void acidicWeatherListener(WeatherChangeEvent event)
     {
-
 	if (event.isCancelled()) {
 	    return;
 	}
@@ -82,8 +81,6 @@ public class WeatherListener implements Listener
 
 		if (!MultiWorldManager.checkWorld(affectedWorld,
 			GlobalVariables.rain_acid_allowedWorlds)) {
-		    System.out
-			    .println("World not enabled in config for acid rain.");
 		    return;
 		}
 		AcidRain.acidicWorlds.put(affectedWorld, Boolean.TRUE);
@@ -179,7 +176,8 @@ public class WeatherListener implements Listener
 							    System.out
 								    .println("Pushed block to deteriorator: "
 									    + toDeteriorate);
-							StormUtil.transform(
+							StormUtil
+								.transform(
 									toDeteriorate,
 									GlobalVariables.rain_acid_dissolver_blockTransformations);
 						    }
@@ -248,11 +246,13 @@ public class WeatherListener implements Listener
 					    damagee.addPotionEffect(new PotionEffect(
 						    PotionEffectType.HUNGER,
 						    hungerTicks, 1));
-					    StormUtil.message(damagee, acidRainPoisonMessage);
+					    StormUtil.message(damagee,
+						    acidRainPoisonMessage);
 
 					} else
 					{
-					    StormUtil.message(damagee, acidRainHurtMessage);
+					    StormUtil.message(damagee,
+						    acidRainHurtMessage);
 					}
 
 				    }

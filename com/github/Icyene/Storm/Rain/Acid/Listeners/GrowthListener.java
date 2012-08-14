@@ -21,9 +21,11 @@ public class GrowthListener implements Listener
 	if (growth.isCancelled())
 	    return;
 
+	
 	final Biome eventBiome = growth.getBlock().getBiome();
 
 	if (AcidRain.acidicWorlds.containsKey(growth.getBlock().getWorld())
+		
 		&& AcidRain.acidSnow
 		&& AcidRain.snowyBiomes.contains(eventBiome)
 		|| AcidRain.acidRain

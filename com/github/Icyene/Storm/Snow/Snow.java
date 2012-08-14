@@ -15,7 +15,7 @@ public class Snow
 	PluginManager pm = storm.getServer().getPluginManager();
 	pm.registerEvents(new SnowThroughBlocks(), storm);
 	
-	ModSnow.mod(true);
+	//ModSnow.mod(true);
 
     }
 

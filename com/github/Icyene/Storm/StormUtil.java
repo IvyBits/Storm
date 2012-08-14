@@ -45,8 +45,7 @@ public class StormUtil
 
    	ArrayList<Player> damagees = getNearbyPlayers(location, radius);
 
-   	if (Storm.debug)
-   	    ;
+   	if (Storm.debug);
    	System.out.println(damagees.toString());
 
    	for (Player p : damagees) {
