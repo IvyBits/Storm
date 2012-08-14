@@ -133,6 +133,8 @@ public class FireEvent implements Listener {
 
     public void burn(final Block toBurn) {
 
+        //TODO: Add delay to burn, if block under is air, burn sides.
+
 	toBurn.setTypeId(51);
 	infernink.add(toBurn);
 
