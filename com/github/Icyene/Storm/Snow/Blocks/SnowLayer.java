@@ -26,8 +26,7 @@ public class SnowLayer extends BlockSnow {
 	// Apply a vector multiplied by 0.2 to the Entity to slow them down.
 	final org.bukkit.entity.Entity inSnow = ((org.bukkit.entity.Entity) (e
 		.getBukkitEntity()));
-	inSnow.setVelocity(inSnow.getVelocity().multiply(
-		GlobalVariables.snow_slowing_motionDecrease_0x01));
+	inSnow.setVelocity(inSnow.getVelocity().multiply(0.4000002D));
 
     }
 
