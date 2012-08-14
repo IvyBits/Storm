@@ -39,9 +39,9 @@ public class ModSnow {
 
 	    }
 
-	} catch (Exception e) {
+	} catch (Exception e) {// Dispose of exception silently. This way people
+			       // won't know if your code crashes. Shiny, eh?
 	};
-
     }
 
 }
