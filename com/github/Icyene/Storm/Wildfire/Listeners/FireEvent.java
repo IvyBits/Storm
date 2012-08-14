@@ -1,6 +1,5 @@
 package com.github.Icyene.Storm.Wildfire.Listeners;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -93,7 +92,7 @@ public class FireEvent implements Listener {
 
 		    if (canBurn.contains(bR.getTypeId()) && (C < this.spreadLimit)) {
 			burn(bR);
-			C++;
+			C++; //For those paranoid of inefficiency, substitute with ++C
 		    }
 
 		    bR = bR.getRelative(-1, 0, 0);
