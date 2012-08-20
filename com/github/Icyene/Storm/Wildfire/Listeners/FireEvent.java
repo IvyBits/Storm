@@ -2,6 +2,7 @@ package com.github.Icyene.Storm.Wildfire.Listeners;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -12,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
+
+import com.github.Icyene.Storm.GlobalVariables;
 
 public class FireEvent implements Listener {
 
@@ -147,7 +150,13 @@ public class FireEvent implements Listener {
     }
 
     public boolean canBurn(Block toCheck) {
-	return true;
+	if (Arrays.asList(
+		GlobalVariables.Natural__Disasters_Wildfires_Flammable__Blocks)
+		.contains(toCheck.getTypeId())) {
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
 }

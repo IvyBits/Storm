@@ -62,7 +62,6 @@ public class WeatherListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void acidicWeatherListener(WeatherChangeEvent event)
     {
-
 	if (event.isCancelled()) {
 	    return;
 	}
@@ -74,7 +73,9 @@ public class WeatherListener implements Listener
 	    if (rand.nextInt(100) <= acidRainChance) {
 
 		if (!MultiWorldManager.checkWorld(affectedWorld,
+
 			GlobalVariables.Rain_Acid_Allowed__Worlds)) {
+
 		    return;
 		}
 		AcidRain.acidicWorlds.put(affectedWorld, Boolean.TRUE);
@@ -150,7 +151,7 @@ public class WeatherListener implements Listener
 						if (toDeteriorate
 							.getTypeId() != 0)
 						{
-						
+
 						    StormUtil
 							    .transform(
 								    toDeteriorate,
@@ -161,7 +162,7 @@ public class WeatherListener implements Listener
 
 					} else
 					{
-					   --blocksPerCalculationIndex; 
+					    --blocksPerCalculationIndex;
 					}
 
 				    }

@@ -1,4 +1,8 @@
 name: Storm
 version: 0.0.3
+<<<<<<< HEAD
 author: [hammale, icy]
+=======
+author: [Icynene, hammale]
+>>>>>>> 4fdc18b78be9d1c248f638f9bc466487a61bc14d
 main: com.github.Icyene.Storm.Storm

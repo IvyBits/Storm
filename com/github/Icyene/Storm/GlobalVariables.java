@@ -16,11 +16,11 @@ public class GlobalVariables {
 	    { 18, 0 }, { 2, 3 }, { 1, 4 } };
 
     public static int Rain_Acid_Dissolver_Blocks__To__Deteriorate__Per__Calculation = 10;
-    public static int Rain_Acid_Dissolver_Block__Deterioration__Chance = 100;    
+    public static int Rain_Acid_Dissolver_Block__Deterioration__Chance = 100;
 
     public static int Rain_Acid_Scheduler_Dissolver__Calculation__Intervals__In__Ticks = 100;
     public static int Rain_Acid_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
-   
+
     public static String[] Lightning_Allowed__Worlds = new String[] { "world" };
     public static int Lightning_Damage_Damage = 5;
     public static int Lightning_Damage_Damage__Radius = 10;
@@ -55,9 +55,22 @@ public class GlobalVariables {
     public static boolean Features_Lightning_Player__Attraction = true;
     public static boolean Features_Lightning_Block__Attraction = true;
     public static boolean Features_Lightning_Block__Transformations = true;
-    public static boolean Features_Lightning_Fulgarites = true;
     public static boolean Features_Snow_PassThruBlocks = true;
     public static boolean Features_Snow_Slow__Players__Down = true;
     public static boolean Features_Meteor = true;
+    public static boolean Features_Wildfires = true;
+
+    public static String[] Natural__Disasters_Wildfires_Allowed__Worlds = new String[] {
+	    "world", "nether" };
+    public static int Natural__Disasters_Wildfires_Spread__Limit = 2;
+    public static Integer[] Natural__Disasters_Wildfires_Flammable__Blocks = new Integer[] {
+	    Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
+	    Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
+	    Block.TNT.id, Block.GRASS.id, Block.WOOL.id, Block.VINE.id,
+	    Block.WORKBENCH.id, Block.BIRCH_WOOD_STAIRS.id,
+	    Block.BROWN_MUSHROOM.id, Block.CROPS.id, Block.RED_MUSHROOM.id,
+	    Block.FENCE_GATE.id, Block.BREWING_STAND.id, Block.NETHERRACK.id
+
+    };
 
 }

@@ -64,6 +64,7 @@ public class StormUtil
 		ploc.setY(location.getY());
 		if (ploc.distance(location) <= radius) {
 		    playerList.add(p);
+
 		}
 	    }
 	}
