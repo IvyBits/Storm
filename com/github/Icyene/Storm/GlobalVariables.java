@@ -5,79 +5,59 @@ import net.minecraft.server.Item;
 
 public class GlobalVariables {
 
-    public static String[] rain_acid_allowedWorlds = new String[] { "world" };
-    public static int rain_acid_acidRainChance = 100;
-    public static boolean rain_acid_acidRain = true;
-    public static boolean rain_acid_acidSnow = true;
-    public static String rain_acid_acidRainMessage = "Acid has started to fall from the sky!";
-    public static int rain_acid_damager_damagerDamage = 2;
-    public static int rain_acid_damager_playerDamageChance = 100;
-    public static boolean rain_acid_damager_getHungry = true;
-    public static int rain_acid_damager_hungerTicks = 300;
-    public static int rain_acid_damager_playerHungerChance = 100;
-    public static String rain_acid_damager_acidRainPoisonMessage = "You have been damaged and poisoned by the acidic downfall!";
-    public static String rain_acid_damager_acidRainHurtMessage = "You have been damaged by the acidic downfall!";
-    public static Integer[][] rain_acid_dissolver_blockTransformations = new Integer[][] {
+    public static transient String Version = "0.0.3";
+    public static String[] Rain_Acid_Allowed__Worlds = new String[] { "world" };
+    public static int Rain_Acid_Acid__Rain__Chance = 100;
+    public static String Rain_Acid_Message__On__Acid__Rain__Start = "Acid has started to fall from the sky!";
+
+    public static String Rain_Acid_Damager_Message__On__Player__Damaged__By__Acid__Rain = "You have been hurt by the acidic downfall!";
+    public static int Rain_Acid_Player_Damage__From__Exposure = 2;
+    public static Integer[][] Rain_Acid_Dissolver_Block__Transformations = new Integer[][] {
 	    { 18, 0 }, { 2, 3 }, { 1, 4 } };
-    public static int rain_acid_dissolver_chunkDissolveChance = 100;
-    public static int rain_acid_dissolver_chunksToCalculate = 4;
-    public static int rain_acid_dissolver_blocksPerChunk = 10;
-    public static int rain_acid_dissolver_deteriorationChance = 100;
-    public static int rain_acid_scheduler_dissolverDelayTicks = 100;
-    public static int rain_acid_scheduler_playerDamagerDelayTicks = 500;
-    public static String[] lightning_allowedWorlds = new String[] { "world" };
-    public static int lightning_damage_strikeDamage = 5;
-    public static int lightning_damage_strikeRadius = 10;
-    public static String lightning_damage_strikeMessage = "You were zapped by lightning. Ouch!";
-    public static int lightning_attraction_blocks_attractionChance = 100;
-    public static Integer[] lightning_attraction_blocks_attractors = new Integer[] { Block.IRON_BLOCK.id };
-    public static int lightning_attraction_players_attractionChance = 100;
-    public static Integer[] lightning_attraction_players_attractors = new Integer[] { Item.IRON_AXE.id };
-    public static Integer[][] lightning_melter_blockTransformations = new Integer[][] {
+
+    public static int Rain_Acid_Dissolver_Blocks__To__Deteriorate__Per__Calculation = 10;
+    public static int Rain_Acid_Dissolver_Block__Deterioration__Chance = 100;    
+
+    public static int Rain_Acid_Scheduler_Dissolver__Calculation__Intervals__In__Ticks = 100;
+    public static int Rain_Acid_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
+   
+    public static String[] Lightning_Allowed__Worlds = new String[] { "world" };
+    public static int Lightning_Damage_Damage = 5;
+    public static int Lightning_Damage_Damage__Radius = 10;
+    public static String Lightning_Damage_Hit__Message = "You were zapped by lightning. Ouch!";
+
+    public static int Lightning_Attraction_Blocks_AttractionChance = 80;
+    public static Integer[] Lightning_Attraction_Blocks_Attractors = new Integer[] { Block.IRON_BLOCK.id };
+
+    public static int Lightning_Attraction_Players_AttractionChance = 80;
+    public static Integer[] Lightning_Attraction_Players_Attractors = new Integer[] { Item.IRON_AXE.id };
+    public static Integer[][] Lightning_Melter_Block__Transformations = new Integer[][] {
 	    { 12, 20 }, { 20, 0 } };
-    public static String[] snow_insubstantial_allowedWorlds = new String[] { "world" };
-    public static Integer[] snow_insubstantial_passThroughBlockIds = new Integer[] { 18 };
-    public boolean snow_piling = true;
-    public static String[] snow_piling_allowedWorlds = new String[] { "world" };
-    public static int snow_piling_pilerDelayTicks = 30;
-    public static int snow_piling_chunksToCalculate = 4;
-    public static int snow_piling_blocksPerChunk = 3;
+    public static int Lightning_Fulgarites_Maximum__Depth = 10;
+    public static int Lightning_Fulgarites_Minimum__Depth = 5;
 
-    public static String[] snow_trampable_allowedWorlds = new String[] { "world" };
+    public static String[] Snow_PassThruBlocks_Allowed__Worlds = new String[] { "world" };
+    public static Integer[] Snow_PassThruBlocks_Block__IDS__To__Pass__Through = new Integer[] { 18 };
 
-    public static double
-	    snow_slowing_motionDecrease_0x01 = 0.4D,
-	    snow_slowing_motionDecrease_0x02 = 0.4D,
-	    snow_slowing_motionDecrease_0x03 = 0.4D,
-	    snow_slowing_motionDecrease_0x04 = 0.4D,
-	    snow_slowing_motionDecrease_0x05 = 0.4D,
-	    snow_slowing_motionDecrease_0x06 = 0.4D,
-	    snow_slowing_motionDecrease_0x07 = 0.4D,
-	    snow_slowing_motionDecrease_0x08 = 0.4D;
+    public static String[] Natural__Disasters_Meteor_Allowed__Worlds = new String[] { "world" };
 
-    public static int
-	    snow_trampable_trampleChance_0x01 = 1,
-	    snow_trampable_trampleChance_0x02 = 1,
-	    snow_trampable_trampleChance_0x03 = 1,
-	    snow_trampable_trampleChance_0x04 = 1,
-	    snow_trampable_trampleChance_0x05 = 1,
-	    snow_trampable_trampleChance_0x06 = 1,
-	    snow_trampable_trampleChance_0x07 = 1,
-	    snow_trampable_trampleChance_0x08 = 1;
+    public static double Natural__Disasters_Meteor_Chance__To__Spawn = 8;
+    public static int Natural__Disasters_Meteor_Lives = 3;
 
-    public static String[] naturalDisasters_meteor_allowedWorlds = new String[] { "world" };
-    public static float naturalDisasters_meteor_trailPower = 3.0F;
-    public static float naturalDisasters_meteor_impactExplosionRadius = 30;
-    public static double naturalDisasters_meteor_spawnChance = 100;
-    public static long naturalDisasters_meteor_recalculationDelayTicks = 200;
-    public static int naturalDisasters_meteor_spawnHeight = 160;
-    public static float naturalDisasters_meteor_pitch = -10;
-    public static float naturalDisasters_meteor_brightness = 50;
-    public static float naturalDisasters_meteor_accelarationY = -1;
-    public static float naturalDisasters_meteor_yield = 0.1F;
-    public static String naturalDisasters_meteor_impactMessage = "A meteor has exploded at <x>, <y>, <z>.";
-    public static int naturalDisasters_meteor_strikeDamage = 10;
-    public static int naturalDisasters_meteor_strikeRadius = 10;
-    public static String naturalDisasters_meteor_playerHitMessage = "You have been flattened by a meteor!";
+    public static String Natural__Disasters_Meteor_Message__On__Meteor__Crash = "A meteor has exploded at %x, %y, %z.";
+    public static int Natural__Disasters_Meteor_Shockwave_Damage = 10;
+    public static int Natural__Disasters_Meteor_Shockwave_Damage__Radius = 100;
+    public static String Natural__Disasters_Meteor_Shockwave_Damage__Message = "You have been flattened by a meteor!";
+    public static long Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks = 72000;
+
+    public static boolean Features_Rain_Acid = true;
+    public static boolean Features_Lightning_Greater__Range__And__Damage = true;
+    public static boolean Features_Lightning_Player__Attraction = true;
+    public static boolean Features_Lightning_Block__Attraction = true;
+    public static boolean Features_Lightning_Block__Attraction__Transformations = true;
+    public static boolean Features_Lightning_Fulgarites = true;
+    public static boolean Features_Snow_PassThruBlocks = true;
+    public static boolean Features_Snow_Slow__Players__Down = true;
+    public static boolean Features_Meteor = true;
 
 }

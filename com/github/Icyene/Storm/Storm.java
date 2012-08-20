@@ -24,15 +24,20 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Location;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.Icyene.Storm.Configuration.ReflectConfiguration;
 import com.github.Icyene.Storm.Lightning.Lightning;
+import com.github.Icyene.Storm.Meteors.Meteor;
 import com.github.Icyene.Storm.Meteors.MeteorSpawner;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
 import com.github.Icyene.Storm.Snow.Snow;
 
-public class Storm extends JavaPlugin
+public class Storm extends JavaPlugin implements Listener
 {
 
     /**
@@ -48,7 +53,8 @@ public class Storm extends JavaPlugin
      * 
      *         TODO:
      * 
-     *         - Puddles - Piling Snow - Hail -Damage players in range when meteor falls
+     *         - Puddles - Piling Snow - Hail -Damage players in range when
+     *         meteor falls
      * 
      * @specification
      * 
@@ -59,29 +65,27 @@ public class Storm extends JavaPlugin
      * 
      * @see That is all that will be included in V0.1, with perhaps Earthquakes.
      * 
-     * @SNOWRULES
-     * Do not pile if any block in any direction is air, or has a data difference of greater than 1,.
+     * @SNOWRULES Do not pile if any block in any direction is air, or has a
+     *            data difference of greater than 1,.
      * 
      */
 
-    
-    //Dear future me. I cannot even begin to tell you how bad I feel for you.    
-    
+    // Dear future me. I cannot even begin to tell you how bad I feel for you.
+
     public final Logger log = Logger.getLogger("Minecraft");
     static final String prefix = "[Storm] ";
     public static boolean debug = true;
-    
-   public static List<String> stats = new ArrayList<String>();
+
+    public static List<String> stats = new ArrayList<String>();
 
     @Override
     public void onEnable()
     {
-	ReflectConfiguration.load(this, GlobalVariables.class, "storm.");	
+	ReflectConfiguration.load(this, GlobalVariables.class, "Storm.");
 	// Stats
-	
+
 	try {
 	    Metrics metrics = new Metrics(this);
-	    // Custom plotter for each item
 	    for (int i = 0; i < stats.size(); i++) {
 		final String name = stats.get(i);
 		metrics.addCustomData(new Metrics.Plotter() {
@@ -96,17 +100,19 @@ public class Storm extends JavaPlugin
 		    }
 		});
 	    }
-	    metrics.start();	  
+	    metrics.start();
 	} catch (IOException e) {
-	
+
 	}
 
 	try {
+
+
 	    Snow.load(this);
 	    AcidRain.load(this);
 	    Lightning.load(this);
-	    MeteorSpawner.load(this);
-
+	    Meteor.load(this);
+	    // this.getServer().getPluginManager().registerEvents(this, this);
 
 	} catch (Exception e) {
 
@@ -122,25 +128,18 @@ public class Storm extends JavaPlugin
 	this.setEnabled(false);
     }
 
-}
+    @EventHandler
+    public void hitThatPlayer(PlayerInteractEvent e) {
 
-// final List<Triple<Double, Double, Double>> plots =
-// PlotPoints.pointOnCircle(0.4, 1, 70, 1, 5, 0.2, 0.25, 8.0);
-//
-// Bukkit.getScheduler()
-// .scheduleSyncRepeatingTask(this,
-// new Runnable()
-// {
-// @Override
-// public void run()
-// {
-//
-// for(Triple<Double, Double, Double> t : plots ) {
-//
-// PlotPoints.smoke(new Location(defWorld, t.x, t.y, t.z), 4, 200);
-//
-//
-// }
-//
-// }
-// }, 0, 50);
+	Location toTarget = e.getPlayer().getTargetBlock(null, 200)
+		.getLocation();
+
+	Location ploc = e.getPlayer().getLocation();
+	Location toSpawn =
+		ploc.toVector().add(ploc.getDirection().normalize())
+			.toLocation(ploc.getWorld());
+
+	MeteorSpawner.meteorCommand(toTarget, toSpawn);
+    }
+
+}

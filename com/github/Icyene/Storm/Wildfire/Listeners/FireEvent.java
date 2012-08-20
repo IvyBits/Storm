@@ -7,27 +7,24 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
-import com.github.Icyene.Storm.Wildfire.Wildfire;
-
 public class FireEvent implements Listener {
+    
+    //FIXME: NOT WORKING!
 
     // TO USE: Create a fire block and add it to infernink
-
-    /* You are not expected to understand this */
 
     // Private final, so people can't fuck with it without reflection!
     private final int spreadLimit = 2;
     // Adopt evil accent to become evil
     private final int radiuski = 3;
     private int C = 0;
-    private List<Block> infernink = new ArrayList<Block>();
+    public static List<Block> infernink = new ArrayList<Block>();
 
     // Dear future me. Please forgive me.
     // I can't even begin to express how sorry I am.
@@ -45,8 +42,10 @@ public class FireEvent implements Listener {
 	for (int x = -radiuski; x <= radiuski; x++) {
 	    for (int y = -radiuski; y <= radiuski; y++) {
 		for (int z = -radiuski; z <= radiuski; z++) {
-
+		    System.out.println("Does contain?");
 		    if (infernink.contains(new Location(w, x, y, z).getBlock())) {
+
+			System.out.println("Contains");
 
 			try {
 			    scanForIgnitables(loc, w);
@@ -69,6 +68,7 @@ public class FireEvent implements Listener {
     @EventHandler
     public void onBlockEx(final BlockFadeEvent event) {
 	final Block b = event.getBlock();
+	System.out.println("Removing " + b);
 	if (infernink.contains(b)) {
 	    infernink.remove(b);
 	}
@@ -80,8 +80,6 @@ public class FireEvent implements Listener {
 	    IllegalArgumentException, InvocationTargetException
     {
 
-	final net.minecraft.server.World mcWorld = ((CraftWorld) (w))
-		.getHandle(); // Madness? THIS IS SPARTA!
 	Block bR = w.getBlockAt(loc);
 
 	/* Abandon all ye hope those who venture beyond this point */
@@ -100,45 +98,35 @@ public class FireEvent implements Listener {
 
 		    bR = bR.getRelative(0, -1, 0);
 
-		    if (Wildfire.canBurn.invoke(mcWorld, bR.getX(), bR.getY(),
-			    bR.getZ()) == Boolean.TRUE
-			    && (C < this.spreadLimit)) {
+		    if (canBurn(bR) && (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(-1, 0, 0);
 
-		    if (Wildfire.canBurn.invoke(mcWorld, bR.getX(), bR.getY(),
-			    bR.getZ()) == Boolean.TRUE
-			    && (C < this.spreadLimit)) {
+		    if (canBurn(bR) && (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(1, 0, 0);
 
-		    if (Wildfire.canBurn.invoke(mcWorld, bR.getX(), bR.getY(),
-			    bR.getZ()) == Boolean.TRUE
-			    && (C < this.spreadLimit)) {
+		    if (canBurn(bR) && (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(0, 0, -1);
 
-		    if (Wildfire.canBurn.invoke(mcWorld, bR.getX(), bR.getY(),
-			    bR.getZ()) == Boolean.TRUE
-			    && (C < this.spreadLimit)) {
+		    if (canBurn(bR) && (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(0, 0, 1);
 
-		    if (Wildfire.canBurn.invoke(mcWorld, bR.getX(), bR.getY(),
-			    bR.getZ()) == Boolean.TRUE
-			    || (C < this.spreadLimit)) {
+		    if (canBurn(bR) || (C < this.spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
@@ -152,10 +140,15 @@ public class FireEvent implements Listener {
     }
 
     public void burn(final Block toBurn) {
+	System.out.println("Burning");
 
 	toBurn.setTypeId(51);
 	infernink.add(toBurn);
 
+    }
+
+    public boolean canBurn(Block toCheck) {
+	return true;
     }
 
 }

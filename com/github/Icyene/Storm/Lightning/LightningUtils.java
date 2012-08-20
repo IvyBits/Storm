@@ -45,7 +45,7 @@ public class LightningUtils {
 	    Location ploc = new Location(p.getWorld(), p.getLocation().getX(),
 		    255, p.getLocation().getZ());
 	    if (chunk.distance(ploc) <= 40) {
-		for (int id : GlobalVariables.lightning_attraction_players_attractors) {
+		for (int id : GlobalVariables.Lightning_Attraction_Players_Attractors) {
 		    if (p.getInventory().getItemInHand().getTypeId() == id
 			    || Arrays.asList(
 				    p.getInventory().getArmorContents())
@@ -101,7 +101,7 @@ public class LightningUtils {
 		int type = snapshot.getBlockTypeId(x, y, z);
 
 		if (Arrays.asList(
-			GlobalVariables.lightning_attraction_blocks_attractors)
+			GlobalVariables.Lightning_Attraction_Blocks_Attractors)
 			.contains(type)) {
 		    list.add(chunk.getBlock(x, y, z).getLocation());
 		} else {
@@ -111,7 +111,7 @@ public class LightningUtils {
 		    y--;
 		    type = snapshot.getBlockTypeId(x, y, z);
 		    if (Arrays
-			    .asList(GlobalVariables.lightning_attraction_blocks_attractors)
+			    .asList(GlobalVariables.Lightning_Attraction_Blocks_Attractors)
 			    .contains(type)) {
 			list.add(chunk.getBlock(x, y, z).getLocation());
 		    }

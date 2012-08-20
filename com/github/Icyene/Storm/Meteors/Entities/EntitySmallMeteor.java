@@ -1,25 +1,26 @@
 package com.github.Icyene.Storm.Meteors.Entities;
 
-import org.bukkit.Location;
+import java.util.Random;
 
-import com.github.Icyene.Storm.GlobalVariables;
-import com.github.Icyene.Storm.StormUtil;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.CraftWorld;
 
 import net.minecraft.server.EntityFireball;
 import net.minecraft.server.EntityLiving;
 import net.minecraft.server.MovingObjectPosition;
 import net.minecraft.server.World;
 
-public class EntityMeteor extends EntityFireball
+public class EntitySmallMeteor extends EntityFireball
 {
+    final private Random rand = new Random();
+
     private float explosionRadius = 50F;
-    private float trailPower = 30F;
     private float brightness = 10F;
-    private String meteorCrashMessage;
     private int burrowCount = 5;
     private int burrowPower = 10;
 
-    public EntityMeteor(World world)
+    public EntitySmallMeteor(World world)
     {
 	super(world);
     }
@@ -27,22 +28,20 @@ public class EntityMeteor extends EntityFireball
     @Override
     public void h_()
     {
-	if (this.locY > 255) {
-	    this.dead = true; // Die silently
-	    return;
+	final CraftWorld cWorld = world.getWorld();
+	final Location thisLoc = new Location(cWorld, locX, locY, locZ);
+	if (rand.nextBoolean()) {
+	    cWorld.playEffect(thisLoc, Effect.MOBSPAWNER_FLAMES, 1,
+		    rand.nextInt(10) + 5);
+	} else {
+	    cWorld.playEffect(thisLoc, Effect.SMOKE, 1);
 	}
-	if (this.locY < 0) {
-	    this.dead = true; // Die silently
-	    return;
+	if (rand.nextBoolean()) {
+	    cWorld.playEffect(thisLoc, Effect.GHAST_SHOOT, 1);
+	} else {
+	    cWorld.playEffect(thisLoc, Effect.GHAST_SHRIEK, 1);
 	}
-	createExplosion(this, locX, locY, locZ, trailPower, true);
-	StormUtil
-	    .damageNearbyPlayers(
-		    new Location(this.world.getWorld(), locX, locY,
-			    locZ),
-		    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage__Radius,
-		    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage,
-		    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage__Message);
+
 	super.h_();
     }
 
@@ -52,19 +51,10 @@ public class EntityMeteor extends EntityFireball
 	if (burrowCount > 0) {
 	    // Not yet dead, so burrow.
 	    createExplosion(this, locX, locY, locZ, burrowPower, true);
-	    StormUtil
-		    .damageNearbyPlayers(
-			    new Location(this.world.getWorld(), locX, locY,
-				    locZ),
-			    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage__Radius,
-			    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage,
-			    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage__Message);
 
 	} else {
 
 	    createExplosion(this, locX, locY, locZ, explosionRadius, true);
-	    getCrashMessage().replace("%x", locX + "")
-		    .replace("%z", locZ + "").replace("%y", locY + "");
 	    die();
 	}
     }
@@ -75,31 +65,12 @@ public class EntityMeteor extends EntityFireball
 	return this.brightness;
     }
 
-    @Override
-    public void die()
-    {
-	this.dead = true;
-	StormUtil.broadcast(getCrashMessage());
-    }
-
-    public void setCrashMessage(String message) {
-	this.meteorCrashMessage = message;
-    }
-
-    public String getCrashMessage() {
-	return this.meteorCrashMessage;
-    }
-
     public void setBrightness(float brightnessT) {
 	this.brightness = brightnessT;
     }
 
     public float getBrightness() {
 	return this.brightness;
-    }
-
-    public void setTrail(float f) {
-	this.trailPower = f;
     }
 
     public void setExplosionPower(float f) {

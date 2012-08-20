@@ -12,7 +12,7 @@ public class Wildfire {
 
     public static Method canBurn; 
     
-    public void load(Storm storm) {
+    public static void load(Storm storm) {
 	try {
 	    
 	canBurn = BlockFire.class.getDeclaredMethod("canPlace", World.class, int.class, int.class, int.class);

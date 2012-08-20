@@ -13,6 +13,7 @@ import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.StormUtil;
 
 import com.github.Icyene.Storm.Lightning.LightningUtils;
+import com.github.Icyene.Storm.Lightning.Fulgarites.FulgariteGenerator;
 import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 
 public class StrikeListener implements Listener {
@@ -31,43 +32,48 @@ public class StrikeListener implements Listener {
     public void strikeLightningListener(final LightningStrikeEvent strike) {
 
 	if (strike.isCancelled()) {
-	  //  System.out.println("Strike cancelled.");
 	    return;
 	}
 	if (!MultiWorldManager.checkWorld(strike.getWorld(),
-		GlobalVariables.lightning_allowedWorlds)) {
-	  //  System.out.println("Invalid world: " + strike.getWorld().getName()
-		  //  + ": " + GlobalVariables.lightning_allowedWorlds);
+		GlobalVariables.Lightning_Allowed__Worlds)) {
 	    return;
 	}
 
 	Location strikeLocation = strike.getLightning().getLocation();
-
-	StormUtil.damageNearbyPlayers(strikeLocation,
-		GlobalVariables.lightning_damage_strikeRadius,
-		GlobalVariables.lightning_damage_strikeDamage,
-		GlobalVariables.lightning_damage_strikeMessage);
-
-	StormUtil.transform(strikeLocation.getBlock(),
-		GlobalVariables.lightning_melter_blockTransformations);
-	
-	if (rand.nextInt(100) <= GlobalVariables.lightning_attraction_blocks_attractionChance) {
-	    strikeLocation = util.hitMetal(strike.getLightning()
-		    .getLocation());
-	    strike.getLightning().teleport(strikeLocation);
-	    return;
+	if (GlobalVariables.Features_Lightning_Greater__Range__And__Damage) {
+	    StormUtil.damageNearbyPlayers(strikeLocation,
+		    GlobalVariables.Lightning_Damage_Damage__Radius,
+		    GlobalVariables.Lightning_Damage_Damage,
+		    GlobalVariables.Lightning_Damage_Hit__Message);
 	}
-	
-	if (rand.nextInt(100) <= GlobalVariables.lightning_attraction_players_attractionChance) {
-	    strikeLocation = util.hitPlayers(strike.getLightning()
-		    .getLocation());
-	    strike.getLightning().teleport(strikeLocation);
-	    return;
+	if (GlobalVariables.Features_Lightning_Block__Attraction__Transformations) {
+
+	    StormUtil.transform(strikeLocation.getBlock(),
+		    GlobalVariables.Lightning_Melter_Block__Transformations);
 	}
-	
-	
-	
-	
+	if (GlobalVariables.Features_Lightning_Block__Attraction) {
+	    if (rand.nextInt(100) <= GlobalVariables.Lightning_Attraction_Blocks_AttractionChance) {
+		strikeLocation = util.hitMetal(strike.getLightning()
+			.getLocation());
+		strike.getLightning().teleport(strikeLocation);
+
+	    }
+	} else {
+	    if (GlobalVariables.Features_Lightning_Player__Attraction) {
+		if (rand.nextInt(100) <= GlobalVariables.Lightning_Attraction_Players_AttractionChance) {
+		    strikeLocation = util.hitPlayers(strike.getLightning()
+			    .getLocation());
+		    strike.getLightning().teleport(strikeLocation);
+
+		}
+	    }
+	}
+
+	if (GlobalVariables.Features_Lightning_Fulgarites) {
+	    FulgariteGenerator.generateFulgarite(strikeLocation,
+		    GlobalVariables.Lightning_Fulgarites_Maximum__Depth,
+		    GlobalVariables.Lightning_Fulgarites_Minimum__Depth);
+	}
 
     }
 

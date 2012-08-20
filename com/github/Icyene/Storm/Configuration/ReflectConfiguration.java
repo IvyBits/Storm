@@ -14,7 +14,7 @@ public class ReflectConfiguration {
 	    final int mod = field.getModifiers();
 	    if (Modifier.isStatic(mod)
 		    && !Modifier.isTransient(mod) && !Modifier.isVolatile(mod)) {
-		final String path = field.getName().replaceAll("_", ".");
+		final String path = field.getName().replaceAll("__", " ").replaceAll("_", ".");
 		try {
 		    if (configuration.isSet(path)) {
 			field.set(null, configuration.get(path));
