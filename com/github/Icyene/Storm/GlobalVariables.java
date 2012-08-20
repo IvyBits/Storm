@@ -54,7 +54,7 @@ public class GlobalVariables {
     public static boolean Features_Lightning_Greater__Range__And__Damage = true;
     public static boolean Features_Lightning_Player__Attraction = true;
     public static boolean Features_Lightning_Block__Attraction = true;
-    public static boolean Features_Lightning_Block__Attraction__Transformations = true;
+    public static boolean Features_Lightning_Block__Transformations = true;
     public static boolean Features_Lightning_Fulgarites = true;
     public static boolean Features_Snow_PassThruBlocks = true;
     public static boolean Features_Snow_Slow__Players__Down = true;

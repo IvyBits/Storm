@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -32,10 +31,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.Icyene.Storm.Configuration.ReflectConfiguration;
 import com.github.Icyene.Storm.Lightning.Lightning;
-import com.github.Icyene.Storm.Meteors.Meteor;
-import com.github.Icyene.Storm.Meteors.MeteorSpawner;
 import com.github.Icyene.Storm.Rain.Acid.AcidRain;
 import com.github.Icyene.Storm.Snow.Snow;
+import com.github.Icyene.Storm.Wildfire.Wildfire;
 
 public class Storm extends JavaPlugin implements Listener
 {
@@ -111,7 +109,8 @@ public class Storm extends JavaPlugin implements Listener
 	    Snow.load(this);
 	    AcidRain.load(this);
 	    Lightning.load(this);
-	    Meteor.load(this);
+	    Wildfire.load(this);
+	   // Meteor.load(this);
 	    // this.getServer().getPluginManager().registerEvents(this, this);
 
 	} catch (Exception e) {
@@ -131,15 +130,8 @@ public class Storm extends JavaPlugin implements Listener
     @EventHandler
     public void hitThatPlayer(PlayerInteractEvent e) {
 
-	Location toTarget = e.getPlayer().getTargetBlock(null, 200)
-		.getLocation();
-
-	Location ploc = e.getPlayer().getLocation();
-	Location toSpawn =
-		ploc.toVector().add(ploc.getDirection().normalize())
-			.toLocation(ploc.getWorld());
-
-	MeteorSpawner.meteorCommand(toTarget, toSpawn);
+	
+	
     }
 
 }

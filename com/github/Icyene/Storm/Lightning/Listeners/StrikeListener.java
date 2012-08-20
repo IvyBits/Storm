@@ -13,7 +13,6 @@ import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.StormUtil;
 
 import com.github.Icyene.Storm.Lightning.LightningUtils;
-import com.github.Icyene.Storm.Lightning.Fulgarites.FulgariteGenerator;
 import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 
 public class StrikeListener implements Listener {
@@ -40,17 +39,14 @@ public class StrikeListener implements Listener {
 	}
 
 	Location strikeLocation = strike.getLightning().getLocation();
+
 	if (GlobalVariables.Features_Lightning_Greater__Range__And__Damage) {
 	    StormUtil.damageNearbyPlayers(strikeLocation,
 		    GlobalVariables.Lightning_Damage_Damage__Radius,
 		    GlobalVariables.Lightning_Damage_Damage,
 		    GlobalVariables.Lightning_Damage_Hit__Message);
 	}
-	if (GlobalVariables.Features_Lightning_Block__Attraction__Transformations) {
 
-	    StormUtil.transform(strikeLocation.getBlock(),
-		    GlobalVariables.Lightning_Melter_Block__Transformations);
-	}
 	if (GlobalVariables.Features_Lightning_Block__Attraction) {
 	    if (rand.nextInt(100) <= GlobalVariables.Lightning_Attraction_Blocks_AttractionChance) {
 		strikeLocation = util.hitMetal(strike.getLightning()
@@ -69,10 +65,10 @@ public class StrikeListener implements Listener {
 	    }
 	}
 
-	if (GlobalVariables.Features_Lightning_Fulgarites) {
-	    FulgariteGenerator.generateFulgarite(strikeLocation,
-		    GlobalVariables.Lightning_Fulgarites_Maximum__Depth,
-		    GlobalVariables.Lightning_Fulgarites_Minimum__Depth);
+	if (GlobalVariables.Features_Lightning_Block__Transformations) {
+
+	    StormUtil.transform(strikeLocation.getBlock(),
+		    GlobalVariables.Lightning_Melter_Block__Transformations);
 	}
 
     }

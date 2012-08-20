@@ -14,8 +14,6 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
 public class FireEvent implements Listener {
-    
-    //FIXME: NOT WORKING!
 
     // TO USE: Create a fire block and add it to infernink
 
@@ -38,6 +36,7 @@ public class FireEvent implements Listener {
 
 	final Location loc = event.getBlock().getLocation();
 	final World w = loc.getWorld();
+	infernink.add(loc.getBlock());
 
 	for (int x = -radiuski; x <= radiuski; x++) {
 	    for (int y = -radiuski; y <= radiuski; y++) {
