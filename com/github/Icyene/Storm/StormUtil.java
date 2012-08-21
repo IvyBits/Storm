@@ -1,20 +1,26 @@
 package com.github.Icyene.Storm;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+
+import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 
 public class StormUtil
 {
     public static final Logger log = Logger.getLogger("Minecraft");
     static final String prefix = "[Storm] ";
+    private static final Random rand = new Random();
 
     public static void log(String logM)
     {
@@ -81,6 +87,27 @@ public class StormUtil
 		toTransform.setTypeId(toCheck[1]);
 		return;
 	    }
+	}
+    }
+    
+
+    public static Chunk pickChunk(final World w) {
+	final Chunk[] loadedChunks = w.getLoadedChunks();
+	return loadedChunks[rand.nextInt(loadedChunks.length)];
+    }
+
+    public static World pickWorld(final Storm storm, String[] world) {
+	ArrayList<World> worlds = new ArrayList<World>();
+	for (World w : storm.getServer().getWorlds()) {
+	    if (MultiWorldManager.checkWorld(w, world)) {
+		worlds.add(w);
+	    }
+	}
+
+	if (worlds.size() == 1) {
+	    return worlds.get(0);
+	} else {
+	    return worlds.get(rand.nextInt(worlds.size()));
 	}
     }
     

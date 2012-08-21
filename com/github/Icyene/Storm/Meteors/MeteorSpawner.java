@@ -1,6 +1,5 @@
 package com.github.Icyene.Storm.Meteors;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -15,8 +14,8 @@ import org.bukkit.util.Vector;
 
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.GlobalVariables;
+import com.github.Icyene.Storm.StormUtil;
 import com.github.Icyene.Storm.Meteors.Entities.EntityMeteor;
-import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 
 public class MeteorSpawner {
 
@@ -32,7 +31,7 @@ public class MeteorSpawner {
 		    public void run() {
 			if (rand.nextInt(100) <= GlobalVariables.Natural__Disasters_Meteor_Chance__To__Spawn) {
 
-			    Chunk chunk = pickChunk(pickWorld(storm));
+			    Chunk chunk = StormUtil.pickChunk(StormUtil.pickWorld(storm, GlobalVariables.Natural__Disasters_Meteor_Allowed__Worlds));
 
 			    final int x = rand.nextInt(16);
 			    final int z = rand.nextInt(16);
@@ -47,27 +46,6 @@ public class MeteorSpawner {
 		,
 		com.github.Icyene.Storm.GlobalVariables.Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks,
 		com.github.Icyene.Storm.GlobalVariables.Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks);
-    }
-
-    public static Chunk pickChunk(final World w) {
-	final Chunk[] loadedChunks = w.getLoadedChunks();
-	return loadedChunks[rand.nextInt(loadedChunks.length)];
-    }
-
-    public static World pickWorld(final Storm storm) {
-	ArrayList<World> worlds = new ArrayList<World>();
-	for (World w : storm.getServer().getWorlds()) {
-	    if (MultiWorldManager.checkWorld(w,
-		    GlobalVariables.Natural__Disasters_Meteor_Allowed__Worlds)) {
-		worlds.add(w);
-	    }
-	}
-
-	if (worlds.size() == 1) {
-	    return worlds.get(0);
-	} else {
-	    return worlds.get(rand.nextInt(worlds.size()));
-	}
     }
 
     public static void meteorCommand(Location targetLoc,

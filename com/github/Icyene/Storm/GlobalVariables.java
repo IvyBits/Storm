@@ -33,8 +33,6 @@ public class GlobalVariables {
     public static Integer[] Lightning_Attraction_Players_Attractors = new Integer[] { Item.IRON_AXE.id };
     public static Integer[][] Lightning_Melter_Block__Transformations = new Integer[][] {
 	    { 12, 20 }, { 20, 0 } };
-    public static int Lightning_Fulgarites_Maximum__Depth = 10;
-    public static int Lightning_Fulgarites_Minimum__Depth = 5;
 
     public static String[] Snow_PassThruBlocks_Allowed__Worlds = new String[] { "world" };
     public static Integer[] Snow_PassThruBlocks_Block__IDS__To__Pass__Through = new Integer[] { 18 };
@@ -50,6 +48,20 @@ public class GlobalVariables {
     public static String Natural__Disasters_Meteor_Shockwave_Damage__Message = "You have been flattened by a meteor!";
     public static long Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks = 72000;
 
+    public static String[] Natural__Disasters_Wildfires_Allowed__Worlds = new String[] {
+	    "world", "nether" };
+    public static int Natural__Disasters_Wildfires_Chance__To__Start = 20;
+    public static int Natural__Disasters_Wildfires_Spread__Limit = 2;
+    public static Integer[] Natural__Disasters_Wildfires_Flammable__Blocks = new Integer[] {
+	    Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
+	    Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
+	    Block.TNT.id, Block.GRASS.id, Block.WOOL.id, Block.VINE.id,
+	    Block.WORKBENCH.id, Block.BIRCH_WOOD_STAIRS.id,
+	    Block.BROWN_MUSHROOM.id, Block.CROPS.id, Block.RED_MUSHROOM.id,
+	    Block.FENCE_GATE.id, Block.BREWING_STAND.id, Block.NETHERRACK.id };
+    public static String Natural__Disasters_Wildfires_Message__On__Start = "A wildfire has been spotted around %x, %y, %z!";
+    public static long Natural__Disasters_Wildfires_Scheduler_Spawner__Recalculation__Intervals__In__Ticks = 72000;
+
     public static boolean Features_Rain_Acid = true;
     public static boolean Features_Lightning_Greater__Range__And__Damage = true;
     public static boolean Features_Lightning_Player__Attraction = true;
@@ -60,17 +72,4 @@ public class GlobalVariables {
     public static boolean Features_Meteor = true;
     public static boolean Features_Wildfires = true;
 
-    public static String[] Natural__Disasters_Wildfires_Allowed__Worlds = new String[] {
-	    "world", "nether" };
-    public static int Natural__Disasters_Wildfires_Spread__Limit = 2;
-    public static Integer[] Natural__Disasters_Wildfires_Flammable__Blocks = new Integer[] {
-	    Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
-	    Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
-	    Block.TNT.id, Block.GRASS.id, Block.WOOL.id, Block.VINE.id,
-	    Block.WORKBENCH.id, Block.BIRCH_WOOD_STAIRS.id,
-	    Block.BROWN_MUSHROOM.id, Block.CROPS.id, Block.RED_MUSHROOM.id,
-	    Block.FENCE_GATE.id, Block.BREWING_STAND.id, Block.NETHERRACK.id
-
-    };
-
-}
+};

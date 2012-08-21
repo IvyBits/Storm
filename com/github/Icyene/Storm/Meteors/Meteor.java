@@ -19,7 +19,7 @@ public class Meteor {
     public static final Random rand = new Random();
     public static Storm storm;
     public static List<Fireball> activeMeteors = new ArrayList<Fireball>();
-
+    
     public static void load(Storm sStorm) {
 	storm = sStorm;
 
