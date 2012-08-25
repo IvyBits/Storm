@@ -3,31 +3,41 @@ package com.github.Icyene.Storm.Wildfire;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.server.Block;
+
 import org.bukkit.block.Biome;
 
-import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
-import com.github.Icyene.Storm.Wildfire.Listeners.FireEvent;
+import com.github.Icyene.Storm.Wildfire.Listeners.WildfireListeners;
 
 public class Wildfire {
 
+    public static Integer[] flammableBlocks = new Integer[] {
+	    Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
+	    Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
+	    Block.GRASS.id, Block.WOOL.id, Block.VINE.id,
+	    Block.BIRCH_WOOD_STAIRS.id,
+
+    };
 
     public static List<Biome> leafyBiomes = Arrays.asList(new Biome[] {
-	    
-	    Biome.FOREST, Biome.FOREST_HILLS, Biome.JUNGLE, Biome.JUNGLE_HILLS, Biome.HELL
-	    
+
+	    Biome.FOREST, Biome.FOREST_HILLS, Biome.JUNGLE, Biome.JUNGLE_HILLS,
+	    Biome.HELL
+
     });
-    
+
     public static void load(Storm storm) {
 	try {
 
-	    if(GlobalVariables.Features_Wildfires) {
-	    storm.getServer().getPluginManager()
-		    .registerEvents(new FireEvent(), storm);
+	    if (Storm.config.Features_Wildfires) {
+		storm.getServer().getPluginManager()
+			.registerEvents(new WildfireListeners(), storm);
 	    }
 
 	} catch (Exception e) {
-	};
+	}
+	;
 
     }
 }

@@ -2,8 +2,7 @@ package com.github.Icyene.Storm.Meteors.Entities;
 
 import org.bukkit.Location;
 
-import com.github.Icyene.Storm.GlobalVariables;
-import com.github.Icyene.Storm.StormUtil;
+import com.github.Icyene.Storm.Storm;
 
 import net.minecraft.server.EntityFireball;
 import net.minecraft.server.EntityLiving;
@@ -13,7 +12,7 @@ import net.minecraft.server.World;
 public class EntityMeteor extends EntityFireball
 {
     private float explosionRadius = 50F;
-    private float trailPower = 30F;
+    private float trailPower = 20F;
     private float brightness = 10F;
     private String meteorCrashMessage;
     private int burrowCount = 5;
@@ -21,28 +20,29 @@ public class EntityMeteor extends EntityFireball
 
     public EntityMeteor(World world)
     {
-	super(world);
+        super(world);
+        System.out.println("Meteor with ID of " + this.uniqueId + " has been generated in world " + world + ".");
     }
 
     @Override
     public void h_()
     {
 	if (this.locY > 255) {
+	    System.out.println("Meteor with ID of " + this.uniqueId + " has a location of 256. Removing.");
 	    this.dead = true; // Die silently
 	    return;
 	}
 	if (this.locY < 0) {
+	    System.out.println("Meteor with ID of " + this.uniqueId + " has a location of 0. Removing.");
 	    this.dead = true; // Die silently
 	    return;
 	}
-	createExplosion(this, locX, locY, locZ, trailPower, true);
-	StormUtil
-	    .damageNearbyPlayers(
-		    new Location(this.world.getWorld(), locX, locY,
-			    locZ),
-		    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage__Radius,
-		    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage,
-		    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage__Message);
+	
+	this.motX  *= 1.10;
+	this.motY  *= 1.10;
+	this.motZ  *= 1.10;
+	
+	 world.createExplosion(this, locX, locY, locZ, trailPower, true);
 	super.h_();
     }
 
@@ -51,20 +51,24 @@ public class EntityMeteor extends EntityFireball
     {
 	if (burrowCount > 0) {
 	    // Not yet dead, so burrow.
-	    createExplosion(this, locX, locY, locZ, burrowPower, true);
-	    StormUtil
-		    .damageNearbyPlayers(
-			    new Location(this.world.getWorld(), locX, locY,
-				    locZ),
-			    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage__Radius,
-			    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage,
-			    GlobalVariables.Natural__Disasters_Meteor_Shockwave_Damage__Message);
+	    world.createExplosion(this, locX, locY, locZ, burrowPower, true);	      
+	    System.out.println("Meteor with ID of " + this.uniqueId + " burrowed.");
 
 	} else {
 
-	    createExplosion(this, locX, locY, locZ, explosionRadius, true);
+	    world.createExplosion(this, locX, locY, locZ, explosionRadius, true);
+	    
+	    Storm.util
+	    .damageNearbyPlayers(
+		    new Location(this.world.getWorld(), locX, locY,
+			    locZ),
+			    Storm.config.Natural__Disasters_Meteor_Shockwave_Damage__Radius,
+			    Storm.config.Natural__Disasters_Meteor_Shockwave_Damage,
+			    Storm.config.Natural__Disasters_Meteor_Shockwave_Damage__Message);
+	    
 	    getCrashMessage().replace("%x", locX + "")
 		    .replace("%z", locZ + "").replace("%y", locY + "");
+	    System.out.println("Meteor with ID of " + this.uniqueId + " exploded.");
 	    die();
 	}
     }
@@ -78,8 +82,9 @@ public class EntityMeteor extends EntityFireball
     @Override
     public void die()
     {
+	Storm.util.broadcast(getCrashMessage());
 	this.dead = true;
-	StormUtil.broadcast(getCrashMessage());
+
     }
 
     public void setCrashMessage(String message) {
@@ -114,34 +119,11 @@ public class EntityMeteor extends EntityFireball
 	this.burrowPower = power;
     }
 
-    // Explosion start - less yield explosions
-
-    public EntityMeteorExplosion explode(net.minecraft.server.Entity entity,
-	    double d0, double d1, double d2,
-	    float f)
-    {
-	return createExplosion(entity, d0, d1, d2, f, false);
-    }
-
-    public EntityMeteorExplosion createExplosion(
-	    net.minecraft.server.Entity entity, double d0, double d1,
-	    double d2,
-	    float f, boolean flag)
-    {
-	EntityMeteorExplosion explosion = new EntityMeteorExplosion(
-		entity.world, entity, d0, d1, d2, f, this.yield);
-	explosion.a = flag;
-	explosion.a();
-	explosion.a(true);
-	return explosion;
-    }
-
-    // Explosion end
 
     public EntityLiving shooter;
     public double dirX;
     public double dirY;
     public double dirZ;
-    private int yield = 0;
+    public int yield = 0;
     public boolean isIncendiary;
 }

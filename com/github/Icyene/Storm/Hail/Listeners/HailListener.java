@@ -51,20 +51,18 @@ public class HailListener implements Listener {
 
     }
 
-    @SuppressWarnings("static-access")
     private void startHail(World world) {
 	affectedWorlds.add(world);
-	if (storm.debug) {
-	    storm.log.info("Starting hail storm on " + world.getName());
-	}
+	
+	Storm.util.log("Starting hail storm on " + world.getName());
+	
     }
 
-    @SuppressWarnings("static-access")
     private void stopHail(World world) {
 	affectedWorlds.remove(world);
-	if (storm.debug) {
-	    storm.log.info("Stopping hail storm on " + world.getName());
-	}
+	
+	Storm.util.log("Stopping hail storm on " + world.getName());
+	
     }
 
     private void run() {
@@ -91,7 +89,7 @@ public class HailListener implements Listener {
 	HashSet<Location> locs = new HashSet<Location>();
 	for (Chunk chunk : w.getLoadedChunks()) {
 	    for (int i = 1; i <= 4; i++) {
-		locs.add(chunk.getBlock(ran.nextInt(16), 255, ran.nextInt(16))
+		locs.add(chunk.getBlock(ran.nextInt(16), ran.nextInt(100)+156, ran.nextInt(16))
 			.getLocation());
 	    }
 	}

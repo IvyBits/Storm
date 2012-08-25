@@ -8,9 +8,8 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.plugin.PluginManager;
 
-import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
-import com.github.Icyene.Storm.Blizzard.Listeners.BlizzardSpawner;
+import com.github.Icyene.Storm.Blizzard.Listeners.BlizzardListeners;
 
 public class Blizzard {
 
@@ -22,12 +21,12 @@ public class Blizzard {
 
     public static void load(Storm storm)
     {
-	if (GlobalVariables.Features_Blizzards_Player__Damaging) {
+	if (Storm.config.Features_Blizzards_Player__Damaging) {
 	    PluginManager pm = storm.getServer().getPluginManager();
-	    pm.registerEvents(new BlizzardSpawner(storm), storm);
+	    pm.registerEvents(new BlizzardListeners(storm), storm);
 	}
 
-	if (GlobalVariables.Features_Blizzards_Slowing__Snow) {
+	if (Storm.config.Features_Blizzards_Slowing__Snow) {
 	    ModSnow.mod(true);
 	}
     }
@@ -37,3 +36,6 @@ public class Blizzard {
     }
 
 }
+// Trying to see if a player, when they log in, log into a world that has a blizzard, and if so, send them a TPack change.
+// basically that lineyou want to see if their world is in the hashmap??????  Yes, let me look at the docs  WAIT!!! IT WORKS FINE. Oh damn
+//I'm an idiot. If CWorld isnt in the hashmap already... that means it will return null... dammit'

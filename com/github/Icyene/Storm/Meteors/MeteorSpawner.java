@@ -13,8 +13,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.util.Vector;
 
 import com.github.Icyene.Storm.Storm;
-import com.github.Icyene.Storm.GlobalVariables;
-import com.github.Icyene.Storm.StormUtil;
 import com.github.Icyene.Storm.Meteors.Entities.EntityMeteor;
 
 public class MeteorSpawner {
@@ -29,9 +27,9 @@ public class MeteorSpawner {
 		new Runnable() {
 		    @Override
 		    public void run() {
-			if (rand.nextInt(100) <= GlobalVariables.Natural__Disasters_Meteor_Chance__To__Spawn) {
+			if (rand.nextInt(100) <= Storm.config.Natural__Disasters_Meteor_Chance__To__Spawn) {
 
-			    Chunk chunk = StormUtil.pickChunk(StormUtil.pickWorld(storm, GlobalVariables.Natural__Disasters_Meteor_Allowed__Worlds));
+			    Chunk chunk = Storm.util.pickChunk(Storm.util.pickWorld(storm, Storm.config.Natural__Disasters_Meteor_Allowed__Worlds));
 
 			    final int x = rand.nextInt(16);
 			    final int z = rand.nextInt(16);
@@ -39,13 +37,14 @@ public class MeteorSpawner {
 			    spawnMeteorNaturallyAndRandomly(chunk.getWorld(),
 				    b.getX(),
 				    b.getZ());
+			    System.out.println("Genned meteor: " + b.getWorld());
 			}
 		    }
 
 		}
 		,
-		com.github.Icyene.Storm.GlobalVariables.Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks,
-		com.github.Icyene.Storm.GlobalVariables.Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks);
+		Storm.config.Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks,
+		Storm.config.Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks);
     }
 
     public static void meteorCommand(Location targetLoc,
@@ -69,7 +68,7 @@ public class MeteorSpawner {
 	EntityMeteor mm = new EntityMeteor(mcWorld);
 	mcWorld.addEntity(mm, SpawnReason.CUSTOM);
 
-	mm.setCrashMessage(GlobalVariables.Natural__Disasters_Meteor_Message__On__Meteor__Crash);
+	mm.setCrashMessage(Storm.config.Natural__Disasters_Meteor_Message__On__Meteor__Crash);
 	mm.setBrightness(30F);
 	mm.setExplosionPower(60F);
 	mm.setTrail(10F);
@@ -98,10 +97,10 @@ public class MeteorSpawner {
 		z);
 	meteor.yaw = (float) rand.nextInt(360);
 	meteor.pitch = -rand.nextInt(20);
-	meteor.setBurrowCount(rand.nextInt(10) + 5);
+	meteor.setBurrowCount(rand.nextInt(5));
 	meteoriteWorld.addEntity(meteor, SpawnReason.DEFAULT);
 
-	meteor.setCrashMessage(GlobalVariables.Natural__Disasters_Meteor_Message__On__Meteor__Crash);
+	meteor.setCrashMessage(Storm.config.Natural__Disasters_Meteor_Message__On__Meteor__Crash);
 	meteor.setBrightness(rand.nextInt(30) + 5);
 	meteor.setExplosionPower(rand.nextInt(50) + 25);
 	meteor.setTrail(rand.nextInt(5) + 5);

@@ -1,9 +1,11 @@
 package com.github.Icyene.Storm.Blizzard.Blocks;
 
+import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.github.Icyene.Storm.GlobalVariables;
+import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
 
 import net.minecraft.server.*;
@@ -21,25 +23,29 @@ public class SnowLayer extends BlockSnow {
 	    final int z, final Entity e)
     {
 
-	final CraftWorld cWorld = w.getWorld();
-
-	if (Blizzard.blizzardingWorlds.containsKey(cWorld)) {
-
-	    final org.bukkit.entity.Entity inSnow = e.getBukkitEntity();
-	    final Vector preVector = inSnow.getVelocity();
-	    
-	    if(!Blizzard.snowyBiomes.contains(inSnow.getLocation().getBlock().getBiome())) {
+	final CraftWorld cWorld = (CraftWorld) e.getBukkitEntity().getWorld();
+	final org.bukkit.entity.Entity inSnow = e.getBukkitEntity();
+	if (inSnow instanceof EntityPlayer) {
+	    if (((Player) (inSnow)).getGameMode()==GameMode.CREATIVE) {
 		return;
 	    }
-
-	    final Vector motionTranslation = preVector
-		    .multiply(
-			    GlobalVariables.Blizzard_Player_Speed__Loss__While__In__Snow)
-		    .setY(preVector.getY());
-	    inSnow.setVelocity(motionTranslation);
-
 	}
 
-    }
+	if (Blizzard.blizzardingWorlds.containsKey(cWorld) && Blizzard.blizzardingWorlds.get(cWorld)) {
+	    
+	    final Vector preVector = inSnow.getVelocity();
 
+	    if (!Blizzard.snowyBiomes.contains(inSnow.getLocation().getBlock()
+		    .getBiome())) {
+		return;
+	    } 
+	    Vector motionTranslation = preVector.clone();
+	    motionTranslation = motionTranslation.multiply(Storm.config.Blizzard_Player_Speed__Loss__While__In__Snow);
+	    motionTranslation.setY(preVector.getY());
+	    inSnow.setVelocity(motionTranslation);
+
+	} 
+
+    }
+ 
 }

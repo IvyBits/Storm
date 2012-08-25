@@ -8,9 +8,7 @@ import java.util.logging.Level;
 
 import org.bukkit.entity.Fireball;
 
-import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
-import com.github.Icyene.Storm.StormUtil;
 import com.github.Icyene.Storm.Meteors.Entities.EntityMeteor;
 
 public class Meteor {
@@ -23,7 +21,7 @@ public class Meteor {
     public static void load(Storm sStorm) {
 	storm = sStorm;
 
-	if (GlobalVariables.Features_Meteor) {
+	if (Storm.config.Features_Meteor) {
 
 	    try {
 		Method a = net.minecraft.server.EntityTypes.class
@@ -34,7 +32,7 @@ public class Meteor {
 		a.invoke(a, EntityMeteor.class, "Fireball", 12);
 
 	    } catch (Exception e) {
-		StormUtil.log(Level.SEVERE, "Failed to create meteor entity!");
+		Storm.util.log(Level.SEVERE, "Failed to create meteor entity!");
 	    }
 
 	    MeteorSpawner.load(sStorm);

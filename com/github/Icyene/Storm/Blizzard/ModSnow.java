@@ -12,17 +12,19 @@ public class ModSnow {
     public static void mod(boolean doMod) {
 
 	try {
-	    Method v = Block.class.getDeclaredMethod("v");
-	    Method p = Block.class.getDeclaredMethod("p");
-	    Method c = Block.class.getDeclaredMethod("c", float.class);
-	    Method a = Block.class.getDeclaredMethod("a", StepSound.class);
-	    Method h = Block.class.getDeclaredMethod("h", int.class);
-	    v.setAccessible(true);
-	    p.setAccessible(true);
-	    c.setAccessible(true);
-	    a.setAccessible(true);
-	    h.setAccessible(true);
 	    if (doMod) {
+
+		Method v = Block.class.getDeclaredMethod("v");
+		Method p = Block.class.getDeclaredMethod("p");
+		Method c = Block.class.getDeclaredMethod("c", float.class);
+		Method a = Block.class.getDeclaredMethod("a", StepSound.class);
+		Method h = Block.class.getDeclaredMethod("h", int.class);
+		v.setAccessible(true);
+		p.setAccessible(true);
+		c.setAccessible(true);
+		a.setAccessible(true);
+		h.setAccessible(true);
+
 		Block.byId[Block.SNOW.id] = null;
 		Block SNOW = ((SnowLayer) (new SnowLayer(78, 66)).b("snow"));
 
@@ -40,7 +42,8 @@ public class ModSnow {
 	    }
 
 	} catch (Exception e) {
-	};
+	}
+	;
 
     }
 

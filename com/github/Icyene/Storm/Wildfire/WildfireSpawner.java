@@ -8,10 +8,8 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
-import com.github.Icyene.Storm.StormUtil;
-import com.github.Icyene.Storm.Wildfire.Listeners.FireEvent;
+import com.github.Icyene.Storm.Wildfire.Listeners.WildfireListeners;
 
 public class WildfireSpawner {
 
@@ -25,13 +23,13 @@ public class WildfireSpawner {
 		new Runnable() {
 		    @Override
 		    public void run() {
-			if (rand.nextInt(100) <= GlobalVariables.Natural__Disasters_Meteor_Chance__To__Spawn) {
+			if (rand.nextInt(100) <= Storm.config.Natural__Disasters_Meteor_Chance__To__Spawn) {
 			    Block toBurn;
 			    while (true) {
-				Chunk chunk = StormUtil.pickChunk(StormUtil
+				Chunk chunk = Storm.util.pickChunk(Storm.util
 					.pickWorld(
 						storm,
-						GlobalVariables.Natural__Disasters_Wildfires_Allowed__Worlds));
+						Storm.config.Natural__Disasters_Wildfires_Allowed__Worlds));
 
 				final int x = rand.nextInt(16);
 				final int z = rand.nextInt(16);
@@ -51,7 +49,7 @@ public class WildfireSpawner {
 				if (Wildfire.leafyBiomes.contains(toBurn
 					.getBiome())
 					&& Arrays
-						.asList(GlobalVariables.Natural__Disasters_Wildfires_Flammable__Blocks)
+						.asList(Wildfire.flammableBlocks)
 						.contains(toBurn.getTypeId())) {
 				    break;
 				}
@@ -61,9 +59,9 @@ public class WildfireSpawner {
 			    toBurn = toBurn.getLocation().add(0, 1, 0)
 				    .getBlock();
 			    toBurn.setType(Material.FIRE);
-			    FireEvent.infernink.add(toBurn);
-			    StormUtil
-				    .broadcast(GlobalVariables.Natural__Disasters_Wildfires_Message__On__Start
+			    WildfireListeners.infernink.add(toBurn);
+			    Storm.util
+				    .broadcast(Storm.config.Natural__Disasters_Wildfires_Message__On__Start
 					    .replace("%x", toBurn.getX() + "")
 					    .replace("%y", toBurn.getY() + "")
 					    .replace("%z", toBurn.getZ() + ""));
@@ -73,8 +71,8 @@ public class WildfireSpawner {
 
 		}
 		,
-		GlobalVariables.Natural__Disasters_Wildfires_Scheduler_Spawner__Recalculation__Intervals__In__Ticks,
-		GlobalVariables.Natural__Disasters_Wildfires_Scheduler_Spawner__Recalculation__Intervals__In__Ticks);
+		Storm.config.Natural__Disasters_Wildfires_Scheduler_Spawner__Recalculation__Intervals__In__Ticks,
+		Storm.config.Natural__Disasters_Wildfires_Scheduler_Spawner__Recalculation__Intervals__In__Ticks);
     }
 
 }

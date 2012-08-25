@@ -15,7 +15,6 @@ import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 
 public class LightningUtils {
@@ -45,7 +44,7 @@ public class LightningUtils {
 	    Location ploc = new Location(p.getWorld(), p.getLocation().getX(),
 		    255, p.getLocation().getZ());
 	    if (chunk.distance(ploc) <= 40) {
-		for (int id : GlobalVariables.Lightning_Attraction_Players_Attractors) {
+		for (int id : Storm.config.Lightning_Attraction_Players_Attractors) {
 		    if (p.getInventory().getItemInHand().getTypeId() == id
 			    || Arrays.asList(
 				    p.getInventory().getArmorContents())
@@ -100,8 +99,7 @@ public class LightningUtils {
 		int y = snapshot.getHighestBlockYAt(x, z);
 		int type = snapshot.getBlockTypeId(x, y, z);
 
-		if (Arrays.asList(
-			GlobalVariables.Lightning_Attraction_Blocks_Attractors)
+		if (Storm.config.Lightning_Attraction_Blocks_Attractors
 			.contains(type)) {
 		    list.add(chunk.getBlock(x, y, z).getLocation());
 		} else {
@@ -110,8 +108,7 @@ public class LightningUtils {
 		    }
 		    y--;
 		    type = snapshot.getBlockTypeId(x, y, z);
-		    if (Arrays
-			    .asList(GlobalVariables.Lightning_Attraction_Blocks_Attractors)
+		    if (Storm.config.Lightning_Attraction_Blocks_Attractors
 			    .contains(type)) {
 			list.add(chunk.getBlock(x, y, z).getLocation());
 		    }
