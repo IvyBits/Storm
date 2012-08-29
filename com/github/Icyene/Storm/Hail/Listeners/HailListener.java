@@ -18,7 +18,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.Icyene.Storm.Storm;
-import com.github.Icyene.Storm.Rain.Acid.AcidRain;
+import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 
 public class HailListener implements Listener {
 

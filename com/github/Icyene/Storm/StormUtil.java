@@ -19,25 +19,27 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import com.github.Icyene.Storm.Rain.Acid.AcidRain;
+import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 
 public class StormUtil
 {
     public static final Logger log = Logger.getLogger("Storm");
-    static final String prefix = "[Storm] ";
     private static final Random rand = new Random();
 
     public void log(String logM)
     {
-	log.log(Level.INFO, prefix + logM);
+	log.log(Level.INFO, logM);
     }
 
     public void log(Level level, String logM)
     {
-	log.log(level, prefix + logM);
+	log.log(level, logM);
     }
 
     public void broadcast(String message) {
+	if(message.isEmpty()) {
+	    return;
+	}
 	Bukkit.getServer().broadcastMessage(parseColors(message));
     }
 
@@ -58,7 +60,7 @@ public class StormUtil
 
 	    if (!p.getGameMode().equals(GameMode.CREATIVE)) {
 
-		p.damage(damage*2);
+		p.damage(damage * 2);
 
 		this.message(p, message);
 	    }
@@ -84,25 +86,83 @@ public class StormUtil
 	return playerList;
     }
 
-    public void transform(Block toTransform, List<Integer[]> transformations) {
+   public void transform(Block toTransform,
+	    List<List<String>> transformations) {
 
 	final int blockId = toTransform.getTypeId();
-	for (Integer[] toCheck : transformations) {
-	    if (toCheck[0] == blockId) {
-		toTransform.setTypeId(toCheck[1]);
+	final int blockData = toTransform.getData();
+
+	for (List<String> toCheck : transformations) {
+
+	    String[] curState = new String[2];
+	    String[] toState = new String[2];
+	    if (toCheck.get(0).contains(":")) {
+
+		curState = toCheck.get(0).split(":");
+
+	    } else {
+
+		curState[0] = toCheck.get(0);
+		curState[1] = "0";
+
+	    }
+
+	    if (toCheck.get(1).contains(":")) {
+
+		toState = toCheck.get(1).split(":");
+
+	    } else {
+
+		toState[0] = toCheck.get(1);
+		toState[1] = "0";
+
+	    }
+
+	    if (Integer.valueOf(curState[0]) == blockId
+		    && Integer.valueOf(curState[1]) == blockData) {
+		toTransform.setTypeIdAndData(Integer.valueOf(toState[0]),
+			Byte.parseByte(toState[0]), true); // Ewwww
 		return;
 	    }
+
 	}
+
     }
 
     public Chunk pickChunk(final World w) {
-	final Chunk[] loadedChunks = w.getLoadedChunks();
-	return loadedChunks[rand.nextInt(loadedChunks.length)];
+
+	if (w == null) {
+	    Storm.util
+		    .log("The universe tried to f*ck with Storm by giving it a null world. Operation aborted :D");
+	    return null; // Somehow at times it passes a null world. The dafuq?
+	}
+
+	try {
+	    final Chunk[] loadedChunks = w.getLoadedChunks();
+	    return loadedChunks[rand.nextInt(loadedChunks.length)];
+	} catch (Exception e) {
+	    Storm.util.log("World " + w.getName()
+		    + " has no loaded chunks!");
+	}
+	return null;
+
     }
 
-    public World pickWorld(Storm storm, List<String> natural__Disasters_Meteor_Allowed__Worlds){
-	  return storm.getServer().getWorld(natural__Disasters_Meteor_Allowed__Worlds.get(new Random().nextInt(natural__Disasters_Meteor_Allowed__Worlds.size())));
-	 }
+    public World pickWorld(final Storm storm, List<String> world) {
+
+	ArrayList<World> worlds = new ArrayList<World>();
+	for (World w : storm.getServer().getWorlds()) {
+	    if (MultiWorldManager.checkWorld(w, world)) {
+		worlds.add(w);
+	    }
+	}
+
+	if (worlds.size() == 1) {
+	    return worlds.get(0);
+	} else {
+	    return worlds.get(rand.nextInt(worlds.size()));
+	}
+    }
 
     public boolean verifyVersion(Storm storm) {
 

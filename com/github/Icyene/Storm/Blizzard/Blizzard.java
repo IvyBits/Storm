@@ -36,6 +36,3 @@ public class Blizzard {
     }
 
 }
-// Trying to see if a player, when they log in, log into a world that has a blizzard, and if so, send them a TPack change.
-// basically that lineyou want to see if their world is in the hashmap??????  Yes, let me look at the docs  WAIT!!! IT WORKS FINE. Oh damn
-//I'm an idiot. If CWorld isnt in the hashmap already... that means it will return null... dammit'

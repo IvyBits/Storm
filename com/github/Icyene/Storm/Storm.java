@@ -28,10 +28,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
 import com.github.Icyene.Storm.Lightning.Lightning;
 import com.github.Icyene.Storm.Meteors.Meteor;
-import com.github.Icyene.Storm.Rain.Acid.AcidRain;
 import com.github.Icyene.Storm.Wildfire.Wildfire;
 
 public class Storm extends JavaPlugin implements Listener
@@ -45,8 +45,14 @@ public class Storm extends JavaPlugin implements Listener
     {
 	
 	config = new GlobalVariables(this);
+	config.workaroundLists(); //Stupid workaround for config
 	config.load();
 
+	Commands cmds = new Commands();
+	
+	getCommand("meteor").setExecutor(cmds);
+	getCommand("wildfire").setExecutor(cmds);
+	
 	// Stats
 	try {
 	    MetricsLite metrics = new MetricsLite(this);
@@ -78,7 +84,7 @@ public class Storm extends JavaPlugin implements Listener
 	    Meteor.load(this);
 	    this.getServer().getPluginManager().registerEvents(new TextureManager(), this);
 	    this.getServer().getPluginManager().registerEvents(new MultistateManager(), this);
-	    System.out.println(config.Natural__Disasters_Meteor_Allowed__Worlds);
+	
 	  
 	} catch (Exception e) {
 
@@ -90,7 +96,7 @@ public class Storm extends JavaPlugin implements Listener
 
     @Override
     public void onDisable() {
-	Blizzard.unload();
+	Blizzard.unload();	
     }
 
     public void crashDisable(String crash)

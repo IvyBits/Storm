@@ -14,6 +14,8 @@ public class MultistateManager implements Listener {
     // This class makes sure there can't be a blizzard at the same time as acid
     // rain, etc.
 
+    //FIXME: Currently broken. Shattered.
+    
     public MultistateManager() {
     };
 
@@ -24,19 +26,15 @@ public class MultistateManager implements Listener {
 
 	World affectedWorld = e.getAffectedWorld();
 
-	if (!e.getWeatherState()) { // Acid rain just ended
+	if (e.getWeatherState()) { // Acid rain just started
 
 	    if (multiMap.containsKey(affectedWorld)
 		    && multiMap.get(affectedWorld)) {
 
 		e.setCancelled(true);
-
+		return;
 	    }
 
-	    multiMap.remove(affectedWorld);
-	    multiMap.put(affectedWorld, Boolean.FALSE);
-
-	    return;
 	}
 
 	multiMap.remove(affectedWorld);
@@ -49,19 +47,16 @@ public class MultistateManager implements Listener {
 
 	World affectedWorld = e.getAffectedWorld();
 
-	if (!e.getWeatherState()) { // Blizzard just ended
+	if (e.getWeatherState()) { // Blizzard just started
 
 	    if (multiMap.containsKey(affectedWorld)
 		    && multiMap.get(affectedWorld)) {
 
 		e.setCancelled(true);
+		return;
 
 	    }
 
-	    multiMap.remove(affectedWorld);
-	    multiMap.put(affectedWorld, Boolean.FALSE);
-
-	    return;
 	}
 
 	multiMap.remove(affectedWorld);

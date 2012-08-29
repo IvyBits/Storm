@@ -1,5 +1,6 @@
 package com.github.Icyene.Storm;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +15,26 @@ public class GlobalVariables extends ReflectConfiguration {
 	super(storm);
     }
 
-    public String Version = "0.0.4B";
+    public void workaroundLists() {
+
+	List<String> leavesToAir = Arrays.asList(new String[] { "18", "0" });
+	List<String> grassToDirt = Arrays.asList(new String[] { "2", "3" });
+	List<String> stoneToCobble = Arrays.asList(new String[] { "1", "4" });
+	List<String> brickSlabToCobbleSlab = Arrays.asList(new String[] {
+		"44:5", "44:3" });
+	List<String> cobbleToMossy = Arrays.asList(new String[] { "4", "48" });
+	Acid__Rain_Dissolver_Block__Transformations.add(leavesToAir);
+	Acid__Rain_Dissolver_Block__Transformations.add(grassToDirt);
+	Acid__Rain_Dissolver_Block__Transformations.add(stoneToCobble);
+	Acid__Rain_Dissolver_Block__Transformations.add(brickSlabToCobbleSlab);
+	Acid__Rain_Dissolver_Block__Transformations.add(cobbleToMossy);
+
+	List<String> sandToGlass = Arrays.asList(new String[] { "12", "20" });
+	Lightning_Melter_Block__Transformations.add(sandToGlass);
+
+    }
+
+    public String Version = "0.0.6B";
     public List<String> Acid__Rain_Allowed__Worlds = Arrays
 	    .asList(new String[] { "world" });
     public int Acid__Rain_Acid__Rain__Chance = 5;
@@ -22,9 +42,7 @@ public class GlobalVariables extends ReflectConfiguration {
 
     public String Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain = "You have been hurt by the acidic downfall!";
     public int Acid__Rain_Player_Damage__From__Exposure = 2;
-    public List<Integer[]> Acid__Rain_Dissolver_Block__Transformations = Arrays
-	    .asList(new Integer[][] {
-		    { 18, 0 }, { 2, 3 }, { 1, 4 } });
+    public List<List<String>> Acid__Rain_Dissolver_Block__Transformations = new ArrayList<List<String>>();
 
     public int Acid__Rain_Dissolver_Blocks__To__Deteriorate__Per__Calculation = 10;
 
@@ -39,6 +57,11 @@ public class GlobalVariables extends ReflectConfiguration {
     public String Blizzard_Message__On__Blizzard__Start = "It has started to snow violently! Seek a warm biome for safety!";
     public String Blizzard_Damager_Message__On__Player__Damaged__Cold = "You are freezing!";
     public int Blizzard_Damager_Blindness__Amplitude = 5;
+
+    public List<Integer> Blizzard_Damager_Heating__Blocks = Arrays.asList(
+	    Block.FIRE.id, Block.LAVA.id, Block.STATIONARY_LAVA.id,
+	    Block.BURNING_FURNACE.id);
+
     public int Blizzard_Player_Damage__From__Exposure = 2;
     public double Blizzard_Player_Speed__Loss__While__In__Snow = 0.4D;
     public int Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
@@ -56,9 +79,7 @@ public class GlobalVariables extends ReflectConfiguration {
     public int Lightning_Attraction_Players_AttractionChance = 80;
     public List<Integer> Lightning_Attraction_Players_Attractors = Arrays
 	    .asList(new Integer[] { Item.IRON_AXE.id });
-    public List<Integer[]> Lightning_Melter_Block__Transformations = Arrays
-	    .asList(new Integer[][] {
-		    { 12, 20 }, { 20, 0 } });
+    public List<List<String>> Lightning_Melter_Block__Transformations = new ArrayList<List<String>>();
 
     public List<String> Natural__Disasters_Meteor_Allowed__Worlds = Arrays
 	    .asList(new String[] { "world" });
@@ -93,7 +114,6 @@ public class GlobalVariables extends ReflectConfiguration {
     public boolean Features_Lightning_Player__Attraction = true;
     public boolean Features_Lightning_Block__Attraction = true;
     public boolean Features_Lightning_Block__Transformations = true;
-    public boolean Features_Snow_PassThruBlocks = true;
     public boolean Features_Snow_Slow__Players__Down = true;
     public boolean Features_Blizzards_Player__Damaging = true;
     public boolean Features_Blizzards_Slowing__Snow = true;

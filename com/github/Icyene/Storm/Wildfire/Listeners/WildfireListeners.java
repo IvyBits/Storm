@@ -27,6 +27,8 @@ public class WildfireListeners implements Listener {
     private final int radiuski = Storm.config.Natural__Disasters_Wildfires_Scan__Radius;
     private int C = 0;
     public static List<Block> infernink = new ArrayList<Block>();
+    private List<Integer> flammableList = Arrays
+	    .asList(Wildfire.flammableBlocks);
 
     // Dear future me. Please forgive me.
     // I can't even begin to express how sorry I am.
@@ -46,7 +48,7 @@ public class WildfireListeners implements Listener {
 
 	final Location loc = event.getBlock().getLocation();
 	final World w = loc.getWorld();
-	
+
 	for (int x = -radiuski; x <= radiuski; x++) {
 	    for (int y = -radiuski; y <= radiuski; y++) {
 		for (int z = -radiuski; z <= radiuski; z++) {
@@ -83,17 +85,12 @@ public class WildfireListeners implements Listener {
 
     private void scanForIgnitables(final Location loc, final World w)
     {
-
 	Block bR = w.getBlockAt(loc);
 
-	/* Abandon all ye hope those who venture beyond this point */
+	for (int x = -radiuski; x <= radiuski; x++) {
+	    for (int y = -radiuski; y <= radiuski; y++) {
+		for (int z = -radiuski; z <= radiuski; z++) {
 
-	for (int y = 1; y > -2; y--)
-	{
-	    for (int x = 1; x > -2; x--)
-	    {
-		for (int z = 1; z > -2; z--)
-		{
 		    bR = w.getBlockAt((int) loc.getX() + x,
 			    (int) loc.getY() + y, (int) loc.getZ() + z);
 		    if (bR.getTypeId() != 0) {
@@ -144,16 +141,14 @@ public class WildfireListeners implements Listener {
     }
 
     public void burn(final Block toBurn) {
-	
+
 	toBurn.setTypeId(51);
 	infernink.add(toBurn);
 
     }
 
     public boolean canBurn(Block toCheck) {
-	if (Arrays.asList(
-		Wildfire.flammableBlocks)
-		.contains(toCheck.getTypeId())) {
+	if (flammableList.contains(toCheck.getTypeId())) {
 	    return true;
 	} else {
 	    return false;

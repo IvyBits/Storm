@@ -8,7 +8,7 @@ import net.minecraft.server.Block;
 import org.bukkit.block.Biome;
 
 import com.github.Icyene.Storm.Storm;
-import com.github.Icyene.Storm.Wildfire.Listeners.WildfireListeners;
+import com.github.Icyene.Storm.Wildfire.Tasks.Igniter;
 
 public class Wildfire {
 
@@ -28,16 +28,8 @@ public class Wildfire {
     });
 
     public static void load(Storm storm) {
-	try {
-
-	    if (Storm.config.Features_Wildfires) {
-		storm.getServer().getPluginManager()
-			.registerEvents(new WildfireListeners(), storm);
-	    }
-
-	} catch (Exception e) {
+	if (Storm.config.Features_Wildfires) {
+	    new Igniter(storm).run();
 	}
-	;
-
     }
 }

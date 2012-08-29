@@ -3,28 +3,23 @@ package com.github.Icyene.Storm.Blizzard.Listeners;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
+import com.github.Icyene.Storm.MultiWorldManager;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
+import com.github.Icyene.Storm.Blizzard.Tasks.BlizzardTask;
 import com.github.Icyene.Storm.Events.BlizzardEvent;
-import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 
 public class BlizzardListeners implements Listener {
 
     private Random rand = new Random();
-    HashMap<World, Integer> damagerMap = new HashMap<World, Integer>();
+    public static HashMap<World, BlizzardTask> damagerMap = new HashMap<World, BlizzardTask>();
     private Storm storm;
-    private int damagerScheduleId = -1;
 
     public BlizzardListeners(Storm storm)
     {
@@ -36,7 +31,6 @@ public class BlizzardListeners implements Listener {
     {
 
 	if (event.isCancelled()) {
-
 	    return;
 	}
 
@@ -73,65 +67,19 @@ public class BlizzardListeners implements Listener {
 	    Blizzard.blizzardingWorlds.remove(affectedWorld);
 	    Blizzard.blizzardingWorlds.put(affectedWorld, Boolean.FALSE);
 	    // Cancel damaging tasks for specific world
-	    try {
-		Bukkit.getScheduler().cancelTask(
-			damagerMap.get(affectedWorld));
-		Bukkit.getScheduler().cancelTask(damagerMap.get(affectedWorld));
 
-		BlizzardEvent startEvent = new BlizzardEvent(
-			affectedWorld, false);
-		Bukkit.getServer().getPluginManager().callEvent(startEvent);
+	    damagerMap.get(affectedWorld).stop();
 
-	    } catch (Exception e) {
+	    BlizzardEvent startEvent = new BlizzardEvent(
+		    affectedWorld, false);
+	    Bukkit.getServer().getPluginManager().callEvent(startEvent);
 
-	    }
 	    return;
 	}
 
-	damagerScheduleId = Bukkit.getScheduler()
-		.scheduleSyncRepeatingTask(
-			storm,
-			new Runnable()
-			{
-			    @Override
-			    public void run()
-			    {
-
-				for (Player damagee : affectedWorld
-					.getPlayers())
-				{
-				    if (!damagee.getGameMode().equals(
-					    GameMode.CREATIVE)
-				    )
-				    {
-
-					if (!Blizzard.snowyBiomes
-						.contains(damagee.getLocation()
-							.getBlock().getBiome())) {
-					    return;
-					}
-
-					damagee.damage(Storm.config.Blizzard_Player_Damage__From__Exposure*2);
-
-					damagee.addPotionEffect(new PotionEffect(
-						PotionEffectType.BLINDNESS,
-						Storm.config.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks+60,
-						Storm.config.Blizzard_Damager_Blindness__Amplitude));
-
-					Storm.util
-						.message(
-							damagee,
-							Storm.config.Blizzard_Damager_Message__On__Player__Damaged__Cold);
-
-				    }
-				}
-			    }
-
-			},
-			Storm.config.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks,
-			Storm.config.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks);
-
-	damagerMap.put(affectedWorld, damagerScheduleId);
+	final BlizzardTask bliz = new BlizzardTask(storm, affectedWorld);
+	damagerMap.put(affectedWorld, bliz);
+	bliz.run();
 
     }
 }

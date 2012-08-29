@@ -8,9 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.LightningStrikeEvent;
 
+import com.github.Icyene.Storm.MultiWorldManager;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Lightning.LightningUtils;
-import com.github.Icyene.Storm.MultiWorld.MultiWorldManager;
 
 public class StrikeListener implements Listener {
 

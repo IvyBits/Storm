@@ -7,10 +7,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
 import com.github.Icyene.Storm.Events.AcidRainEvent;
 import com.github.Icyene.Storm.Events.BlizzardEvent;
-import com.github.Icyene.Storm.Rain.Acid.AcidRain;
 
 public class TextureManager implements Listener {
 
