@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import com.github.Icyene.Storm.Storm;
+import com.github.Icyene.Storm.Wildfire.Listeners.WildfireListeners;
 import com.github.Icyene.Storm.Wildfire.Tasks.Igniter;
 
 public class Wildfire {
@@ -30,6 +31,7 @@ public class Wildfire {
 
     public static void load(Storm storm) {
 
+	storm.getServer().getPluginManager().registerEvents(new WildfireListeners(), storm);	
 	for (World w : storm.getServer().getWorlds()) {
 	    if (Storm.wConfigs.get(w.getName()).Features_Meteor) {
 		new Igniter(storm, w).run();
