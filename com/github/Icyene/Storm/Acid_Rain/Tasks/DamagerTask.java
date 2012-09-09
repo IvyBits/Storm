@@ -9,20 +9,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 
 public class DamagerTask {
 
     private int id;
-    private Random rand = new Random();    
-    private World affectedWorld; 
+    private Random rand = new Random();
+    private World affectedWorld;
     private Storm storm;
 
-    public DamagerTask(Storm storm, World affectedWorld) {
+    private GlobalVariables glob;
 
+    public DamagerTask(Storm storm, World affectedWorld) {
 	this.storm = storm;
 	this.affectedWorld = affectedWorld;
-
+	glob = Storm.wConfigs.get(affectedWorld.getName());
     }
 
     public void run() {
@@ -50,7 +52,7 @@ public class DamagerTask {
 
 					}
 
-					damagee.damage(Storm.config.Acid__Rain_Player_Damage__From__Exposure * 2);
+					damagee.damage(glob.Acid__Rain_Player_Damage__From__Exposure * 2);
 
 					damagee.addPotionEffect(
 						new PotionEffect(
@@ -65,15 +67,15 @@ public class DamagerTask {
 					Storm.util
 						.message(
 							damagee,
-							Storm.config.Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain);
+							glob.Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain);
 
 				    }
 				}
 			    }
 
 			},
-			Storm.config.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks,
-			Storm.config.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks);
+			glob.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks,
+			glob.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks);
 
     }
 

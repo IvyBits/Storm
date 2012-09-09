@@ -21,14 +21,12 @@ public class Blizzard {
 
     public static void load(Storm storm)
     {
-	if (Storm.config.Features_Blizzards_Player__Damaging) {
-	    PluginManager pm = storm.getServer().getPluginManager();
-	    pm.registerEvents(new BlizzardListeners(storm), storm);
-	}
 
-	if (Storm.config.Features_Blizzards_Slowing__Snow) {
-	    ModSnow.mod(true);
-	}
+	PluginManager pm = storm.getServer().getPluginManager();
+	pm.registerEvents(new BlizzardListeners(storm), storm);
+
+	ModSnow.mod(true);
+
     }
 
     public static void unload() {

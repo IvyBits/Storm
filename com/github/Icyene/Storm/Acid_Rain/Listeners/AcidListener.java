@@ -3,9 +3,11 @@ package com.github.Icyene.Storm.Acid_Rain.Listeners;
 import java.util.*;
 
 import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import com.github.Icyene.Storm.MultiWorldManager;
+
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 import com.github.Icyene.Storm.Acid_Rain.Tasks.DamagerTask;
@@ -36,16 +38,16 @@ public class AcidListener implements Listener
 
 	final World affectedWorld = event.getWorld();
 
+	GlobalVariables glob = Storm.wConfigs.get(affectedWorld.getName());
+	
 	if (event.toWeatherState()) {// gets if its set to raining
 
-	    if (rand.nextInt(100) <= Storm.config.Acid__Rain_Acid__Rain__Chance) {
+	    if (rand.nextInt(100) <= glob.Acid__Rain_Acid__Rain__Chance) {
 
-		if (!MultiWorldManager.checkWorld(affectedWorld,
-
-			Storm.config.Acid__Rain_Allowed__Worlds)) {
-
+		if(!glob.Features_Acid__Rain_Dissolving__Blocks && !glob.Features_Acid__Rain_Player__Damaging) {
 		    return;
 		}
+		
 		AcidRain.acidicWorlds.remove(affectedWorld);
 		AcidRain.acidicWorlds.put(affectedWorld, Boolean.TRUE);
 
@@ -57,8 +59,13 @@ public class AcidListener implements Listener
 		    return;
 		}
 
-		Storm.util
-			.broadcast(Storm.config.Acid__Rain_Message__On__Acid__Rain__Start);
+		for (Player p : affectedWorld.getPlayers()) {
+
+		    Storm.util
+			    .message(
+				    p,
+				    glob.Acid__Rain_Message__On__Acid__Rain__Start);
+		}
 
 	    } else {
 		return;
@@ -74,21 +81,24 @@ public class AcidListener implements Listener
 	    AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
 		    false);
 	    Bukkit.getServer().getPluginManager().callEvent(startEvent);
-
-	    dissolverMap.get(affectedWorld).stop();
-	    damagerMap.get(affectedWorld).stop();
+	    try {
+		dissolverMap.get(affectedWorld).stop();
+		damagerMap.get(affectedWorld).stop();
+	    } catch (Exception e) {
+	    }
+	    ;
 
 	    return;
 	}
 
-	if (Storm.config.Features_Acid__Rain_Dissolving__Blocks) {
+	if (glob.Features_Acid__Rain_Dissolving__Blocks) {
 	    final DissolverTask dis = new DissolverTask(storm, affectedWorld);
 	    dissolverMap.put(affectedWorld, new DissolverTask(storm,
 		    affectedWorld));
 	    dis.run();
 	}
 
-	if (Storm.config.Features_Acid__Rain_Player__Damaging) {
+	if (glob.Features_Acid__Rain_Player__Damaging) {
 	    final DamagerTask dam = new DamagerTask(storm, affectedWorld);
 	    damagerMap.put(affectedWorld, dam);
 	    dam.run();

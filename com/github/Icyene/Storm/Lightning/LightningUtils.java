@@ -15,6 +15,7 @@ import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 
 public class LightningUtils {
@@ -40,11 +41,13 @@ public class LightningUtils {
     public Location hitPlayers(Location oldLoc) {
 	final Location chunk = pickChunk(oldLoc.getWorld()).getBlock(8, 255, 8)
 		.getLocation();
+	GlobalVariables glob = Storm.wConfigs.get(oldLoc.getWorld().getName());
+	
 	for (Player p : storm.getServer().getOnlinePlayers()) {
 	    Location ploc = new Location(p.getWorld(), p.getLocation().getX(),
 		    255, p.getLocation().getZ());
 	    if (chunk.distance(ploc) <= 40) {
-		for (int id : Storm.config.Lightning_Attraction_Players_Attractors) {
+		for (int id : glob.Lightning_Attraction_Players_Attractors) {
 		    if (p.getInventory().getItemInHand().getTypeId() == id
 			    || Arrays.asList(
 				    p.getInventory().getArmorContents())
@@ -92,6 +95,8 @@ public class LightningUtils {
 
 	ChunkSnapshot snapshot = chunk.getChunkSnapshot(true, false, false);
 
+	GlobalVariables glob = Storm.wConfigs.get(chunk.getWorld().getName());
+	
 	for (int x = 0; x < 16; x++)
 	{
 	    for (int z = 0; z < 16; z++)
@@ -99,7 +104,7 @@ public class LightningUtils {
 		int y = snapshot.getHighestBlockYAt(x, z);
 		int type = snapshot.getBlockTypeId(x, y, z);
 
-		if (Storm.config.Lightning_Attraction_Blocks_Attractors
+		if (glob.Lightning_Attraction_Blocks_Attractors
 			.contains(type)) {
 		    list.add(chunk.getBlock(x, y, z).getLocation());
 		} else {
@@ -108,7 +113,7 @@ public class LightningUtils {
 		    }
 		    y--;
 		    type = snapshot.getBlockTypeId(x, y, z);
-		    if (Storm.config.Lightning_Attraction_Blocks_Attractors
+		    if (glob.Lightning_Attraction_Blocks_Attractors
 			    .contains(type)) {
 			list.add(chunk.getBlock(x, y, z).getLocation());
 		    }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
 
@@ -17,10 +18,13 @@ public class BlizzardTask {
     private int id;
     private World affectedWorld;
     private Storm storm;
-
-    public BlizzardTask(Storm storm, World affectedWorld) {
+    private GlobalVariables glob;
+    
+    public BlizzardTask(Storm storm, World spawnWorld) {
 	this.storm = storm;
-	this.affectedWorld = affectedWorld;
+	this.affectedWorld = spawnWorld;
+	 glob = Storm.wConfigs.get(spawnWorld.getName());
+	
     }
 
     public void run() {
@@ -51,8 +55,8 @@ public class BlizzardTask {
 					damagee.addPotionEffect(
 						new PotionEffect(
 							PotionEffectType.BLINDNESS,
-							Storm.config.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks + 60,
-							Storm.config.Blizzard_Damager_Blindness__Amplitude),
+							glob.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks + 60,
+							glob.Blizzard_Damager_Blindness__Amplitude),
 						true);
 
 					final Location loc = damagee
@@ -73,7 +77,7 @@ public class BlizzardTask {
 								    + y,
 							    (int) loc.getZ()
 								    + z);
-						    if (Storm.config.Blizzard_Damager_Heating__Blocks
+						    if (glob.Blizzard_Damager_Heating__Blocks
 							    .contains(scan
 								    .getTypeId())) {
 							return; // Don't damage
@@ -85,19 +89,19 @@ public class BlizzardTask {
 					    }
 					}
 
-					damagee.damage(Storm.config.Blizzard_Player_Damage__From__Exposure * 2);
+					damagee.damage(glob.Blizzard_Player_Damage__From__Exposure * 2);
 					Storm.util
 						.message(
 							damagee,
-							Storm.config.Blizzard_Damager_Message__On__Player__Damaged__Cold);
+							glob.Blizzard_Damager_Message__On__Player__Damaged__Cold);
 
 				    }
 				}
 			    }
 
 			},
-			Storm.config.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks,
-			Storm.config.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks);
+			glob.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks,
+			glob.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks);
 
     }
 

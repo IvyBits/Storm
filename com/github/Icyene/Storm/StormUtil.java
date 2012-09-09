@@ -18,14 +18,28 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.github.Icyene.Storm.Acid_Rain.AcidRain;
+import com.sk89q.worldguard.bukkit.BukkitUtil;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 
 public class StormUtil
 {
     public static final Logger log = Logger.getLogger("Storm");
     private static final Random rand = new Random();
+    private static WorldGuardPlugin wg;
+    private static boolean hasWG = false;
 
+    public StormUtil(Storm storm) {
+	
+	final Plugin wgp = storm.getServer().getPluginManager().getPlugin("WorldGuard");
+	hasWG = wgp == null ? false : true; //Short and sweet
+	if(hasWG) {wg=(WorldGuardPlugin)wgp;}
+	
+    }
+    
     public void log(String logM)
     {
 	log.log(Level.INFO, logM);
@@ -67,6 +81,23 @@ public class StormUtil
 	}
     }
 
+    public boolean isBlockProtected(Block b) {
+	
+	if(!hasWG) {
+	    return false;
+	}
+	
+	RegionManager mgr = wg.getGlobalRegionManager().get(b.getWorld());
+	if(mgr.getApplicableRegions(BukkitUtil.toVector(b.getLocation())).size() > 0) {
+	    
+	    return true;
+	    
+	} else {
+	    return false;
+	}
+	
+    }
+    
     public ArrayList<Player> getNearbyPlayers(Location location,
 	    double radius) {
 
@@ -89,6 +120,10 @@ public class StormUtil
    public void transform(Block toTransform,
 	    List<List<String>> transformations) {
 
+       if(isBlockProtected(toTransform)) {
+	   return;
+       }
+       
 	final int blockId = toTransform.getTypeId();
 	final int blockData = toTransform.getData();
 
@@ -131,9 +166,7 @@ public class StormUtil
 
     public Chunk pickChunk(final World w) {
 
-	if (w == null) {
-	    Storm.util
-		    .log("The universe tried to f*ck with Storm by giving it a null world. Operation aborted :D");
+	if (w == null) {	 
 	    return null; // Somehow at times it passes a null world. The dafuq?
 	}
 
@@ -147,27 +180,9 @@ public class StormUtil
 	return null;
 
     }
-
-    public World pickWorld(final Storm storm, List<String> world) {
-
-	ArrayList<World> worlds = new ArrayList<World>();
-	for (World w : storm.getServer().getWorlds()) {
-	    if (MultiWorldManager.checkWorld(w, world)) {
-		worlds.add(w);
-	    }
-	}
-
-	if (worlds.size() == 1) {
-	    return worlds.get(0);
-	} else {
-	    return worlds.get(rand.nextInt(worlds.size()));
-	}
-    }
-
     public boolean verifyVersion(Storm storm) {
 
-	if (!Storm.config.Version
-		.equals(storm.getDescription().getVersion())) {
+	if (!Storm.versionID.equals(storm.getDescription().getVersion())) {
 	    return false; // Tell user config should be updated
 	} else {
 	    return true;
@@ -182,7 +197,7 @@ public class StormUtil
     }
 
     public void clearTexture(Player toClear) {
-	setTexture(toClear, Storm.config.Textures_Default__Texture__Path);
+	setTexture(toClear, Storm.wConfigs.get(toClear.getWorld().getName()).Textures_Default__Texture__Path);
     }
 
     public boolean isPlayerInRain(final Player player) {
@@ -198,5 +213,5 @@ public class StormUtil
 	}
 	return false;
     }
-
+    
 }

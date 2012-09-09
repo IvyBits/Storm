@@ -1,7 +1,7 @@
 package com.github.Icyene.Storm.Wildfire.Listeners;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Wildfire.Wildfire;
 
@@ -21,12 +22,7 @@ public class WildfireListeners implements Listener {
 
     // TO USE: Create a fire block and add it to infernink
 
-    // Private final, so people can't fuck with it without reflection!
-    private final int spreadLimit = Storm.config.Natural__Disasters_Wildfires_Spread__Limit;
-    // Adopt evil accent to become evil
-    private final int radiuski = Storm.config.Natural__Disasters_Wildfires_Scan__Radius;
-    private int C = 0;
-    public static List<Block> infernink = new ArrayList<Block>();
+    public static HashMap<World, List<Block>> infernink = new HashMap<World, List<Block>>();
     private List<Integer> flammableList = Arrays
 	    .asList(Wildfire.flammableBlocks);
 
@@ -39,21 +35,25 @@ public class WildfireListeners implements Listener {
 	if (!event.getCause().equals(IgniteCause.SPREAD)) {
 	    return;
 	}
+	final Location loc = event.getBlock().getLocation();
+	final World w = loc.getWorld();
 
-	if (!(infernink.size() < Storm.config.Natural__Disasters_Maximum__Fires)) {
+	GlobalVariables glob = Storm.wConfigs.get(w.getName());
+
+	if (!(infernink.size() < glob.Natural__Disasters_Maximum__Fires)) {
 	    return;
 	}
 
 	boolean doScan = false;
 
-	final Location loc = event.getBlock().getLocation();
-	final World w = loc.getWorld();
+	final int radiuski = glob.Natural__Disasters_Wildfires_Scan__Radius;
 
 	for (int x = -radiuski; x <= radiuski; x++) {
 	    for (int y = -radiuski; y <= radiuski; y++) {
 		for (int z = -radiuski; z <= radiuski; z++) {
-		    if (infernink.contains(new Location(w, x + loc.getX(), y
-			    + loc.getY(), z + loc.getZ()).getBlock())) {
+		    if (infernink.get(w).contains(
+			    new Location(w, x + loc.getX(), y
+				    + loc.getY(), z + loc.getZ()).getBlock())) {
 
 			doScan = true;
 
@@ -65,7 +65,8 @@ public class WildfireListeners implements Listener {
 
 	if (doScan) {
 
-	    scanForIgnitables(loc, w);
+	    scanForIgnitables(loc, w, radiuski,
+		    glob.Natural__Disasters_Wildfires_Spread__Limit);
 
 	}
 
@@ -74,7 +75,7 @@ public class WildfireListeners implements Listener {
     @EventHandler
     public void onBlockEx(final BlockFadeEvent event) {
 	final Block b = event.getBlock();
-	if (infernink.contains(b)) {
+	if (infernink.get(b.getWorld()).contains(b)) {
 
 	    if (b.getRelative(BlockFace.DOWN).getTypeId() == 0) {
 		infernink.remove(b);
@@ -83,9 +84,12 @@ public class WildfireListeners implements Listener {
 
     }
 
-    private void scanForIgnitables(final Location loc, final World w)
+    private void scanForIgnitables(final Location loc, final World w,
+	    int radiuski, int spreadLimit)
     {
 	Block bR = w.getBlockAt(loc);
+
+	int C = 0;
 
 	for (int x = -radiuski; x <= radiuski; x++) {
 	    for (int y = -radiuski; y <= radiuski; y++) {
@@ -99,35 +103,35 @@ public class WildfireListeners implements Listener {
 
 		    bR = bR.getRelative(0, -1, 0);
 
-		    if (canBurn(bR) && (C < this.spreadLimit)) {
+		    if (canBurn(bR) && (C < spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(-1, 0, 0);
 
-		    if (canBurn(bR) && (C < this.spreadLimit)) {
+		    if (canBurn(bR) && (C < spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(1, 0, 0);
 
-		    if (canBurn(bR) && (C < this.spreadLimit)) {
+		    if (canBurn(bR) && (C < spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(0, 0, -1);
 
-		    if (canBurn(bR) && (C < this.spreadLimit)) {
+		    if (canBurn(bR) && (C < spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
 
 		    bR = bR.getRelative(0, 0, 1);
 
-		    if (canBurn(bR) || (C < this.spreadLimit)) {
+		    if (canBurn(bR) || (C < spreadLimit)) {
 			burn(bR);
 			C++;
 		    }
@@ -143,7 +147,7 @@ public class WildfireListeners implements Listener {
     public void burn(final Block toBurn) {
 
 	toBurn.setTypeId(51);
-	infernink.add(toBurn);
+	infernink.get(toBurn.getWorld()).add(toBurn);
 
     }
 

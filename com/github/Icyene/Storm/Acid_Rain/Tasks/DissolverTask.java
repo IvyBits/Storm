@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 
@@ -15,14 +16,15 @@ public class DissolverTask {
 
     private int id;
     private Random rand = new Random();
-    private World affectedWorld;   
+    private World affectedWorld;
     private Storm storm;
     
+    private GlobalVariables glob;
+    
     public DissolverTask(Storm storm, World affectedWorld) {
-	
 	this.storm = storm;
 	this.affectedWorld = affectedWorld;
-	
+	glob = Storm.wConfigs.get(affectedWorld.getName());
     }
 
     public void run() {
@@ -38,7 +40,7 @@ public class DissolverTask {
 				Chunk[] loadedChunk = affectedWorld
 					.getLoadedChunks();
 
-				for (int blocksPerCalculationIndex = 0; blocksPerCalculationIndex <= Storm.config.Acid__Rain_Dissolver_Blocks__To__Deteriorate__Per__Calculation; ++blocksPerCalculationIndex)
+				for (int blocksPerCalculationIndex = 0; blocksPerCalculationIndex <= glob.Acid__Rain_Dissolver_Blocks__To__Deteriorate__Per__Calculation; ++blocksPerCalculationIndex)
 				{
 				    Chunk chunkToDissolve = loadedChunk[rand
 					    .nextInt(loadedChunk.length)];
@@ -59,39 +61,44 @@ public class DissolverTask {
 						.subtract(0, 1, 0)
 						.getBlock();
 
-					Biome deteriorationBiome = toDeteriorate
-						.getBiome();
+					if (Storm.util
+						.isBlockProtected(toDeteriorate)) {
+					    --blocksPerCalculationIndex;
+					} else {
 
-					if (AcidRain.rainyBiomes
-						.contains(deteriorationBiome))
-					{
+					    Biome deteriorationBiome = toDeteriorate
+						    .getBiome();
 
-					    if (rand.nextInt(100) < Storm.config.Acid__Rain_Dissolver_Block__Deterioration__Chance)
+					    if (AcidRain.rainyBiomes
+						    .contains(deteriorationBiome))
 					    {
-						if (toDeteriorate
-							.getTypeId() != 0)
-						{
 
-						    Storm.util
-							    .transform(
-								    toDeteriorate,
-								    Storm.config.Acid__Rain_Dissolver_Block__Transformations);
+						if (rand.nextInt(100) < glob.Acid__Rain_Dissolver_Block__Deterioration__Chance)
+						{
+						    if (toDeteriorate
+							    .getTypeId() != 0)
+						    {
+
+							Storm.util
+								.transform(
+									toDeteriorate,
+									glob.Acid__Rain_Dissolver_Block__Transformations);
+						    }
+
 						}
 
+					    } else
+					    {
+						--blocksPerCalculationIndex;
 					    }
-
-					} else
-					{
-					    --blocksPerCalculationIndex;
 					}
-
 				    }
 				}
 
 			    }
 			},
 			0,
-			Storm.config.Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks);
+			glob.Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks);
 
     }
 

@@ -1,6 +1,10 @@
 package com.github.Icyene.Storm.Meteors.Entities;
 
 import org.bukkit.Location;
+import org.bukkit.block.Biome;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.github.Icyene.Storm.Storm;
 
@@ -14,72 +18,99 @@ public class EntityMeteor extends EntityFireball
     private float explosionRadius = 50F;
     private float trailPower = 20F;
     private float brightness = 10F;
-    private String meteorCrashMessage = Storm.config.Natural__Disasters_Meteor_Message__On__Meteor__Crash;
+    private String meteorCrashMessage;
     private int burrowCount = 5;
     private int burrowPower = 10;
 
-    private int prevMotX = 0;
-    private int prevMotY = 0;
-    private int prevMotZ = 0;
+    private String damageMessage;
+    private int shockwaveDamage;
+    private int shockwaveDamageRadius;
+    private int snowRadius;
+    
+    private boolean h_lock, h_lock_2, h_lock_3;
+   
+    /**
+     * Creates a meteor object.
+     * 
+     * @param world
+     *            The world to spawn in
+     * @param burrowCount
+     *            The times it can burrow
+     * @param burrowPower
+     *            The power with which it burrows with
+     * @param trailPower
+     *            Its trail power
+     * @param explosionRadius
+     *            The power of its final explosion
+     * @param brightness
+     *            How bright the meteor is
+     * @param crashMessage
+     *            The message displayed on crash
+     * @param shockwaveDamage
+     *            The damage dealt by its shockwave
+     * @param shockwaveDamageRadius
+     *            The radius of damage
+     * @param damageMessage
+     *            The message on damage
+     * @param snowRadius
+     *            The radius of the meteor winter
+     */
 
-    private Location thisLoc;
-    private Location prevLoc;
-
-    public EntityMeteor(World world)
+    public EntityMeteor(World world) {
+	super(world);
+    }
+    
+    public EntityMeteor(World world, int burrowCount, int burrowPower,
+	    float trailPower, float explosionRadius, float brightness,
+	    String crashMessage, int shockwaveDamage,
+	    int shockwaveDamageRadius, String damageMessage, int snowRadius)
     {
 	super(world);
-	prevLoc = new Location(world.getWorld(), locX, locY, locZ);
+
+	this.burrowPower = burrowPower;
+	this.burrowCount = burrowCount;
+	this.trailPower = trailPower;
+	this.explosionRadius = explosionRadius;
+	this.brightness = brightness;
+	this.meteorCrashMessage = crashMessage;
+	this.shockwaveDamage = shockwaveDamage;
+	this.shockwaveDamageRadius = shockwaveDamageRadius;
+	this.damageMessage = damageMessage;
+	this.snowRadius = snowRadius;
+	this.damageMessage = damageMessage;
+
+    }
+
+    public void spawn() {
+	world.addEntity(this, SpawnReason.CUSTOM);
+
     }
 
     @Override
-    public void h_()
-    {
-	if (this.locY > 255) {
-	    this.dead = true; // Die silently
-	    return;
-	}
-	if (this.locY < 0) {
-	    this.dead = true; // Die silently
-	    return;
-	}
+    public void h_() {
+        do {
+            h_lock = !h_lock;
+            if (h_lock) break;
+            h_lock_2 = !h_lock_2;
+            if (h_lock_2) break;
+            h_lock_3 = !h_lock_3;
+            if (h_lock_3) break;
 
-	if (this.motX == 0 || this.motY == 0 || this.motZ == 0) {
-	    this.dead = true; // Stopped moving, kill
-	    return;
-	}
+            int locY = (int)(this.locY);
+            if ((locY & 0xFFFFFF00) != 0) { // !(0x00 < locY < 0xFF)
+                this.dead = true; // Die silently
+                return;
+            }
 
-	// Make sure it never stalls in air
-	if (prevMotX <= motX) {
-	    prevMotX = (int) motX;
-	}
-	else {
-	    motX = prevMotX;
-	}
-	if (prevMotY <= motY) {
-	    prevMotY = (int) motY;
-	}
-	else {
-	    motY = prevMotY;
-	}
-	if (prevMotZ <= motZ) {
-	    prevMotZ = (int) motZ;
-	}
-	else {
-	    motZ = prevMotZ;
-	}
+            if ((locY & 0xFFFFFFE0) == 0) { // locy < 32
+                explode();
+                return;
+            }
+            
+            world.createExplosion(this, locX, locY, locZ, trailPower, true);
+        } while (false);
 
-	if (locY < 30) {
-	    // Just explode
-	    explode();
-
-	}
-
-	thisLoc = new Location(world.getWorld(), locX, locY, locZ);
-	if (thisLoc.distance(prevLoc) > 1) {
-	    world.createExplosion(this, locX, locY, locZ, trailPower, true);
-	    prevLoc = thisLoc;
-	}
-	super.h_();
+        super.h_();
     }
 
     @Override
@@ -91,6 +122,7 @@ public class EntityMeteor extends EntityFireball
 	    --burrowCount;
 	    return;
 	}
+	makeWinter();
 	explode();
 
     }
@@ -102,53 +134,38 @@ public class EntityMeteor extends EntityFireball
 		.damageNearbyPlayers(
 			new Location(this.world.getWorld(), locX, locY,
 				locZ),
-			Storm.config.Natural__Disasters_Meteor_Shockwave_Damage__Radius,
-			Storm.config.Natural__Disasters_Meteor_Shockwave_Damage,
-			Storm.config.Natural__Disasters_Meteor_Shockwave_Damage__Message);
+			shockwaveDamageRadius,
+			shockwaveDamage,
+			damageMessage);
 
-	Storm.util.broadcast(getCrashMessage().replace("%x", (int) locX + "")
-		.replace("%z", (int) locZ + "").replace("%y", (int) locY + "")); // Lose
-										 // percision
-
+	for (Player p : world.getWorld().getPlayers()) {
+	    Storm.util
+		    .message(
+			    p,
+			    this.meteorCrashMessage.replace("%x", (int) locX + "")
+				    .replace("%z", (int) locZ + "")
+				    .replace("%y", (int) locY + ""));
+	}	
 	die();
+    }
+    
+    public void makeWinter() {
+	final CraftWorld craftworld = world.getWorld();
+	int radiusSquared = this.snowRadius * this.snowRadius;
+	 
+	for(int x = -this.snowRadius; x <= this.snowRadius; x++) {
+	    for(int z = -this.snowRadius; z <= this.snowRadius; z++) {
+	        if( (x*x) + (z*z) <= radiusSquared) {	            
+	            craftworld.getHighestBlockAt((int)(x + this.locX), (int)(z + this.locZ)).setBiome(Biome.TAIGA);	            
+	        }
+	    }
+	}
     }
 
     @Override
     public float c(float f)
     {
 	return this.brightness;
-    }
-
-    public void setCrashMessage(String message) {
-	this.meteorCrashMessage = message;
-    }
-
-    public String getCrashMessage() {
-	return this.meteorCrashMessage;
-    }
-
-    public void setBrightness(float brightnessT) {
-	this.brightness = brightnessT;
-    }
-
-    public float getBrightness() {
-	return this.brightness;
-    }
-
-    public void setTrail(float f) {
-	this.trailPower = f;
-    }
-
-    public void setExplosionPower(float f) {
-	this.explosionRadius = f;
-    }
-
-    public void setBurrowCount(int count) {
-	this.burrowCount = count;
-    }
-
-    public void setBurrowPower(int power) {
-	this.burrowPower = power;
     }
 
     public EntityLiving shooter;

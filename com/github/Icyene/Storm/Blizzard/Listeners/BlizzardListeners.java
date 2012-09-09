@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-import com.github.Icyene.Storm.MultiWorldManager;
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
 import com.github.Icyene.Storm.Blizzard.Tasks.BlizzardTask;
@@ -36,13 +37,15 @@ public class BlizzardListeners implements Listener {
 
 	final World affectedWorld = event.getWorld();
 
+	GlobalVariables glob = Storm.wConfigs.get(affectedWorld.getName());
+
 	if (event.toWeatherState()) {// gets if its set to raining
 
-	    if (rand.nextInt(100) <= Storm.config.Blizzard_Blizzard__Chance) {
+	    if (rand.nextInt(100) <= glob.Blizzard_Blizzard__Chance) {
 
 		// Here it checks to see if the world is enabled
-		if (!MultiWorldManager.checkWorld(affectedWorld,
-			Storm.config.Blizzard_Allowed__Worlds)) {
+		if (!glob.Features_Blizzards_Player__Damaging
+			&& !glob.Features_Blizzards_Slowing__Snow) {
 		    return;
 		}
 		Blizzard.blizzardingWorlds.remove(affectedWorld);
@@ -56,8 +59,12 @@ public class BlizzardListeners implements Listener {
 		    return;
 		}
 
-		Storm.util
-			.broadcast(Storm.config.Blizzard_Message__On__Blizzard__Start);
+		for (Player p : event.getWorld().getPlayers()) {
+		    Storm.util
+			    .message(
+				    p,
+				    glob.Blizzard_Message__On__Blizzard__Start);
+		}
 
 	    } else {
 		return;
@@ -68,7 +75,11 @@ public class BlizzardListeners implements Listener {
 	    Blizzard.blizzardingWorlds.put(affectedWorld, Boolean.FALSE);
 	    // Cancel damaging tasks for specific world
 
-	    damagerMap.get(affectedWorld).stop();
+	    try {
+		damagerMap.get(affectedWorld).stop();
+	    } catch (Exception e) {
+	    }
+	    ;
 
 	    BlizzardEvent startEvent = new BlizzardEvent(
 		    affectedWorld, false);
@@ -77,9 +88,12 @@ public class BlizzardListeners implements Listener {
 	    return;
 	}
 
-	final BlizzardTask bliz = new BlizzardTask(storm, affectedWorld);
-	damagerMap.put(affectedWorld, bliz);
-	bliz.run();
+	if (glob.Features_Blizzards_Player__Damaging) {
+	    final BlizzardTask bliz = new BlizzardTask(storm, affectedWorld);
+	    damagerMap.put(affectedWorld, bliz);
+	    bliz.run();
+	}
 
     }
+
 }

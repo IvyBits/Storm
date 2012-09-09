@@ -20,12 +20,11 @@ package com.github.Icyene.Storm;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.Icyene.Storm.Acid_Rain.AcidRain;
@@ -34,25 +33,35 @@ import com.github.Icyene.Storm.Lightning.Lightning;
 import com.github.Icyene.Storm.Meteors.Meteor;
 import com.github.Icyene.Storm.Wildfire.Wildfire;
 
-public class Storm extends JavaPlugin implements Listener
+public class Storm extends JavaPlugin 
 {
+    
+    public static String versionID = "0.0.7B"; //TODO: REMEMBER TO UPDATE EACH BUILD!
+    
     public static List<String> stats = new ArrayList<String>();
-    public static GlobalVariables config;
-    public static StormUtil util = new StormUtil();
+    public static HashMap<String, GlobalVariables> wConfigs = new HashMap<String, GlobalVariables>(); //Store per-world config
+    public static StormUtil util;
 
     @Override
     public void onEnable()
     {
-	
-	config = new GlobalVariables(this);
-	config.workaroundLists(); //Stupid workaround for config
-	config.load();
+	for (World w : this.getServer().getWorlds()) {
+	    final String s = w.getName();
+	    GlobalVariables config = new GlobalVariables(this, s);
+	    config.workaroundLists(); // Stupid workaround for config
+	    config.load();
+	    wConfigs.put(s, config);
+	}
 
-	Commands cmds = new Commands();
-	
+	util = new StormUtil(this);
+
+	Commands cmds = new Commands(this);
+
 	getCommand("meteor").setExecutor(cmds);
 	getCommand("wildfire").setExecutor(cmds);
-	
+	getCommand("acidrain").setExecutor(cmds);
+	getCommand("blizzard").setExecutor(cmds);
+
 	// Stats
 	try {
 	    MetricsLite metrics = new MetricsLite(this);
@@ -82,12 +91,9 @@ public class Storm extends JavaPlugin implements Listener
 	    Wildfire.load(this);
 	    Blizzard.load(this);
 	    Meteor.load(this);
-	    this.getServer().getPluginManager().registerEvents(new TextureManager(), this);
-	    this.getServer().getPluginManager().registerEvents(new MultistateManager(), this);
-	
-	  
+	    this.getServer().getPluginManager()
+		    .registerEvents(new TextureManager(), this);
 	} catch (Exception e) {
-
 	    e.printStackTrace();
 	    crashDisable("Failed to initialize subplugins.");
 
@@ -96,18 +102,13 @@ public class Storm extends JavaPlugin implements Listener
 
     @Override
     public void onDisable() {
-	Blizzard.unload();	
+	Blizzard.unload();
     }
 
     public void crashDisable(String crash)
     {
 	util.log(Level.SEVERE, crash + " Storm disabled.");
 	this.setEnabled(false);
-    }
-
-    @EventHandler
-    public void hitThatPlayer(PlayerInteractEvent e) {
-
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.World;
 import org.bukkit.entity.Fireball;
 
 import com.github.Icyene.Storm.Storm;
@@ -15,11 +16,11 @@ public class Meteor {
 
     public static Storm storm;
     public static List<Fireball> activeMeteors = new ArrayList<Fireball>();
-    
+
     public static void load(Storm sStorm) {
 	storm = sStorm;
 
-	if (Storm.config.Features_Meteor) {
+	
 
 	    try {
 		Method a = net.minecraft.server.EntityTypes.class
@@ -33,9 +34,13 @@ public class Meteor {
 		Storm.util.log(Level.SEVERE, "Failed to create meteor entity!");
 	    }
 
-	  new MeteorSpawnerTask(storm).run();
-	    
-	}
+	    for (World w : sStorm.getServer().getWorlds()) {
+		if (Storm.wConfigs.get(w.getName()).Features_Meteor) {
+		    new MeteorSpawnerTask(storm, w).run();
+		}
+	    }
+
+	
     }
 
 }

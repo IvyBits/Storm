@@ -11,10 +11,20 @@ import net.minecraft.server.Item;
 
 public class GlobalVariables extends ReflectConfiguration {
 
-    public GlobalVariables(Plugin storm) {
-	super(storm);
+    public GlobalVariables(Plugin storm, String world) {
+	super(storm, world);
     }
 
+    private String configurationWorld;
+    
+    public void setWorld(String w) {
+	configurationWorld = w;
+    }
+    
+    public String getWorld() {
+	return configurationWorld;
+    }
+    
     public void workaroundLists() {
 
 	List<String> leavesToAir = Arrays.asList(new String[] { "18", "0" });
@@ -34,10 +44,7 @@ public class GlobalVariables extends ReflectConfiguration {
 
     }
 
-    public String Version = "0.0.6B";
-    public List<String> Acid__Rain_Allowed__Worlds = Arrays
-	    .asList(new String[] { "world" });
-    public int Acid__Rain_Acid__Rain__Chance = 5;
+     public int Acid__Rain_Acid__Rain__Chance = 5;
     public String Acid__Rain_Message__On__Acid__Rain__Start = "Acid has started to fall from the sky!";
 
     public String Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain = "You have been hurt by the acidic downfall!";
@@ -51,8 +58,6 @@ public class GlobalVariables extends ReflectConfiguration {
     public int Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks = 100;
     public int Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
 
-    public List<String> Blizzard_Allowed__Worlds = Arrays
-	    .asList(new String[] { "world" });
     public int Blizzard_Blizzard__Chance = 20;
     public String Blizzard_Message__On__Blizzard__Start = "It has started to snow violently! Seek a warm biome for safety!";
     public String Blizzard_Damager_Message__On__Player__Damaged__Cold = "You are freezing!";
@@ -66,8 +71,6 @@ public class GlobalVariables extends ReflectConfiguration {
     public double Blizzard_Player_Speed__Loss__While__In__Snow = 0.4D;
     public int Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
 
-    public List<String> Lightning_Allowed__Worlds = Arrays
-	    .asList(new String[] { "world" });
     public int Lightning_Damage_Damage = 5;
     public int Lightning_Damage_Damage__Radius = 10;
     public String Lightning_Damage_Hit__Message = "You were zapped by lightning. Ouch!";
@@ -81,30 +84,29 @@ public class GlobalVariables extends ReflectConfiguration {
 	    .asList(new Integer[] { Item.IRON_AXE.id });
     public List<List<String>> Lightning_Melter_Block__Transformations = new ArrayList<List<String>>();
 
-    public List<String> Natural__Disasters_Meteor_Allowed__Worlds = Arrays
-	    .asList(new String[] { "world" });
-
     public double Natural__Disasters_Meteor_Chance__To__Spawn = 8;
 
     public String Natural__Disasters_Meteor_Message__On__Meteor__Crash = "A meteor has exploded at %x, %y, %z.";
     public int Natural__Disasters_Meteor_Shockwave_Damage = 10;
     public int Natural__Disasters_Meteor_Shockwave_Damage__Radius = 100;
     public String Natural__Disasters_Meteor_Shockwave_Damage__Message = "You have been flattened by a meteor!";
-    public long Natural__Disasters_Meteor_Scheduler_Spawner__Recalculation__Intervals__In__Ticks = 72000;
+    public long Natural__Disasters_Meteor_Scheduler__Recalculation__Intervals__In__Ticks = 72000;
 
-    public List<String> Natural__Disasters_Wildfires_Allowed__Worlds = Arrays
-	    .asList(new String[] {
-		    "world", "world_nether" });
     public int Natural__Disasters_Wildfires_Chance__To__Start = 20;
     public int Natural__Disasters_Wildfires_Spread__Limit = 2;
     public int Natural__Disasters_Wildfires_Scan__Radius = 2;
     public String Natural__Disasters_Wildfires_Message__On__Start = "A wildfire has been spotted around %x, %y, %z!";
-    public long Natural__Disasters_Wildfires_Scheduler_Spawner__Recalculation__Intervals__In__Ticks = 72000;
+    public long Natural__Disasters_Wildfires_Scheduler__Recalculation__Intervals__In__Ticks = 72000;
     public int Natural__Disasters_Maximum__Fires = 100;
-
+  
+//   public int Natural__Disasters_Earthquakes_Chance__To__Spawn = 1;
+//   public String Natural__Disasters_Earthquakes_Message__On__Earthquake__Start = "The ground beneath you begins quaking! Run mortal, run!";
+//   public List<Integer> Natural__Disasters_Earthquakes_Blocks__Can__Fall = Arrays.asList(Block.STONE.id, Block.COBBLESTONE.id);
+//   public long Natural__Disasters_Earthquake_Scheduler_Recalculation__Intervals__In__Ticks = 72000;
+   
     // TPACKS
-    public String Textures_Acid__Rain_Texture__Path = "http://dl.dropbox.com/u/67341745/Storm/Acid_Rain.zip";
-    public String Textures_Blizzard_Texture__Path = "http://dl.dropbox.com/u/67341745/Storm/Blizzard.zip";
+    public String Textures_Acid__Rain__Texture__Path = "http://dl.dropbox.com/u/67341745/Storm/Acid_Rain.zip";
+    public String Textures_Blizzard__Texture__Path = "http://dl.dropbox.com/u/67341745/Storm/Blizzard.zip";
     public String Textures_Default__Texture__Path = "http://dl.dropbox.com/u/67341745/Storm/Default.zip";
 
     // Features

@@ -19,7 +19,7 @@ public class TextureManager implements Listener {
     }
 
     @EventHandler
-    private void worldEvent(PlayerChangedWorldEvent e) {
+    public void worldEvent(PlayerChangedWorldEvent e) {
 
 	final Player hopper = e.getPlayer();
 	final World toWorld = hopper.getWorld();
@@ -32,7 +32,7 @@ public class TextureManager implements Listener {
 		if (Blizzard.blizzardingWorlds.get(toWorld)) {
 
 		    Storm.util.setTexture(hopper,
-			    Storm.config.Textures_Blizzard_Texture__Path);
+			    Storm.wConfigs.get(toWorld.getName()).Textures_Blizzard__Texture__Path);
 
 		    return;
 
@@ -43,7 +43,7 @@ public class TextureManager implements Listener {
 		if (AcidRain.acidicWorlds.get(toWorld)) {
 
 		    Storm.util.setTexture(hopper,
-			    Storm.config.Textures_Acid__Rain_Texture__Path);
+			    Storm.wConfigs.get(toWorld.getName()).Textures_Acid__Rain__Texture__Path);
 
 		    return; // The hashmap is as World, Boolean. Bool is whether
 			    // the world does have event, , da
@@ -57,7 +57,7 @@ public class TextureManager implements Listener {
     }
 
     @EventHandler
-    private void loginEvent(PlayerJoinEvent e) {
+    public void loginEvent(PlayerJoinEvent e) {
 
 	final Player hopper = e.getPlayer();
 	final World world = hopper.getWorld();
@@ -68,7 +68,7 @@ public class TextureManager implements Listener {
 							 // But how???
 
 		Storm.util.setTexture(hopper,
-			Storm.config.Textures_Blizzard_Texture__Path);
+			Storm.wConfigs.get(world.getName()).Textures_Blizzard__Texture__Path);
 
 		return;
 
@@ -79,7 +79,7 @@ public class TextureManager implements Listener {
 	    if (AcidRain.acidicWorlds.get(world)) {
 
 		Storm.util.setTexture(hopper,
-			Storm.config.Textures_Acid__Rain_Texture__Path);
+			Storm.wConfigs.get(world.getName()).Textures_Acid__Rain__Texture__Path);
 
 		return;
 
@@ -91,7 +91,7 @@ public class TextureManager implements Listener {
     }
 
     @EventHandler
-    private void setAcidTexture(AcidRainEvent event) {
+    public void setAcidTexture(AcidRainEvent event) {
 
 	final World world = event.getAffectedWorld();
 
@@ -100,7 +100,7 @@ public class TextureManager implements Listener {
 	    for (Player p : world.getPlayers()) {
 
 		Storm.util.setTexture(p,
-			Storm.config.Textures_Acid__Rain_Texture__Path);
+			Storm.wConfigs.get(p.getWorld().getName()).Textures_Acid__Rain__Texture__Path);
 
 	    }
 	} else {
@@ -116,7 +116,7 @@ public class TextureManager implements Listener {
     }
 
     @EventHandler
-    private void setBlizzardTexture(BlizzardEvent event) {
+    public void setBlizzardTexture(BlizzardEvent event) {
 
 	final World world = event.getAffectedWorld();
 
@@ -125,7 +125,7 @@ public class TextureManager implements Listener {
 	    for (Player p : world.getPlayers()) {
 
 		Storm.util.setTexture(p,
-			Storm.config.Textures_Blizzard_Texture__Path);
+			Storm.wConfigs.get(p.getWorld().getName()).Textures_Blizzard__Texture__Path);
 
 	    }
 	} else {

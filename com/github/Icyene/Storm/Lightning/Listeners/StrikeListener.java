@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.LightningStrikeEvent;
 
-import com.github.Icyene.Storm.MultiWorldManager;
+import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Lightning.LightningUtils;
 
@@ -30,30 +30,28 @@ public class StrikeListener implements Listener {
 	if (strike.isCancelled()) {
 	    return;
 	}
-	if (!MultiWorldManager.checkWorld(strike.getWorld(),
-		Storm.config.Lightning_Allowed__Worlds)) {
-	    return;
-	}
+
+	GlobalVariables glob = Storm.wConfigs.get(strike.getWorld().getName());
 
 	Location strikeLocation = strike.getLightning().getLocation();
 
-	if (Storm.config.Features_Lightning_Greater__Range__And__Damage) {
+	if (glob.Features_Lightning_Greater__Range__And__Damage) {
 	    Storm.util.damageNearbyPlayers(strikeLocation,
-		    Storm.config.Lightning_Damage_Damage__Radius,
-		    Storm.config.Lightning_Damage_Damage,
-		    Storm.config.Lightning_Damage_Hit__Message);
+		    glob.Lightning_Damage_Damage__Radius,
+		    glob.Lightning_Damage_Damage,
+		    glob.Lightning_Damage_Hit__Message);
 	}
 
-	if (Storm.config.Features_Lightning_Block__Attraction) {
-	    if (rand.nextInt(100) <= Storm.config.Lightning_Attraction_Blocks_AttractionChance) {
+	if (glob.Features_Lightning_Block__Attraction) {
+	    if (rand.nextInt(100) <= glob.Lightning_Attraction_Blocks_AttractionChance) {
 		strikeLocation = util.hitMetal(strike.getLightning()
 			.getLocation());
 		strike.getLightning().teleport(strikeLocation);
 
 	    }
 	} else {
-	    if (Storm.config.Features_Lightning_Player__Attraction) {
-		if (rand.nextInt(100) <= Storm.config.Lightning_Attraction_Players_AttractionChance) {
+	    if (glob.Features_Lightning_Player__Attraction) {
+		if (rand.nextInt(100) <= glob.Lightning_Attraction_Players_AttractionChance) {
 		    strikeLocation = util.hitPlayers(strike.getLightning()
 			    .getLocation());
 		    strike.getLightning().teleport(strikeLocation);
@@ -62,10 +60,10 @@ public class StrikeListener implements Listener {
 	    }
 	}
 
-	if (Storm.config.Features_Lightning_Block__Transformations) {
+	if (glob.Features_Lightning_Block__Transformations) {
 
 	    Storm.util.transform(strikeLocation.getBlock(),
-		    Storm.config.Lightning_Melter_Block__Transformations);
+		    glob.Lightning_Melter_Block__Transformations);
 	}
 
     }

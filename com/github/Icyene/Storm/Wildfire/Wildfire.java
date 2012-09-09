@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.server.Block;
 
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import com.github.Icyene.Storm.Storm;
@@ -28,8 +29,12 @@ public class Wildfire {
     });
 
     public static void load(Storm storm) {
-	if (Storm.config.Features_Wildfires) {
-	    new Igniter(storm).run();
+
+	for (World w : storm.getServer().getWorlds()) {
+	    if (Storm.wConfigs.get(w.getName()).Features_Meteor) {
+		new Igniter(storm, w).run();
+	    }
 	}
+
     }
 }
