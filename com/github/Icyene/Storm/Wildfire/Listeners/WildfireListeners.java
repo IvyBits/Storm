@@ -40,7 +40,7 @@ public class WildfireListeners implements Listener {
 
 	GlobalVariables glob = Storm.wConfigs.get(w.getName());
 
-	if (!(infernink.size() < glob.Natural__Disasters_Maximum__Fires)) {
+	if (infernink.containsKey(w) && !(infernink.get(w).size() < glob.Natural__Disasters_Maximum__Fires)) {
 	    return;
 	}
 
@@ -75,7 +75,8 @@ public class WildfireListeners implements Listener {
     @EventHandler
     public void onBlockEx(final BlockFadeEvent event) {
 	final Block b = event.getBlock();
-	if (infernink.get(b.getWorld()).contains(b)) {
+final World w = b.getWorld();
+	if (infernink.containsKey(w) && infernink.get(w).contains(b)) {
 
 	    if (b.getRelative(BlockFace.DOWN).getTypeId() == 0) {
 		infernink.remove(b);
