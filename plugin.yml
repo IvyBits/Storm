@@ -1,8 +1,49 @@
 name: Storm
-version: 0.0.3
-<<<<<<< HEAD
-author: [hammale, icy]
-=======
-author: [Icynene, hammale]
->>>>>>> 4fdc18b78be9d1c248f638f9bc466487a61bc14d
+author: [Icyene, hammale]
+version: 0.0.7B
 main: com.github.Icyene.Storm.Storm
+description: Redifining weather.
+
+commands:
+   meteor:
+      description: Spawns a meteor and targets the block the player is looking at.
+      usage: /<command> 
+      permission: storm.meteor
+      permission-message: You don't have the permission to make 2012 reality.
+   wildfire:
+      description: Starts a wildfire where player is looking at.
+      usage: /<command> 
+      permission: storm.wildfire
+      permission-message: You don't have the permission to start a wildfire! No mass destruction for you!
+   acidrain:
+      description: Starts acid rain in specified world
+      usage: /<command> 
+      permission: storm.acidrain
+      permission-message: You don't have the permission to make green drops fall!
+   blizzard:
+      description: Starts a blizzard in specified world
+      usage: /<command> 
+      permission: storm.blizzard
+      permission-message: You don't have the permission to freeze player's toes off!
+
+permissions:
+    storm.*:
+        description: Gives access to all Storm commands
+        children:
+            storm.meteor: true
+            storm.wildfire: true
+            storm.acidrain: true
+            storm.blizzard: true
+    storm.meteor:
+        description: Allows you to fire a meteor        
+        default: op
+    storm.wildfire:
+        description: Allows you to start a wildfire    
+        default: op
+    storm.acidrain:
+        description: Allows you to toggle acid rain      
+        default: op 
+    storm.blizzard:
+        description: Allows you to toggle blizzards
+        default: op
+        

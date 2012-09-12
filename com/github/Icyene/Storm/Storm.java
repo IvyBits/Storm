@@ -18,100 +18,85 @@
 
 package com.github.Icyene.Storm;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
+import com.github.Icyene.Storm.Database.Database;
 import com.github.Icyene.Storm.Lightning.Lightning;
 import com.github.Icyene.Storm.Meteors.Meteor;
 import com.github.Icyene.Storm.Wildfire.Wildfire;
 
-public class Storm extends JavaPlugin 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.logging.Level;
+
+public class Storm extends JavaPlugin
 {
-    
-    public static String versionID = "0.0.7B"; //TODO: REMEMBER TO UPDATE EACH BUILD!
-    
-    public static HashMap<String, GlobalVariables> wConfigs = new HashMap<String, GlobalVariables>(); //Store per-world config
-    public static BiomeGroups biomes;
-    public static StormUtil util;
 
-    @Override
-    public void onEnable()
-    {
-	
-	for (World w : Bukkit.getWorlds()) {	 
-	    System.out.println( Bukkit.getWorlds());
-	    final String s = w.getName();
-	    GlobalVariables config = new GlobalVariables(this, s);
-	    config.workaroundLists(); // Stupid workaround for config
-	    config.load();
-	    wConfigs.put(s, config);
-	}
+	public static HashMap<String, GlobalVariables>	wConfigs	= new HashMap<String, GlobalVariables>();
+	public static BiomeGroups	                   biomes;
+	public static StormUtil	                       util;
+	private Database	                           db;
 
-	util = new StormUtil(this);
-	biomes = new BiomeGroups();
+	@Override
+	public void onEnable()
+	{
 
-	Commands cmds = new Commands(this);
+		for (World w : Bukkit.getWorlds())
+		{		
+			String world = w.getName();
+			GlobalVariables config = new GlobalVariables(this, world);
+			config.workaroundLists(); // Stupid workaround for config
+			config.load();
+			wConfigs.put(world, config);
+		}
 
-	getCommand("meteor").setExecutor(cmds);
-	getCommand("wildfire").setExecutor(cmds);
-	getCommand("acidrain").setExecutor(cmds);
-	getCommand("blizzard").setExecutor(cmds);
+		util = new StormUtil(this);
+		biomes = new BiomeGroups();
+		db = Database.Obtain(this, null);
 
-	// Stats
-	try {
-	    MetricsLite metrics = new MetricsLite(this);
-	    metrics.start();
-	} catch (IOException e) {
-	    // Failed to submit the stats :-(
-	}
+		Commands cmds = new Commands(this);
 
-	try {
-	    if (!util.verifyVersion(this)) {
-		util.log(Level.WARNING,
-			"--------------------------------------------");
-		util.log(Level.WARNING,
-			"Your configuration is outdated, so some  ");
-		util.log(Level.WARNING,
-			"of Storm's features may not work correctly! ");
-		util.log(Level.WARNING,
-			"Delete it, or risk the consequences!      ");
-		util.log(Level.WARNING, " ");
-		util.log(Level.WARNING, "Thanks for using Storm!");
-		util.log(Level.WARNING,
-			"--------------------------------------------");
-	    }
+		getCommand("meteor").setExecutor(cmds);
+		getCommand("wildfire").setExecutor(cmds);
+		getCommand("acidrain").setExecutor(cmds);
+		getCommand("blizzard").setExecutor(cmds);
 
-	    AcidRain.load(this);
-	    Lightning.load(this);
-	    Wildfire.load(this);
-	    Blizzard.load(this);
-	    Meteor.load(this);
-	    this.getServer().getPluginManager()
-		    .registerEvents(new TextureManager(), this);	   
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    crashDisable("Failed to initialize subplugins.");
+		// Stats
+		try
+		{
+			MetricsLite metrics = new MetricsLite(this);
+			metrics.start();
+		} catch (IOException e)
+		{
+			// Failed to submit the stats :-(
+		}
+
+		AcidRain.load(this);
+		Lightning.load(this);
+		Wildfire.load(this);
+		Blizzard.load(this);
+		Meteor.load(this);
+		// Earthquake.load(this);
+		this.getServer().getPluginManager().registerEvents(
+		        new TextureManager(), this);
 
 	}
-    }
 
-    @Override
-    public void onDisable() {
-	Blizzard.unload();
-    }
+	@Override
+	public void onDisable()
+	{
+		Blizzard.unload();
+		this.db.getEngine().close();
+	}
 
-    public void crashDisable(String crash)
-    {
-	util.log(Level.SEVERE, crash + " Storm disabled.");
-	this.setEnabled(false);
-    }
-    
-  
+	public void crashDisable(String crash)
+	{
+		util.log(Level.SEVERE, crash + " Storm disabled.");
+		this.setEnabled(false);
+	}
+
 }

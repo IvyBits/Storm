@@ -198,19 +198,6 @@ public class StormUtil
 
 	}
 
-	public boolean verifyVersion(Storm storm)
-	{
-
-		if (!Storm.versionID.equals(storm.getDescription().getVersion()))
-		{
-			return false; // Tell user config should be updated
-		} else
-		{
-			return true;
-		}
-
-	}
-
 	public void setTexture(Player toSetOn, String pathToTexture)
 	{
 		((CraftPlayer) toSetOn).getHandle().netServerHandler
