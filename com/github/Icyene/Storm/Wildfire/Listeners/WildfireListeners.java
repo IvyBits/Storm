@@ -40,40 +40,42 @@ public class WildfireListeners implements Listener {
 
 	GlobalVariables glob = Storm.wConfigs.get(w.getName());
 
-
 	if (infernink.containsKey(w)
 		&& !(infernink.get(w).size() < glob.Natural__Disasters_Maximum__Fires)) {
 
-	if (infernink.containsKey(w) && !(infernink.get(w).size() < glob.Natural__Disasters_Maximum__Fires)) {
+	    if (infernink.containsKey(w)
+		    && !(infernink.get(w).size() < glob.Natural__Disasters_Maximum__Fires)) {
 
-	    return;
-	}
+		return;
+	    }
 
-	boolean doScan = false;
+	    boolean doScan = false;
 
-	final int radiuski = glob.Natural__Disasters_Wildfires_Scan__Radius;
+	    final int radiuski = glob.Natural__Disasters_Wildfires_Scan__Radius;
 
-	for (int x = -radiuski; x <= radiuski; x++) {
-	    for (int y = -radiuski; y <= radiuski; y++) {
-		for (int z = -radiuski; z <= radiuski; z++) {
-		    if (infernink.containsKey(w)
+	    for (int x = -radiuski; x <= radiuski; x++) {
+		for (int y = -radiuski; y <= radiuski; y++) {
+		    for (int z = -radiuski; z <= radiuski; z++) {
+			if (infernink.containsKey(w)
 				&& infernink.get(w).contains(
-			    new Location(w, x + loc.getX(), y
-				    + loc.getY(), z + loc.getZ()).getBlock())) {
+					new Location(w, x + loc.getX(), y
+						+ loc.getY(), z + loc.getZ())
+						.getBlock())) {
 
-			doScan = true;
+			    doScan = true;
+
+			}
 
 		    }
-
 		}
 	    }
-	}
 
-	if (doScan) {
+	    if (doScan) {
 
-	    scanForIgnitables(loc, w, radiuski,
-		    glob.Natural__Disasters_Wildfires_Spread__Limit);
+		scanForIgnitables(loc, w, radiuski,
+			glob.Natural__Disasters_Wildfires_Spread__Limit);
 
+	    }
 	}
 
     }
@@ -81,11 +83,8 @@ public class WildfireListeners implements Listener {
     @EventHandler
     public void onBlockEx(final BlockFadeEvent event) {
 	final Block b = event.getBlock();
-<<<<<<< HEAD
 	final World w = b.getWorld();
-=======
-final World w = b.getWorld();
->>>>>>> cd4fd094a686014fa5e8fcb4924f2373d6910b48
+
 	if (infernink.containsKey(w) && infernink.get(w).contains(b)) {
 
 	    if (b.getRelative(BlockFace.DOWN).getTypeId() == 0) {
