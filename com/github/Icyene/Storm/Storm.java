@@ -19,11 +19,10 @@
 package com.github.Icyene.Storm;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,14 +37,15 @@ public class Storm extends JavaPlugin
     
     public static String versionID = "0.0.7B"; //TODO: REMEMBER TO UPDATE EACH BUILD!
     
-    public static List<String> stats = new ArrayList<String>();
     public static HashMap<String, GlobalVariables> wConfigs = new HashMap<String, GlobalVariables>(); //Store per-world config
     public static StormUtil util;
 
     @Override
     public void onEnable()
     {
-	for (World w : this.getServer().getWorlds()) {
+	
+	for (World w : Bukkit.getWorlds()) {	 
+	    System.out.println( Bukkit.getWorlds());
 	    final String s = w.getName();
 	    GlobalVariables config = new GlobalVariables(this, s);
 	    config.workaroundLists(); // Stupid workaround for config
@@ -92,7 +92,7 @@ public class Storm extends JavaPlugin
 	    Blizzard.load(this);
 	    Meteor.load(this);
 	    this.getServer().getPluginManager()
-		    .registerEvents(new TextureManager(), this);
+		    .registerEvents(new TextureManager(), this);	   
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    crashDisable("Failed to initialize subplugins.");
@@ -110,5 +110,6 @@ public class Storm extends JavaPlugin
 	util.log(Level.SEVERE, crash + " Storm disabled.");
 	this.setEnabled(false);
     }
-
+    
+  
 }

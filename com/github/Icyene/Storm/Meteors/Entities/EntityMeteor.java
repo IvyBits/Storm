@@ -26,9 +26,9 @@ public class EntityMeteor extends EntityFireball
     private int shockwaveDamage;
     private int shockwaveDamageRadius;
     private int snowRadius;
-    
+
     private boolean h_lock, h_lock_2, h_lock_3;
-   
+
     /**
      * Creates a meteor object.
      * 
@@ -59,7 +59,7 @@ public class EntityMeteor extends EntityFireball
     public EntityMeteor(World world) {
 	super(world);
     }
-    
+
     public EntityMeteor(World world, int burrowCount, int burrowPower,
 	    float trailPower, float explosionRadius, float brightness,
 	    String crashMessage, int shockwaveDamage,
@@ -88,29 +88,35 @@ public class EntityMeteor extends EntityFireball
 
     @Override
     public void h_() {
-        do {
-            h_lock = !h_lock;
-            if (h_lock) break;
-            h_lock_2 = !h_lock_2;
-            if (h_lock_2) break;
-            h_lock_3 = !h_lock_3;
-            if (h_lock_3) break;
+	do {
+	    h_lock = !h_lock;
+	    if (h_lock)
+		break;
+	    h_lock_2 = !h_lock_2;
+	    if (h_lock_2)
+		break;
+	    h_lock_3 = !h_lock_3;
+	    if (h_lock_3)
+		break;
 
-            int locY = (int)(this.locY);
-            if ((locY & 0xFFFFFF00) != 0) { // !(0x00 < locY < 0xFF)
-                this.dead = true; // Die silently
-                return;
-            }
+	    int locY = (int) (this.locY);
+	    if ((locY & 0xFFFFFF00) != 0) { // !(0x00 < locY < 0xFF)
+		this.dead = true; // Die silently
+		return;
+	    }
 
-            if ((locY & 0xFFFFFFE0) == 0) { // locy < 32
-                explode();
-                return;
-            }
-            
-            world.createExplosion(this, locX, locY, locZ, trailPower, true);
-        } while (false);
+	    if ((locY & 0xFFFFFFE0) == 0) { // locy < 32
+		explode();
+		return;
+	    }
 
-        super.h_();
+	    world.createExplosion(this, locX, locY, locZ, trailPower, true);
+	} while (false);
+	motX *= 0.909F;
+	motY *= 0.909F;
+	motZ *= 0.909F;
+
+	super.h_();
     }
 
     @Override
@@ -142,22 +148,24 @@ public class EntityMeteor extends EntityFireball
 	    Storm.util
 		    .message(
 			    p,
-			    this.meteorCrashMessage.replace("%x", (int) locX + "")
+			    this.meteorCrashMessage
+				    .replace("%x", (int) locX + "")
 				    .replace("%z", (int) locZ + "")
 				    .replace("%y", (int) locY + ""));
-	}	
+	}
 	die();
     }
-    
+
     public void makeWinter() {
 	final CraftWorld craftworld = world.getWorld();
 	int radiusSquared = this.snowRadius * this.snowRadius;
-	 
-	for(int x = -this.snowRadius; x <= this.snowRadius; x++) {
-	    for(int z = -this.snowRadius; z <= this.snowRadius; z++) {
-	        if( (x*x) + (z*z) <= radiusSquared) {	            
-	            craftworld.getHighestBlockAt((int)(x + this.locX), (int)(z + this.locZ)).setBiome(Biome.TAIGA);	            
-	        }
+
+	for (int x = -this.snowRadius; x <= this.snowRadius; x++) {
+	    for (int z = -this.snowRadius; z <= this.snowRadius; z++) {
+		if ((x * x) + (z * z) <= radiusSquared) {
+		    craftworld.getHighestBlockAt((int) (x + this.locX),
+			    (int) (z + this.locZ)).setBiome(Biome.TAIGA);
+		}
 	    }
 	}
     }

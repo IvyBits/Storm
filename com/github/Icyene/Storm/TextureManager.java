@@ -1,6 +1,7 @@
 package com.github.Icyene.Storm;
 
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,11 +12,18 @@ import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
 import com.github.Icyene.Storm.Events.AcidRainEvent;
 import com.github.Icyene.Storm.Events.BlizzardEvent;
+import com.github.Icyene.Storm.Events.SnowCanFormEvent;
 
 public class TextureManager implements Listener {
 
     public TextureManager() {
 
+    }
+    
+    @EventHandler
+    public void checkSnowTheory(SnowCanFormEvent e) {
+	Block b = e.getLocation().getBlock();
+	System.out.println("Trying to place snow @ " + e.getLocation().toString() + " in a biome of type " + b.getBiome().toString());
     }
 
     @EventHandler
