@@ -38,6 +38,7 @@ public class Storm extends JavaPlugin
     public static String versionID = "0.0.7B"; //TODO: REMEMBER TO UPDATE EACH BUILD!
     
     public static HashMap<String, GlobalVariables> wConfigs = new HashMap<String, GlobalVariables>(); //Store per-world config
+    public static BiomeGroups biomes;
     public static StormUtil util;
 
     @Override
@@ -54,6 +55,7 @@ public class Storm extends JavaPlugin
 	}
 
 	util = new StormUtil(this);
+	biomes = new BiomeGroups();
 
 	Commands cmds = new Commands(this);
 

@@ -46,7 +46,7 @@ public class DamagerTask {
 				    {
 
 					if (!Storm.util
-						.isPlayerInRain(damagee)) {
+						.isPlayerUnderSky(damagee)) {
 					    return;
 					} else {
 
