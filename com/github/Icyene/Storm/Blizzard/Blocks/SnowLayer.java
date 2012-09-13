@@ -1,13 +1,11 @@
 package com.github.Icyene.Storm.Blizzard.Blocks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Player;
 
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
-import com.github.Icyene.Storm.Events.SnowCanFormEvent;
 
 import net.minecraft.server.*;
 
@@ -24,10 +22,6 @@ public class SnowLayer extends BlockSnow
 	@Override
 	public boolean canPlace(World world, int i, int j, int k)
 	{
-
-		Bukkit.getServer().getPluginManager()
-		        .callEvent(new SnowCanFormEvent(world,
-		                i, j, k));
 
 		int l = world.getTypeId(i, j - 1, k);
 

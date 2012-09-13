@@ -1,6 +1,8 @@
 package com.github.Icyene.Storm;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -26,15 +28,19 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 
 public class StormUtil
 {
-	public static final Logger	    log	  = Logger.getLogger("Storm");
-	private static final Random	    rand	= new Random();
-	private static WorldGuardPlugin	wg;
-	private static boolean	        hasWG	= false;
+	public final Logger log = Logger.getLogger("Storm");
+	private final Random rand = new Random();
+	private WorldGuardPlugin wg;
+	private boolean hasWG = false;
+	private HashMap<String, BlockTickSelector> blockTickers = new HashMap<String, BlockTickSelector>();
 
-	public StormUtil(Storm storm)
+	/** Creates a util object.
+	 * @param plugin
+	 *            The plugin. */
+	public StormUtil(Plugin plugin)
 	{
 
-		final Plugin wgp = storm.getServer().getPluginManager().getPlugin(
+		final Plugin wgp = plugin.getServer().getPluginManager().getPlugin(
 		        "WorldGuard");
 		hasWG = wgp == null ? false : true; // Short and sweet
 		if (hasWG)
@@ -42,17 +48,38 @@ public class StormUtil
 			wg = (WorldGuardPlugin) wgp;
 		}
 
+		for (World w : Bukkit.getWorlds()) {
+			String world = w.getName();
+			BlockTickSelector ticker = new BlockTickSelector(
+			        (net.minecraft.server.World) w);
+			blockTickers.put(world, ticker);
+		}
+
 	}
+
+	/** Logs.
+	 * @param logM
+	 *            The message. */
 
 	public void log(String logM)
 	{
 		log.log(Level.INFO, logM);
 	}
 
+	/** Logs.
+	 * @param level
+	 *            The severity level.
+	 * @param logM
+	 *            The log message. */
+
 	public void log(Level level, String logM)
 	{
 		log.log(level, logM);
 	}
+
+	/** Broadcasts a message.
+	 * @param message
+	 *            The message. */
 
 	public void broadcast(String message)
 	{
@@ -63,15 +90,41 @@ public class StormUtil
 		Bukkit.getServer().broadcastMessage(parseColors(message));
 	}
 
+	/** Send ChatColor formatted message to player.
+	 * @param player
+	 *            The player.
+	 * @param message
+	 *            The message. */
+
 	public void message(Player player, String message)
 	{
+		if (message.isEmpty())
+		{
+			return;
+		}
+
 		player.sendMessage(parseColors(message));
 	}
+
+	/** Parses colors in string.
+	 * @param msg
+	 *            The string.
+	 * @return The formatted string. */
 
 	public String parseColors(String msg)
 	{
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
+
+	/** Damages players in radius from given location.
+	 * @param location
+	 *            The location.
+	 * @param radius
+	 *            The radius.
+	 * @param damage
+	 *            These values are obvious... The damage.
+	 * @param message
+	 *            Message given to the player when damaged. */
 
 	public void damageNearbyPlayers(Location location, double radius,
 	        int damage, String message)
@@ -87,10 +140,21 @@ public class StormUtil
 
 				p.damage(damage * 2);
 
+				if (message.isEmpty())
+				{
+					return;
+				}
+
 				this.message(p, message);
 			}
 		}
 	}
+
+	/** Wrapper method around WG to check if any regions apply to given block. *
+	 * @param b
+	 *            The block.
+	 * @return
+	 *         True if protected, false otherwise. */
 
 	public boolean isBlockProtected(Block b)
 	{
@@ -153,6 +217,7 @@ public class StormUtil
 
 			String[] curState = new String[2];
 			String[] toState = new String[2];
+
 			if (toCheck.get(0).contains(":"))
 			{
 
@@ -191,12 +256,23 @@ public class StormUtil
 
 	}
 
+	/** Gets random chunk in given world.
+	 * @param w
+	 *            The world.
+	 * @return a chunk. */
+
 	public Chunk pickChunk(World w)
 	{
 		final Chunk[] loadedChunks = w.getLoadedChunks();
 		return loadedChunks[rand.nextInt(loadedChunks.length)];
 
 	}
+
+	/** Sets a texture on given player.
+	 * @param toSetOn
+	 *            The player.
+	 * @param pathToTexture
+	 *            A URL to texture pack. Won't work with https. */
 
 	public void setTexture(Player toSetOn, String pathToTexture)
 	{
@@ -205,12 +281,21 @@ public class StormUtil
 		                (pathToTexture + "\0" + 16).getBytes()));
 	}
 
+	/** Sets player texture pack to default.
+	 * @param toClear
+	 *            The player to set. */
+
 	public void clearTexture(Player toClear)
 	{
 		setTexture(
 		        toClear,
 		        Storm.wConfigs.get(toClear.getWorld().getName()).Textures_Default__Texture__Path);
 	}
+
+	/** Checks if a player is visible to sky.
+	 * @param player
+	 *            The player to check.
+	 * @return True if visible, false otherwise. */
 
 	public boolean isPlayerUnderSky(Player player)
 	{
@@ -227,6 +312,23 @@ public class StormUtil
 			}
 		}
 		return false;
+	}
+
+	/** Interface method against MineCraft block selection. Damn fast.
+	 * @param world
+	 *            The world to return blocks of.
+	 * @return Returns an ArrayList<Block> of the ticked blocks. Only 1/16 of
+	 *         these should be modified.
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException */
+
+	public ArrayList<Block> getRandomTickedBlocks(World world)
+	        throws IllegalArgumentException, IllegalAccessException,
+	        InvocationTargetException {
+
+		return blockTickers.get(world.getName()).getRandomTickedBlocks();
+
 	}
 
 }

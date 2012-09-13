@@ -24,19 +24,11 @@ public class SQLite implements iDriver {
 	private Plugin plugin;
 	
 	private ArrayList<HashMap<String, String>> sql = new ArrayList<HashMap<String, String>>();
-	private ArrayList<ResultSet> query = new ArrayList<ResultSet>();
-	private int execs = 0;
 	
 	private String prefix;
 	private Connection con = null;
 	private Boolean dbg = false;
-	
-	private Boolean parseBool(String s, Boolean d) {
-		if(s.equalsIgnoreCase("1") || s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true"))
-			return true;
-		
-		return d;
-	}
+
 	
 	private SQLite(Plugin p) {
 		plugin = p;

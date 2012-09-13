@@ -36,17 +36,17 @@ import java.util.logging.Level;
 public class Storm extends JavaPlugin
 {
 
-	public static HashMap<String, GlobalVariables>	wConfigs	= new HashMap<String, GlobalVariables>();
-	public static BiomeGroups	                   biomes;
-	public static StormUtil	                       util;
-	private Database	                           db;
+	public static HashMap<String, GlobalVariables> wConfigs = new HashMap<String, GlobalVariables>();
+	public static BiomeGroups biomes;
+	public static StormUtil util;
+	public static Commands cmds;
+	private Database db;
 
 	@Override
-	public void onEnable()
-	{
+	public void onEnable() {
 
-		for (World w : Bukkit.getWorlds())
-		{		
+		// Make per-world configuration files
+		for (World w : Bukkit.getWorlds()) {
 			String world = w.getName();
 			GlobalVariables config = new GlobalVariables(this, world);
 			config.workaroundLists(); // Stupid workaround for config
@@ -57,8 +57,7 @@ public class Storm extends JavaPlugin
 		util = new StormUtil(this);
 		biomes = new BiomeGroups();
 		db = Database.Obtain(this, null);
-
-		Commands cmds = new Commands(this);
+		cmds = new Commands(this);
 
 		getCommand("meteor").setExecutor(cmds);
 		getCommand("wildfire").setExecutor(cmds);
@@ -66,14 +65,9 @@ public class Storm extends JavaPlugin
 		getCommand("blizzard").setExecutor(cmds);
 
 		// Stats
-		try
-		{
-			MetricsLite metrics = new MetricsLite(this);
-			metrics.start();
-		} catch (IOException e)
-		{
-			// Failed to submit the stats :-(
-		}
+		try {
+			new MetricsLite(this).start();
+		} catch (IOException e) {}
 
 		AcidRain.load(this);
 		Lightning.load(this);
@@ -87,14 +81,12 @@ public class Storm extends JavaPlugin
 	}
 
 	@Override
-	public void onDisable()
-	{
+	public void onDisable() {
 		Blizzard.unload();
 		this.db.getEngine().close();
 	}
 
-	public void crashDisable(String crash)
-	{
+	public void crashDisable(String crash) {
 		util.log(Level.SEVERE, crash + " Storm disabled.");
 		this.setEnabled(false);
 	}

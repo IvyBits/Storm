@@ -1,55 +1,57 @@
 package com.github.Icyene.Storm.Events;
 
-import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class SnowCanFormEvent extends Event
-	implements Cancellable
-{
+public class SnowCanFormEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private boolean isCancelled = false;
-    private net.minecraft.server.World world;
-    private int x;
-    private int y;
-    private int z;
+   
+    private World world;
+    private Block block;   
 
-    public SnowCanFormEvent(net.minecraft.server.World world2, int x, int y, int z)
-    {
-	this.world = world2;
+    public SnowCanFormEvent(World world, Block block) {
+		this.world = world;
+		this.block = block;
+	}
 
-	this.x = x;
-	this.y = y;
-	this.z = z;
+    /**
+     * Gets the world this event occured in
+     * 
+     * @return The world
+     */
+    
+    public World getWorld() {
+	   return this.world;
     }
 
-    public World getWorld()
-    {
-	return this.world.getWorld();
+    /**
+     * Gets the block place that snow is trying to be placed in, generally air
+     * 
+     * @return The block 
+     */
+    
+    public Block getBlock() {
+	   return this.block;
+    }  
+
+    public boolean isCancelled() {
+	   return this.isCancelled;
     }
 
-    public Location getLocation() {
-	return new Location(this.world.getWorld(), this.x, this.y, this.z);
-    }
-
+    public void setCancelled(boolean flag) {
+	   this.isCancelled = flag;
+    }  
+    
     public HandlerList getHandlers() {
-	return handlers;
+	   return handlers;
     }
 
     public static HandlerList getHandlerList() {
-	return handlers;
-    }
-
-    public boolean isCancelled()
-    {
-	return this.isCancelled;
-    }
-
-    public void setCancelled(boolean flag)
-    {
-	this.isCancelled = flag;
+	   return handlers;
     }
 }

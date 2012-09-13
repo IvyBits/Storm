@@ -15,19 +15,19 @@ import net.minecraft.server.World;
 
 public class EntityMeteor extends EntityFireball
 {
-	private float	explosionRadius	= 50F;
-	private float	trailPower	    = 20F;
-	private float	brightness	    = 10F;
-	private String	meteorCrashMessage;
-	private int	   burrowCount	    = 5;
-	private int	   burrowPower	    = 10;
+	private float explosionRadius = 50F;
+	private float trailPower = 20F;
+	private float brightness = 10F;
+	private String meteorCrashMessage;
+	private int burrowCount = 5;
+	private int burrowPower = 10;
 
-	private String	damageMessage;
-	private int	   shockwaveDamage;
-	private int	   shockwaveDamageRadius;
-	private int	   snowRadius;
+	private String damageMessage;
+	private int shockwaveDamage;
+	private int shockwaveDamageRadius;
+	private int snowRadius;
 
-	private boolean	h_lock, h_lock_2, h_lock_3;
+	private boolean h_lock, h_lock_2, h_lock_3;
 
 	public EntityMeteor(World world)
 	{
@@ -73,7 +73,7 @@ public class EntityMeteor extends EntityFireball
 			if (h_lock_2)
 				break;
 			h_lock_3 = !h_lock_3;
-			if (h_lock_3) 
+			if (h_lock_3)
 				break;
 
 			int locY = (int) (this.locY);
@@ -162,10 +162,10 @@ public class EntityMeteor extends EntityFireball
 		return this.brightness;
 	}
 
-	public EntityLiving	shooter;
-	public double	    dirX;
-	public double	    dirY;
-	public double	    dirZ;
-	public int	        yield	= 0;
-	public boolean	    isIncendiary;
+	public EntityLiving shooter;
+	public double dirX;
+	public double dirY;
+	public double dirZ;
+	public int yield = 0;
+	public boolean isIncendiary;
 }

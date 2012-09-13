@@ -72,8 +72,8 @@ public class HailListener implements Listener {
 	    public void run() {
 		for (World w : affectedWorlds) {
 		    for (Location loc : getRandomBlocks(w)) {
-			Item tmp = w.dropItem(loc, new ItemStack(
-				Material.SNOW_BALL));
+			//Item tmp = w.dropItem(loc, new ItemStack(
+			//	Material.SNOW_BALL));
 			//tmp.setVelocity(1);
 			hailStones.add(w.dropItem(loc, new ItemStack(
 				Material.SNOW_BALL)));
