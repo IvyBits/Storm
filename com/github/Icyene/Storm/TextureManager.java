@@ -1,5 +1,7 @@
 package com.github.Icyene.Storm;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -82,9 +84,22 @@ public class TextureManager implements Listener
 	}
 
 	@EventHandler
-	public void setAcidTexture(AcidRainEvent event) {
-
+	public void setAcidTexture(AcidRainEvent event) {		
+		
 		final World world = event.getAffectedWorld();
+		
+		try {
+	        System.out.println(Storm.util.getRandomTickedBlocks(world));
+        } catch (IllegalArgumentException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        } catch (IllegalAccessException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        } catch (InvocationTargetException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        }
 
 		if (event.getWeatherState()) {
 

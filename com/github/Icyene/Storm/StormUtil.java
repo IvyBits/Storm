@@ -26,13 +26,13 @@ import com.sk89q.worldguard.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 
-public class StormUtil
+public class StormUtil extends BiomeGroups
 {
 	public final Logger log = Logger.getLogger("Storm");
 	private final Random rand = new Random();
 	private WorldGuardPlugin wg;
 	private boolean hasWG = false;
-	private HashMap<String, BlockTickSelector> blockTickers = new HashMap<String, BlockTickSelector>();
+	private HashMap<String, BlockTickSelectors> blockTickers = new HashMap<String, BlockTickSelectors>();
 
 	/** Creates a util object.
 	 * @param plugin
@@ -50,9 +50,14 @@ public class StormUtil
 
 		for (World w : Bukkit.getWorlds()) {
 			String world = w.getName();
-			BlockTickSelector ticker = new BlockTickSelector(
-			        (net.minecraft.server.World) w);
-			blockTickers.put(world, ticker);
+			BlockTickSelectors ticker;
+			try {
+				ticker = new BlockTickSelectors(w);
+				blockTickers.put(world, ticker);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 		}
 
 	}
@@ -146,11 +151,12 @@ public class StormUtil
 				}
 
 				this.message(p, message);
+
 			}
 		}
 	}
 
-	/** Wrapper method around WG to check if any regions apply to given block. *
+	/** Wrapper method around WG to check if any regions apply to given block.
 	 * @param b
 	 *            The block.
 	 * @return
@@ -200,55 +206,37 @@ public class StormUtil
 		return playerList;
 	}
 
-	public void transform(Block toTransform,
-	        List<List<String>> transformations)
+	public void transform(Block toTransform, List<List<String>> transformations)
 	{
 
 		if (isBlockProtected(toTransform))
-		{
 			return;
-		}
-
-		final int blockId = toTransform.getTypeId();
-		final int blockData = toTransform.getData();
 
 		for (List<String> toCheck : transformations)
 		{
+			ArrayList<String[]> stateIndex = new ArrayList<String[]>();
 
-			String[] curState = new String[2];
-			String[] toState = new String[2];
-
-			if (toCheck.get(0).contains(":"))
+			for (int i = 1; i != 2; ++i)
 			{
+				String got = toCheck.get(i);
 
-				curState = toCheck.get(0).split(":");
-
-			} else
-			{
-
-				curState[0] = toCheck.get(0);
-				curState[1] = "0";
-
+				if (got.contains(":")) // Check for data value appended.
+				{
+					stateIndex.add(got.split(":"));
+				} else
+				{
+					stateIndex.add(new String[] { got, "0" });
+				}
 			}
 
-			if (toCheck.get(1).contains(":"))
+			final String[] curState = stateIndex.get(0), toState = stateIndex
+			        .get(1);
+
+			if (Integer.valueOf(curState[0]) == toTransform.getTypeId()
+			        && Integer.valueOf(curState[1]) == toTransform.getData())
 			{
-
-				toState = toCheck.get(1).split(":");
-
-			} else
-			{
-
-				toState[0] = toCheck.get(1);
-				toState[1] = "0";
-
-			}
-
-			if (Integer.valueOf(curState[0]) == blockId
-			        && Integer.valueOf(curState[1]) == blockData)
-			{
-				toTransform.setTypeIdAndData(Integer.valueOf(toState[0]),
-				        Byte.parseByte(toState[0]), true); // Ewwww
+				toTransform.setTypeIdAndData(Integer.valueOf(toState[0]), Byte
+				        .parseByte(toState[1]), true);
 				return;
 			}
 
@@ -329,6 +317,18 @@ public class StormUtil
 
 		return blockTickers.get(world.getName()).getRandomTickedBlocks();
 
+	}
+
+	public class Triplet<X, Y, Z> {
+		public X X;
+		public Y Y;
+		public Z Z;
+
+		public Triplet(X X, Y Y, Z Z) {
+			this.X = X;
+			this.Y = Y;
+			this.Z = Z;
+		}
 	}
 
 }
