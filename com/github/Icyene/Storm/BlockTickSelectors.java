@@ -56,8 +56,7 @@ public class BlockTickSelectors {
 			{
 				for (int z = -b0; z <= b0; z++)
 				{
-					if (!world.chunkProviderServer.unloadQueue
-					        .contains(x + eX, z + eZ))
+					if (!world.chunkProviderServer.unloadQueue.contains(x + eX, z + eZ))
 						chunkTickList.add(new ChunkCoordIntPair(x + eX, z + eZ));
 				}
 
