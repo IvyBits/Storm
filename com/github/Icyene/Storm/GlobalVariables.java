@@ -33,6 +33,7 @@ public class GlobalVariables extends ReflectConfiguration {
 	List<String> brickSlabToCobbleSlab = Arrays.asList(new String[] {
 		"44:5", "44:3" });
 	List<String> cobbleToMossy = Arrays.asList(new String[] { "4", "48" });
+	
 	Acid__Rain_Dissolver_Block__Transformations.add(leavesToAir);
 	Acid__Rain_Dissolver_Block__Transformations.add(grassToDirt);
 	Acid__Rain_Dissolver_Block__Transformations.add(stoneToCobble);

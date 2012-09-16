@@ -32,7 +32,7 @@ public class StormUtil extends BiomeGroups
 	private final Random rand = new Random();
 	private WorldGuardPlugin wg;
 	private boolean hasWG = false;
-	private HashMap<String, BlockTickSelectors> blockTickers = new HashMap<String, BlockTickSelectors>();
+	private HashMap<String, BlockTickSelector> blockTickers = new HashMap<String, BlockTickSelector>();
 
 	/** Creates a util object.
 	 * @param plugin
@@ -50,9 +50,9 @@ public class StormUtil extends BiomeGroups
 
 		for (World w : Bukkit.getWorlds()) {
 			String world = w.getName();
-			BlockTickSelectors ticker;
+			BlockTickSelector ticker;
 			try {
-				ticker = new BlockTickSelectors(w);
+				ticker = new BlockTickSelector(w, 16);
 				blockTickers.put(world, ticker);
 			} catch (Exception e) {
 				e.printStackTrace();
