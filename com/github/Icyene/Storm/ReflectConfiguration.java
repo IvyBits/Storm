@@ -92,13 +92,13 @@ public class ReflectConfiguration
 				                }
 			                }
 		                }, 1);
-		try
+		/*try
 		{
 			Bukkit.getScheduler().cancelTask(id);
 
 		} catch (Exception e)
 		{}
-		;
+		;*/
 	}
 
 	private boolean doSkip(Field field)
