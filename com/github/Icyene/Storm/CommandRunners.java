@@ -45,7 +45,7 @@ public class CommandRunners {
 		9,
 		80,
 		Storm.wConfigs.get(mcWorld.getWorld().getName()).Natural__Disasters_Meteor_Shockwave_Damage__Message,
-		0);
+		0,Storm.wConfigs.get(mcWorld.getWorld().getName()).Natural__Disasters_Meteor_Meteor_Spawn,Storm.wConfigs.get(mcWorld.getWorld().getName()).Natural__Disasters_Meteor_Meteor_Radius);
 	mm.spawn();
 
 	Fireball meteor = (Fireball) mm.getBukkitEntity();
