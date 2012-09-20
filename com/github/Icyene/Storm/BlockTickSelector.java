@@ -34,8 +34,7 @@ public class BlockTickSelector {
 		Class<?> worldz = worldServer.getSuperclass();
 
 		l = worldz.getDeclaredField("l");
-		a = worldz.getDeclaredMethod("a", int.class, int.class,
-		        Chunk.class);
+		a = worldz.getDeclaredMethod("a", int.class, int.class, Chunk.class);
 		l.setAccessible(true);
 		a.setAccessible(true);
 	}
