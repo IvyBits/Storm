@@ -16,85 +16,88 @@ import com.github.Icyene.Storm.Meteors.Entities.EntityMeteor;
 
 public class MeteorSpawnerTask {
 
-    private int id;
-    private Random rand = new Random();
-    private Storm storm;
-    private World spawnWorld;
-    
-    private GlobalVariables glob;
-    
-    public MeteorSpawnerTask(Storm storm, World spawnWorld) {
-	this.storm = storm;
-	this.spawnWorld = spawnWorld;
-	glob = Storm.wConfigs.get(spawnWorld.getName());
-    }
-    public void run() {
+	private int id;
+	private Random rand = new Random();
+	private Storm storm;
+	private World spawnWorld;
 
-	id = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-		storm,
-		new Runnable() {
-		    @Override
-		    public void run() {
-			if (rand.nextInt(100) <= glob.Natural__Disasters_Meteor_Chance__To__Spawn) {
+	private GlobalVariables glob;
 
-			    Chunk chunk = Storm.util.pickChunk(spawnWorld);
+	public MeteorSpawnerTask(Storm storm, World spawnWorld) {
+		this.storm = storm;
+		this.spawnWorld = spawnWorld;
+		glob = Storm.wConfigs.get(spawnWorld.getName());
+	}
 
-			    if (chunk == null) {
-				return;
-			    }
+	public void run() {
 
-			    final int x = rand.nextInt(16);
-			    final int z = rand.nextInt(16);
-			    final Block b = chunk.getBlock(x, 4, z);
-			    spawnMeteorNaturallyAndRandomly(chunk.getWorld(),
-				    b.getX(),
-				    b.getZ());
-			}
-		    }
+		id = Bukkit.getScheduler().scheduleSyncRepeatingTask(
+		        storm,
+		        new Runnable() {
+			        @Override
+			        public void run() {
+				        if (rand.nextInt(100) <= glob.Natural__Disasters_Meteor_Chance__To__Spawn) {
 
-		}
-		,
-		glob.Natural__Disasters_Meteor_Scheduler__Recalculation__Intervals__In__Ticks,
-		glob.Natural__Disasters_Meteor_Scheduler__Recalculation__Intervals__In__Ticks);
-    }
+					        Chunk chunk = Storm.util.pickChunk(spawnWorld);
 
-    public void stop() {
-	Bukkit.getScheduler().cancelTask(id);
-    }
+					        if (chunk == null) {
+						        return;
+					        }
 
-    private void spawnMeteorNaturallyAndRandomly(World world, double x,
-	    double z)
-    {
-	net.minecraft.server.World meteoriteWorld = ((CraftWorld) world)
-		.getHandle();
+					        final int x = rand.nextInt(16);
+					        final int z = rand.nextInt(16);
+					        final Block b = chunk.getBlock(x, 4, z);
+					        spawnMeteorNaturallyAndRandomly(chunk.getWorld(),
+					                b.getX(),
+					                b.getZ());
+				        }
+			        }
 
-	EntityMeteor meteor = new EntityMeteor(
-		meteoriteWorld,
-		rand.nextInt(7) + 1,
-		10,
-		rand.nextInt(5) + 5,
-		rand.nextInt(50) + 25,
-		100,
-		glob.Natural__Disasters_Meteor_Message__On__Meteor__Crash,
-		9,
-		80,
-		glob.Natural__Disasters_Meteor_Shockwave_Damage__Message,
-		rand.nextInt(100) + 200,glob.Natural__Disasters_Meteor_Meteor_Spawn,glob.Natural__Disasters_Meteor_Meteor_Radius);
+		        }
+		        ,
+		        glob.Natural__Disasters_Meteor_Scheduler__Recalculation__Intervals__In__Ticks,
+		        glob.Natural__Disasters_Meteor_Scheduler__Recalculation__Intervals__In__Ticks);
+	}
 
-	meteor.spawn();
+	public void stop() {
+		Bukkit.getScheduler().cancelTask(id);
+	}
 
-	meteor.setPosition(
-		x,
-		rand.nextInt(100) + 156,
-		z);
-	meteor.yaw = (float) rand.nextInt(360);
-	meteor.pitch = -9;
-	meteoriteWorld.addEntity(meteor, SpawnReason.DEFAULT);
+	private void spawnMeteorNaturallyAndRandomly(World world, double x,
+	        double z)
+	{
+		net.minecraft.server.World meteoriteWorld = ((CraftWorld) world)
+		        .getHandle();
 
-	Fireball fireMeteor = (Fireball) meteor.getBukkitEntity();
+		EntityMeteor meteor = new EntityMeteor(
+		        meteoriteWorld,
+		        rand.nextInt(7) + 1,
+		        10,
+		        rand.nextInt(5) + 5,
+		        rand.nextInt(50) + 25,
+		        100,
+		        glob.Natural__Disasters_Meteor_Message__On__Meteor__Crash,
+		        9,
+		        80,
+		        glob.Natural__Disasters_Meteor_Shockwave_Damage__Message,
+		        rand.nextInt(100) + 200,
+		        glob.Natural__Disasters_Meteor_Meteor_Spawn,
+		        glob.Natural__Disasters_Meteor_Meteor_Radius);
 
-	fireMeteor.setDirection(fireMeteor.getDirection().setY(-1));
+		meteor.spawn();
 
-    }
+		meteor.setPosition(
+		        x,
+		        rand.nextInt(100) + 156,
+		        z);
+		meteor.yaw = (float) rand.nextInt(360);
+		meteor.pitch = -9;
+		meteoriteWorld.addEntity(meteor, SpawnReason.DEFAULT);
+
+		Fireball fireMeteor = (Fireball) meteor.getBukkitEntity();
+
+		fireMeteor.setDirection(fireMeteor.getDirection().setY(-1));
+
+	}
 
 }

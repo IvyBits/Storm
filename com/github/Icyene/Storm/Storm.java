@@ -25,12 +25,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
 import com.github.Icyene.Storm.Database.Database;
+import com.github.Icyene.Storm.Earthquake.Earthquake;
 import com.github.Icyene.Storm.Lightning.Lightning;
 import com.github.Icyene.Storm.Meteors.Meteor;
 import com.github.Icyene.Storm.Wildfire.Wildfire;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -75,24 +75,9 @@ public class Storm extends JavaPlugin
 		Wildfire.load(this);
 		Blizzard.load(this);
 		Meteor.load(this);
-		// Earthquake.load(this);
+		Earthquake.load(this);
 		this.getServer().getPluginManager().registerEvents(
 		        new TextureManager(), this);
-		for (World w : Bukkit.getWorlds()) {
-			try {
-				System.out.println(util.getRandomTickedBlocks(w));
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
 	}
 
 	@Override
