@@ -44,6 +44,9 @@ public class BlockListener implements Listener {
 		//e.setCancelled(true);
 		
 		final Block b = e.getBlock();
+		if(Storm.util.isBlockProtected(b))
+			return;
+		
 		final FallingBlock fB = e.getPlayer().getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
 		fB.setDropItem(true);
 		
@@ -76,11 +79,15 @@ public class BlockListener implements Listener {
 
 		//e.setCancelled(true);
 		
-		Random rand = new Random();
 		final Block b = e.getBlock();
+		
+		if(Storm.util.isBlockProtected(b))
+			return;
+		
 		FallingBlock fB = e.getPlayer().getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
 		fB.setDropItem(true);
 		
+		Random rand = new Random();
 		float x = ((float) rand.nextInt(10) - 5F) / 10F;
 		float z = ((float) rand.nextInt(10) - 5F) / 10F;
 

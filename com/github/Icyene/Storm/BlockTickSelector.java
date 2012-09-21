@@ -30,9 +30,8 @@ public class BlockTickSelector {
 		this.world = ((CraftWorld) world).getHandle();
 		this.chan = selChance;
 
-		l = World.class.getDeclaredField("l");
-		a = World.class.getDeclaredMethod("a", int.class, int.class,
-		        Chunk.class);
+		l = net.minecraft.server.World.class.getDeclaredField("l");
+		a = net.minecraft.server.World.class.getDeclaredMethod("a", int.class, int.class, Chunk.class);
 
 		l.setAccessible(true);
 		a.setAccessible(true);
