@@ -75,7 +75,7 @@ public class ReflectConfiguration
 		// using BufferedOutputStream when saving. Causes only one file to be
 		// generated.
 
-		int id = Bukkit.getScheduler()
+		Bukkit.getScheduler()
 		        .scheduleAsyncDelayedTask(
 		                plugin,
 		                new Runnable()
@@ -92,13 +92,6 @@ public class ReflectConfiguration
 				                }
 			                }
 		                }, 1);
-		/*try
-		{
-			Bukkit.getScheduler().cancelTask(id);
-
-		} catch (Exception e)
-		{}
-		;*/
 	}
 
 	private boolean doSkip(Field field)

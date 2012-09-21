@@ -31,7 +31,6 @@ import com.github.Icyene.Storm.Meteors.Meteor;
 import com.github.Icyene.Storm.Wildfire.Wildfire;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -79,21 +78,6 @@ public class Storm extends JavaPlugin
 		Earthquake.load(this);
 		this.getServer().getPluginManager().registerEvents(
 		        new TextureManager(), this);
-		/*for (World w : Bukkit.getWorlds()) {
-			try {
-				System.out.println(util.getRandomTickedBlocks(w));
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}*/
-
 	}
 
 	@Override
