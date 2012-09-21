@@ -67,6 +67,7 @@ public class GlobalVariables extends ReflectConfiguration {
     public List<Integer> Blizzard_Damager_Heating__Blocks = Arrays.asList(
 	    Block.FIRE.id, Block.LAVA.id, Block.STATIONARY_LAVA.id,
 	    Block.BURNING_FURNACE.id);
+    public int Blizzard_Damager_Heat__Radius = 2;
 
     public int Blizzard_Player_Damage__From__Exposure = 2;
     public double Blizzard_Player_Speed__Loss__While__In__Snow = 0.4D;

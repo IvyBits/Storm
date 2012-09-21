@@ -15,10 +15,10 @@ import com.github.Icyene.Storm.Storm;
 public class BlizzardTask
 {
 
-	private int	            id;
-	private World	        affectedWorld;
-	private Storm	        storm;
-	private GlobalVariables	glob;
+	private int id;
+	private World affectedWorld;
+	private Storm storm;
+	private GlobalVariables glob;
 
 	public BlizzardTask(Storm storm, World spawnWorld)
 	{
@@ -45,6 +45,7 @@ public class BlizzardTask
 				                {
 					                if (!damagee.getGameMode().equals(
 					                        GameMode.CREATIVE)
+
 					                )
 					                {
 
@@ -55,23 +56,28 @@ public class BlizzardTask
 							                return;
 						                }
 
-						                damagee.addPotionEffect(
-						                        new PotionEffect(
-						                                PotionEffectType.BLINDNESS,
-						                                glob.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks + 60,
-						                                glob.Blizzard_Damager_Blindness__Amplitude),
-						                        true);
+						                if (Storm.util
+						                        .isPlayerUnderSky(damagee)) {
+							                damagee.addPotionEffect(
+							                        new PotionEffect(
+							                                PotionEffectType.BLINDNESS,
+							                                glob.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks + 60,
+							                                glob.Blizzard_Damager_Blindness__Amplitude),
+							                        true);
+						                }
 
 						                final Location loc = damagee
 						                        .getLocation();
 
 						                final World world = damagee.getWorld();
 
-						                for (int y = 1; y > -2; y--)
+						                int radius = glob.Blizzard_Damager_Heat__Radius;
+
+						                for (int y = 1; y > -radius; y--)
 						                {
-							                for (int x = 1; x > -2; x--)
+							                for (int x = 1; x > -radius; x--)
 							                {
-								                for (int z = 1; z > -2; z--)
+								                for (int z = 1; z > -radius; z--)
 								                {
 									                Block scan = world
 									                        .getBlockAt(
