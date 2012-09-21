@@ -3,29 +3,35 @@ package com.github.Icyene.Storm.Acid_Rain.Tasks;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 
+import com.github.Icyene.Storm.BlockTickSelector;
 import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 
 public class DissolverTask
 {
 
-	private int	            id;
-	private Random	        rand	= new Random();
-	private World	        affectedWorld;
-	private Storm	        storm;
+	private int id;
+	private Random rand = new Random();
+	private World affectedWorld;
+	private Storm storm;
 
-	private GlobalVariables	glob;
+	private GlobalVariables glob;
+	private BlockTickSelector ticker;
 
 	public DissolverTask(Storm storm, World affectedWorld)
 	{
 		this.storm = storm;
 		this.affectedWorld = affectedWorld;
 		glob = Storm.wConfigs.get(affectedWorld.getName());
+		try {
+			ticker = new BlockTickSelector(affectedWorld,
+			        glob.Acid__Rain_Dissolver_Block__Deterioration__Chance);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void run()
@@ -39,49 +45,33 @@ public class DissolverTask
 			                @Override
 			                public void run()
 			                {
-				                final Chunk[] loadedChunk = affectedWorld
-				                        .getLoadedChunks();
 
-				                for (int index = 0; index <= glob.Acid__Rain_Dissolver_Blocks__To__Deteriorate__Per__Calculation; ++index)
-				                {
-					                if (rand.nextInt(100) <= glob.Acid__Rain_Acid__Rain__Chance)
-					                {
-						                int x = rand.nextInt(16);
-						                int z = rand.nextInt(16);
+				                try {
+					                for (Block b : ticker
+					                        .getRandomTickedBlocks()) {
 
-						                Block tran = affectedWorld
-						                        .getHighestBlockAt(
-						                                loadedChunk[rand
-						                                        .nextInt(loadedChunk.length)]
-						                                        .getBlock(x, 4,
-						                                                z)
-						                                        .getLocation()
-						                        ).getRelative(BlockFace.DOWN);
-
-						                if (Storm.util.isBlockProtected(tran))
+						                if (!Storm.util.isBlockProtected(b))
 						                {
-							                --index;
-						                } else
+
+						                }
+						                if (Storm.biomes.isRainy(b
+						                        .getBiome())
+						                        && rand.nextInt(100) < glob.Acid__Rain_Dissolver_Block__Deterioration__Chance
+						                        && b.getTypeId() != 0)
 						                {
-							                if (Storm.biomes.isRainy(tran
-							                                .getBiome())
-							                        && rand.nextInt(100) < glob.Acid__Rain_Dissolver_Block__Deterioration__Chance
-							                        && tran.getTypeId() != 0)
-							                {
 
-								                Storm.util
-								                        .transform(
-								                                tran,
-								                                glob.Acid__Rain_Dissolver_Block__Transformations);
+							                Storm.util
+							                        .transform(
+							                                b,
+							                                glob.Acid__Rain_Dissolver_Block__Transformations);
 
-							                } else
-							                {
-								                --index;
-							                }
 						                }
 					                }
+				                } catch (Exception e) {
+					                e.printStackTrace();
 				                }
 			                }
+
 		                },
 		                0,
 		                glob.Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks);
