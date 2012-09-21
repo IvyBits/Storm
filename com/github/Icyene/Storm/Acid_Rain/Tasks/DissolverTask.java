@@ -1,7 +1,5 @@
 package com.github.Icyene.Storm.Acid_Rain.Tasks;
 
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -14,7 +12,6 @@ public class DissolverTask
 {
 
 	private int id;
-	private Random rand = new Random();
 	private World affectedWorld;
 	private Storm storm;
 
