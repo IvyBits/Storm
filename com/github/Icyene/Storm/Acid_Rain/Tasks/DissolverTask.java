@@ -12,7 +12,6 @@ public class DissolverTask
 {
 
 	private int id;
-	private World affectedWorld;
 	private Storm storm;
 
 	private GlobalVariables glob;
@@ -21,7 +20,6 @@ public class DissolverTask
 	public DissolverTask(Storm storm, World affectedWorld)
 	{
 		this.storm = storm;
-		this.affectedWorld = affectedWorld;
 		glob = Storm.wConfigs.get(affectedWorld.getName());
 		try {
 			ticker = new BlockTickSelector(affectedWorld,
@@ -49,23 +47,21 @@ public class DissolverTask
 
 						                if (!Storm.util.isBlockProtected(b))
 						                {
-
-						                }
-						                if (Storm.biomes.isRainy(b
-						                        .getBiome())						                        
-						                        && b.getTypeId() != 0)
-						                {
-
-							                Storm.util
-							                        .transform(
-							                                b,
-							                                glob.Acid__Rain_Dissolver_Block__Transformations);
-
+							                if (Storm.biomes.isRainy(b
+							                        .getBiome())
+							                        && b.getTypeId() != 0)
+							                {
+								                Storm.util
+								                        .transform(
+								                                b,
+								                                glob.Acid__Rain_Dissolver_Block__Transformations);
+							                }
 						                }
 					                }
 				                } catch (Exception e) {
 					                e.printStackTrace();
 				                }
+
 			                }
 
 		                },
