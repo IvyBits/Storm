@@ -55,8 +55,7 @@ public class DissolverTask
 
 						                }
 						                if (Storm.biomes.isRainy(b
-						                        .getBiome())
-						                        && rand.nextInt(100) < glob.Acid__Rain_Dissolver_Block__Deterioration__Chance
+						                        .getBiome())						                        
 						                        && b.getTypeId() != 0)
 						                {
 
