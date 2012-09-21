@@ -92,7 +92,9 @@ public class GlobalVariables extends ReflectConfiguration {
     public int Natural__Disasters_Meteor_Shockwave_Damage__Radius = 100;
     public String Natural__Disasters_Meteor_Shockwave_Damage__Message = "You have been flattened by a meteor!";
     public long Natural__Disasters_Meteor_Scheduler__Recalculation__Intervals__In__Ticks = 72000;
-
+    public boolean Natural__Disasters_Meteor_Meteor_Spawn = true;
+    public int Natural__Disasters_Meteor_Meteor_Radius = 4;
+    
     public int Natural__Disasters_Wildfires_Chance__To__Start = 20;
     public int Natural__Disasters_Wildfires_Spread__Limit = 2;
     public int Natural__Disasters_Wildfires_Scan__Radius = 2;

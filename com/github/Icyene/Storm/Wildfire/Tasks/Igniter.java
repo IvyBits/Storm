@@ -17,106 +17,112 @@ import com.github.Icyene.Storm.Wildfire.Listeners.WildfireListeners;
 
 public class Igniter {
 
-    private int id;
-    private Random rand = new Random();
-    private World affectedWorld;
-    private Storm storm;
+	private int id;
+	private Random rand = new Random();
+	private World affectedWorld;
+	private Storm storm;
 
-    private GlobalVariables glob;
-    
-    public Igniter(Storm storm, World spawnWorld) {
-	this.storm = storm;
-	this.affectedWorld = spawnWorld;
-	glob = Storm.wConfigs.get(spawnWorld.getName());
-    }
-    public void run() {
+	private GlobalVariables glob;
 
-	id = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-		storm,
-		new Runnable() {
-		    @Override
-		    public void run() {
-			if (rand.nextInt(100) <= glob.Natural__Disasters_Meteor_Chance__To__Spawn) {
-			    Block toBurn;
-			    while (true) {				
+	public Igniter(Storm storm, World spawnWorld) {
+		this.storm = storm;
+		this.affectedWorld = spawnWorld;
+		glob = Storm.wConfigs.get(spawnWorld.getName());
+	}
 
-				Chunk chunk = Storm.util
-					.pickChunk(affectedWorld);
+	public void run() {
 
-				if (chunk == null) {
-				    Storm.util
-					    .log("Selected chunk is null. Aborting wildfire.");
-				    return;
-				}
+		id = Bukkit.getScheduler().scheduleSyncRepeatingTask(
+		        storm,
+		        new Runnable() {
+			        @Override
+			        public void run() {
+				        if (rand.nextInt(100) <= glob.Natural__Disasters_Meteor_Chance__To__Spawn) {
+					        Block toBurn;
+					        while (true) {
 
-				final int x = rand.nextInt(16);
-				final int z = rand.nextInt(16);
+						        Chunk chunk = Storm.util
+						                .pickChunk(affectedWorld);
 
-				toBurn = chunk.getWorld()
-					.getHighestBlockAt(
-						chunk
-							.getBlock(
-								x,
-								4,
-								z)
-							.getLocation())
-					.getLocation()
-					.subtract(0, 1, 0)
-					.getBlock();
+						        if (chunk == null) {
+							        Storm.util
+							                .log("Selected chunk is null. Aborting wildfire.");
+							        return;
+						        }
 
-				if (Storm.util
-					.isBlockProtected(toBurn)) {
+						        final int x = rand.nextInt(16);
+						        final int z = rand.nextInt(16);
 
-				} else {
+						        toBurn = chunk.getWorld()
+						                .getHighestBlockAt(
+						                        chunk
+						                                .getBlock(
+						                                        x,
+						                                        4,
+						                                        z)
+						                                .getLocation())
+						                .getLocation()
+						                .subtract(0, 1, 0)
+						                .getBlock();
 
-				    if (Wildfire.leafyBiomes.contains(toBurn
-					    .getBiome())
-					    && Arrays
-						    .asList(Wildfire.flammableBlocks)
-						    .contains(
-							    toBurn.getTypeId())) {
-					break;
-				    }
+						        if (Storm.util
+						                .isBlockProtected(toBurn)) {
 
-				}
+						        } else {
 
-				toBurn = toBurn.getLocation().add(0, 1, 0)
-					.getBlock();
-				toBurn.setType(Material.FIRE);
-				WildfireListeners.infernink.get(toBurn.getWorld()).add(toBurn);
+							        if (Wildfire.leafyBiomes.contains(toBurn
+							                .getBiome())
+							                && Arrays
+							                        .asList(Wildfire.flammableBlocks)
+							                        .contains(
+							                                toBurn.getTypeId())) {
+								        break;
+							        }
 
-				for (Player p : affectedWorld.getPlayers()) {
-				    Storm.util
-					    .message(
-						    p,
-						    glob.Natural__Disasters_Wildfires_Message__On__Start
-							    .replace(
-								    "%x",
-								    toBurn.getX()
-									    + "")
-							    .replace(
-								    "%y",
-								    toBurn.getY()
-									    + "")
-							    .replace(
-								    "%z",
-								    toBurn.getZ()
-									    + ""));
-				}
+						        }
 
-			    }
-			}
-		    }
+						        toBurn = toBurn.getLocation().add(0, 1, 0)
+						                .getBlock();
+						        toBurn.setType(Material.FIRE);
+						        World world;
+						        if (WildfireListeners.infernink
+						                .containsKey((world = toBurn.getWorld()))) {
+							        WildfireListeners.infernink.get(world).add(
+							                toBurn);
+						        }
 
-		}
-		,
-		glob.Natural__Disasters_Wildfires_Scheduler__Recalculation__Intervals__In__Ticks,
-		glob.Natural__Disasters_Wildfires_Scheduler__Recalculation__Intervals__In__Ticks);
+						        for (Player p : affectedWorld.getPlayers()) {
+							        Storm.util
+							                .message(
+							                        p,
+							                        glob.Natural__Disasters_Wildfires_Message__On__Start
+							                                .replace(
+							                                        "%x",
+							                                        toBurn.getX()
+							                                                + "")
+							                                .replace(
+							                                        "%y",
+							                                        toBurn.getY()
+							                                                + "")
+							                                .replace(
+							                                        "%z",
+							                                        toBurn.getZ()
+							                                                + ""));
+						        }
 
-    }
+					        }
+				        }
+			        }
 
-    public void stop() {
-	Bukkit.getScheduler().cancelTask(id);
-    }
+		        }
+		        ,
+		        glob.Natural__Disasters_Wildfires_Scheduler__Recalculation__Intervals__In__Ticks,
+		        glob.Natural__Disasters_Wildfires_Scheduler__Recalculation__Intervals__In__Ticks);
+
+	}
+
+	public void stop() {
+		Bukkit.getScheduler().cancelTask(id);
+	}
 
 }

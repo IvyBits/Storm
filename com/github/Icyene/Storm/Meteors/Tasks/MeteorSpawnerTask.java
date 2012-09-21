@@ -79,7 +79,7 @@ public class MeteorSpawnerTask {
 		9,
 		80,
 		glob.Natural__Disasters_Meteor_Shockwave_Damage__Message,
-		rand.nextInt(100) + 200);
+		rand.nextInt(100) + 200,glob.Natural__Disasters_Meteor_Meteor_Spawn,glob.Natural__Disasters_Meteor_Meteor_Radius);
 
 	meteor.spawn();
 
