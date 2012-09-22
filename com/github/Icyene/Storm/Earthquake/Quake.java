@@ -1,5 +1,6 @@
 package com.github.Icyene.Storm.Earthquake;
 
+import com.github.Icyene.Storm.Earthquake.Events.QuakeLoadEvent;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -13,9 +14,11 @@ import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Earthquake.Exceptions.InvalidWorldException;
 import com.github.Icyene.Storm.Earthquake.Listeners.BlockListener;
 import com.github.Icyene.Storm.Earthquake.Listeners.MobListener;
+import com.github.Icyene.Storm.Earthquake.Tasks.RiftLoader;
 
 import java.util.List;
 import java.util.logging.Level;
+import org.bukkit.Bukkit;
 
 public class Quake {
 
@@ -31,11 +34,17 @@ public class Quake {
 	private MobListener mL;
 	private BlockListener bL;
 	
-	private Integer tID;
+	private Integer tID, rLID;
 	private Boolean isLoading = false;
 	private Boolean isRunning = false;
 	
 	private void load() {
+		QuakeLoadEvent QLE = new QuakeLoadEvent(this);
+		Bukkit.getServer().getPluginManager().callEvent(QLE);
+		
+		if(QLE.isCancelled())
+			return;
+		
 		this.isLoading = true;
 		
 		World w = storm.getServer().getWorld(world);
@@ -45,8 +54,21 @@ public class Quake {
 		
 		// Calculate blocks
 		Chunk c = w.getChunkAt(x, z);
+		Chunk c2 = w.getChunkAt(x + 16, z);
+		Chunk c3 = w.getChunkAt(x - 16, z);
 		
+		storm.getLogger().severe("===== DEBUG =====");
+		storm.getLogger().severe("----- Chunk center -----");
+		storm.getLogger().severe("X: " + c.getX());
+		storm.getLogger().severe("Z: " + c.getZ());
+		storm.getLogger().severe("----- Chunk left -----");
+		storm.getLogger().severe("X: " + c2.getX());
+		storm.getLogger().severe("Z: " + c2.getZ());
+		storm.getLogger().severe("----- Chunk right -----");
+		storm.getLogger().severe("X: " + c3.getX());
+		storm.getLogger().severe("Z: " + c3.getZ());
 		
+		rLID = storm.getServer().getScheduler().scheduleAsyncDelayedTask(storm, new RiftLoader(this));
 		
 		// Creepers will not attack player during quake!
 		mL = new MobListener(this);
@@ -113,8 +135,8 @@ public class Quake {
 			this.point1 = new Pair<Integer, Integer>(minX, minZ);
 			this.point2 = new Pair<Integer, Integer>(maxX, maxZ);
 			
-			this.load();
 			storm.getLogger().log(Level.SEVERE, "Quake loading at: [" + this.point1.LEFT + " - " + this.point1.RIGHT + "] - [" + this.point2.LEFT + " - " + this.point2.RIGHT + "]");
+			this.load();
 		}else{
 			throw new InvalidWorldException("World " + w + " and World " + w2 + " do not match!");
 		}
@@ -135,6 +157,10 @@ public class Quake {
 		
 		if(null != bL) {
 			bL.forget();
+		}
+		
+		if(rLID != null) {
+			storm.getServer().getScheduler().cancelTask(rLID);
 		}
 		
 		if(tID != null) {
@@ -165,5 +191,21 @@ public class Quake {
 		
 		return (point.getBlockX() >= point1.LEFT && point.getBlockZ() >= point1.RIGHT
 				&& point.getBlockX() <= point2.LEFT && point.getBlockZ() <= point2.RIGHT);
+	}
+	
+	public World getWorld() {
+		return storm.getServer().getWorld(this.world);
+	}
+	
+	public Pair<Integer, Integer> getEpicenter() {
+		return this.epicenter;
+	}
+	
+	public Pair<Integer, Integer> getPointOne() {
+		return this.point1;
+	}
+	
+	public Pair<Integer, Integer> getPointTwo() {
+		return this.point2;
 	}
 }
