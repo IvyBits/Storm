@@ -33,6 +33,7 @@ import com.github.StormTeam.Storm.Earthquake.Earthquake;
 import com.github.StormTeam.Storm.Lightning.Lightning;
 import com.github.StormTeam.Storm.Meteors.Meteor;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
+import com.github.StormTeam.Storm.Puddles.Puddles;;
 
 public class Storm extends JavaPlugin
 {
@@ -70,12 +71,14 @@ public class Storm extends JavaPlugin
 			new MetricsLite(this).start();
 		} catch (IOException e) {}
 
+		//Modularity FTW!
 		AcidRain.load(this);
 		Lightning.load(this);
 		Wildfire.load(this);
 		Blizzard.load(this);
 		Meteor.load(this);
 		Earthquake.load(this);
+		Puddles.load(this);
 		this.getServer().getPluginManager().registerEvents(
 		        new TextureManager(), this);
 	}

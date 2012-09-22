@@ -71,7 +71,9 @@ public class GlobalVariables extends ReflectConfiguration {
 
     public int Blizzard_Player_Damage__From__Exposure = 2;
     public double Blizzard_Player_Speed__Loss__While__In__Snow = 0.4D;
+    public int Blizzard_Block_Snow__Pile__Chance = 32;
     public int Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
+    public int Blizzard_Scheduler_Player__Piler__Calculation__Intervals__In__Ticks = 30;
 
     public int Lightning_Damage_Damage = 5;
     public int Lightning_Damage_Damage__Radius = 10;
@@ -123,6 +125,7 @@ public class GlobalVariables extends ReflectConfiguration {
     public boolean Features_Snow_Slow__Players__Down = true;
     public boolean Features_Blizzards_Player__Damaging = true;
     public boolean Features_Blizzards_Slowing__Snow = true;
+    public boolean Features_Blizzards_Piling__Snow = true;
     public boolean Features_Meteor = true;
     public boolean Features_Wildfires = true;
     public boolean Features_Force__Weather__Textures = true;
