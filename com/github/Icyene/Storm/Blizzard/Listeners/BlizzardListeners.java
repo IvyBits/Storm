@@ -13,8 +13,8 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
+import com.github.Icyene.Storm.Blizzard.Events.BlizzardEvent;
 import com.github.Icyene.Storm.Blizzard.Tasks.BlizzardTask;
-import com.github.Icyene.Storm.Events.BlizzardEvent;
 
 public class BlizzardListeners implements Listener {
 

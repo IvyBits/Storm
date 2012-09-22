@@ -10,9 +10,9 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import com.github.Icyene.Storm.GlobalVariables;
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Acid_Rain.AcidRain;
+import com.github.Icyene.Storm.Acid_Rain.Events.AcidRainEvent;
 import com.github.Icyene.Storm.Acid_Rain.Tasks.DamagerTask;
 import com.github.Icyene.Storm.Acid_Rain.Tasks.DissolverTask;
-import com.github.Icyene.Storm.Events.AcidRainEvent;
 
 public class AcidListener implements Listener
 {

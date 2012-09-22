@@ -36,7 +36,7 @@ public class BlockTickSelector {
 		l.setAccessible(true);
 		a.setAccessible(true);
 	}
-
+	
 	public ArrayList<Block> getRandomTickedBlocks()
 	        throws IllegalArgumentException,
 	        IllegalAccessException, InvocationTargetException {

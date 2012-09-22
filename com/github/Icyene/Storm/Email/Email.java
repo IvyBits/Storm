@@ -7,9 +7,8 @@ import java.net.Socket;
 
 public class Email {
 
-	@SuppressWarnings("deprecation")
-    public void sendEmail(Providers provider, String to, String from,
-	        String password, String content, int port) {
+	public void sendEmail(Providers provider, String to, String from,
+	        String password, String content, String subject, int port) {
 
 		String HOST = provider.getHost();
 
@@ -37,32 +36,18 @@ public class Email {
 			dos.writeBytes("\r\n");
 			dos.writeBytes("RCPT TO: <" + to + ">\r\n");
 			dos.writeBytes("DATA\r\n");
-			dos.writeBytes("Subject: Email test\r\n");
+			dos.writeBytes("Subject: " + subject + "\r\n");
 			dos.writeBytes(content);
 			dos.writeBytes("\r\n.\r\n");
 			dos.writeBytes("QUIT\r\n");
 
 			dos.flush();
-
-			String responseline;
-			while ((responseline = is.readLine()) != null) {
-				System.out.println(responseline);
-			}
-
 			is.close();
 			dos.close();
 			socket.close();
 		} catch (IOException ex) {
 			System.err.println(ex);
 		}
-
-	}
-
-	public void sendEmail(Providers provider, String to, String from,
-	        String password, String content) {
-
-		sendEmail(provider, to, from, password, content, 25); // Use default
-															  // port
 
 	}
 

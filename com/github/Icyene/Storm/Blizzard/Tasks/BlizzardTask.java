@@ -44,12 +44,11 @@ public class BlizzardTask
 				                        .getPlayers())
 				                {
 					                if (!damagee.getGameMode().equals(
-					                        GameMode.CREATIVE)
-
-					                )
+					                        GameMode.CREATIVE))					                
 					                {
 
-						                if (!Storm.biomes.isTundra(
+						             //   Player damagee = damagee;
+										if (!Storm.biomes.isTundra(
 						                        damagee.getLocation()
 						                                .getBlock().getBiome()))
 						                {
@@ -66,13 +65,13 @@ public class BlizzardTask
 							                        true);
 						                }
 
-						                final Location loc = damagee
-						                        .getLocation();
-
+						                if(glob.Blizzard_Damager_Heating__Blocks.contains(damagee.getItemInHand().getTypeId()) {
+						                	return;
+						                }
+						               
+						                final Location loc = damagee.getLocation();
 						                final World world = damagee.getWorld();
-
 						                int radius = glob.Blizzard_Damager_Heat__Radius;
-
 						                for (int y = 1; y > -radius; y--)
 						                {
 							                for (int x = 1; x > -radius; x--)

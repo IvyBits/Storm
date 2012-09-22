@@ -26,11 +26,16 @@ import com.github.Icyene.Storm.Acid_Rain.AcidRain;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
 import com.github.Icyene.Storm.Database.Database;
 import com.github.Icyene.Storm.Earthquake.Earthquake;
+import com.github.Icyene.Storm.Email.EmailLogger;
+import com.github.Icyene.Storm.Email.EmailVariables;
 import com.github.Icyene.Storm.Lightning.Lightning;
 import com.github.Icyene.Storm.Meteors.Meteor;
 import com.github.Icyene.Storm.Wildfire.Wildfire;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -41,6 +46,8 @@ public class Storm extends JavaPlugin
 	public static BiomeGroups biomes;
 	public static StormUtil util;
 	public static Commands cmds;
+	public static EmailVariables eV;
+	public static EmailLogger eL = new EmailLogger();
 	private Database db;
 
 	@Override
@@ -53,6 +60,26 @@ public class Storm extends JavaPlugin
 			config.workaroundLists(); // Stupid workaround for config
 			config.load();
 			wConfigs.put(world, config);
+		}
+		eV = new EmailVariables(this, "emailLogging");
+		eV.load();
+
+		if (eV.Email_Email__Developers__On__Crash) {
+			Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+
+				private String getStackTrace(Throwable aThrowable) {
+					final Writer result = new StringWriter();
+					final PrintWriter printWriter = new PrintWriter(result);
+					aThrowable.printStackTrace(printWriter);
+					return result.toString();
+				}
+
+				@Override
+				public void uncaughtException(Thread arg0, Throwable arg1) {
+					Storm.eL.sendStackTrace(getStackTrace(arg1));
+
+				}
+			});
 		}
 
 		util = new StormUtil(this);

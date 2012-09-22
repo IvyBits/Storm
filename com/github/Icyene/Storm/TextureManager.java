@@ -1,7 +1,5 @@
 package com.github.Icyene.Storm;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,9 +8,9 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.github.Icyene.Storm.Acid_Rain.AcidRain;
+import com.github.Icyene.Storm.Acid_Rain.Events.AcidRainEvent;
 import com.github.Icyene.Storm.Blizzard.Blizzard;
-import com.github.Icyene.Storm.Events.AcidRainEvent;
-import com.github.Icyene.Storm.Events.BlizzardEvent;
+import com.github.Icyene.Storm.Blizzard.Events.BlizzardEvent;
 
 public class TextureManager implements Listener
 {
@@ -87,19 +85,6 @@ public class TextureManager implements Listener
 	public void setAcidTexture(AcidRainEvent event) {		
 		
 		final World world = event.getAffectedWorld();
-		
-		try {
-	        System.out.println(Storm.util.getRandomTickedBlocks(world));
-        } catch (IllegalArgumentException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        } catch (IllegalAccessException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        } catch (InvocationTargetException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        }
 
 		if (event.getWeatherState()) {
 
