@@ -1,7 +1,7 @@
 package com.github.StormTeam.Storm.Earthquake.Events;
 
-import com.github.Icyene.Storm.Earthquake.Quake;
-import com.github.Icyene.Storm.Pair;
+import com.github.StormTeam.Storm.Earthquake.Quake;
+import com.github.StormTeam.Storm.Pair;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
