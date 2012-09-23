@@ -1,6 +1,8 @@
 package com.github.Icyene.Storm.Earthquake;
 
+import com.github.Icyene.Storm.Earthquake.Events.QuakeFinishEvent;
 import com.github.Icyene.Storm.Earthquake.Events.QuakeLoadEvent;
+import com.github.Icyene.Storm.Earthquake.Events.QuakeStartEvent;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -87,6 +89,9 @@ public class Quake {
 	}
 	
 	private void go() {
+		QuakeStartEvent QSE = new QuakeStartEvent(this);
+		Bukkit.getServer().getPluginManager().callEvent(QSE);
+		
 		// Blocks will bounce everywhere in the quake!
 		bL = new BlockListener(this, storm);
 		storm.getServer().getPluginManager().registerEvents(bL, storm);
@@ -149,6 +154,8 @@ public class Quake {
 	}
 	
 	public void stop() {
+		QuakeFinishEvent QFE = new QuakeFinishEvent(this);
+		Bukkit.getServer().getPluginManager().callEvent(QFE);
 		this.isLoading = false;
 		this.isRunning = false;
 		if(null != mL) {
