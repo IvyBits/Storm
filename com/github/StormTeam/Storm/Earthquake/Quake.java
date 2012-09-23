@@ -1,14 +1,9 @@
 package com.github.StormTeam.Storm.Earthquake;
 
 import org.bukkit.Chunk;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import com.github.StormTeam.Storm.Tuple;
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Earthquake.Exceptions.InvalidWorldException;
 import com.github.StormTeam.Storm.Earthquake.Listeners.BlockListener;
@@ -18,7 +13,8 @@ import com.github.StormTeam.Storm.Earthquake.Events.QuakeFinishEvent;
 import com.github.StormTeam.Storm.Earthquake.Events.QuakeLoadEvent;
 import com.github.StormTeam.Storm.Earthquake.Events.QuakeStartEvent;
 
-import java.util.List;
+import com.github.StormTeam.Storm.Earthquake.Tasks.QuakeTask;
+import com.github.StormTeam.Storm.Tuple;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 
@@ -51,28 +47,28 @@ public class Quake {
         int z = (point1.z + point2.z) / 2;
         this.epicenter = new Tuple<Integer, Integer>(x, z);
 
-        // Calculate blocks
+// Calculate blocks
         Chunk c = w.getChunkAt(x, z);
         Chunk c2 = w.getChunkAt(x + 16, z);
         Chunk c3 = w.getChunkAt(x - 16, z);
 
         storm.getLogger().severe("===== DEBUG =====");
         storm.getLogger().severe("----- Chunk center -----");
-        storm.getLogger().severe("X: " + c.getX());
-        storm.getLogger().severe("Z: " + c.getZ());
+        storm.getLogger().log(Level.SEVERE, "X: {0}", c.getX());
+        storm.getLogger().log(Level.SEVERE, "Z: {0}", c.getZ());
         storm.getLogger().severe("----- Chunk left -----");
-        storm.getLogger().severe("X: " + c2.getX());
-        storm.getLogger().severe("Z: " + c2.getZ());
+        storm.getLogger().log(Level.SEVERE, "X: {0}", c2.getX());
+        storm.getLogger().log(Level.SEVERE, "Z: {0}", c2.getZ());
         storm.getLogger().severe("----- Chunk right -----");
-        storm.getLogger().severe("X: " + c3.getX());
-        storm.getLogger().severe("Z: " + c3.getZ());
+        storm.getLogger().log(Level.SEVERE, "X: {0}", c3.getX());
+        storm.getLogger().log(Level.SEVERE, "Z: {0}", c3.getZ());
 
         rLID = storm.getServer().getScheduler().scheduleAsyncDelayedTask(storm, new RiftLoader(this));
 
-        // Creepers will not attack player during quake!
+// Creepers will not attack player during quake!
         mL = new MobListener(this);
 
-        // Register events
+// Register events
         storm.getServer().getPluginManager().registerEvents(mL, storm);
 
         tID = storm.getServer().getScheduler().scheduleSyncDelayedTask(storm, new Runnable() {
@@ -87,37 +83,13 @@ public class Quake {
         QuakeStartEvent QSE = new QuakeStartEvent(this);
         Bukkit.getServer().getPluginManager().callEvent(QSE);
 
-        // Blocks will bounce everywhere in the quake!
+// Blocks will bounce everywhere in the quake!
         bL = new BlockListener(this, storm);
         storm.getServer().getPluginManager().registerEvents(bL, storm);
 
         storm.getLogger().log(Level.SEVERE, "Quake started at: [" + this.point1.x + " - " + this.point1.z + "] - [" + this.point2.x + " - " + this.point2.z + "]");
 
-        tID = storm.getServer().getScheduler().scheduleSyncRepeatingTask(storm, new Runnable() {
-            int i = 0;
-
-            @Override
-            public void run() {
-                List<Player> players = storm.getServer().getWorld(world).getPlayers();
-                for (Player p : players) {
-                    // Don't bother creative players
-                    if (p.getGameMode() == GameMode.CREATIVE) {
-                        continue;
-                    }
-
-                    // Player isn't quaking...
-                    if (!isQuaking(p.getLocation())) {
-                        continue;
-                    }
-
-                    if (i == 0) {
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 5), true);
-                    } else {
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2, 5), true);
-                    }
-                }
-            }
-        }, 0L, 2L);
+        tID = storm.getServer().getScheduler().scheduleSyncRepeatingTask(storm, new QuakeTask(this, storm), 0L, 2L);
     }
 
     public Quake(Storm storm, Integer qID, Location point1, Location point2) throws InvalidWorldException {

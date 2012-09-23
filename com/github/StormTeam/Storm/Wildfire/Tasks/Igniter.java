@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
-import com.github.StormTeam.Storm.Wildfire.Listeners.WildfireListeners;
+import static com.github.StormTeam.Storm.Wildfire.Wildfire.wildfireBlocks;
 
 public class Igniter {
 
@@ -85,10 +85,8 @@ public class Igniter {
 						                .getBlock();
 						        toBurn.setType(Material.FIRE);
 						        World world;
-						        if (WildfireListeners.infernink
-						                .containsKey((world = toBurn.getWorld()))) {
-							        WildfireListeners.infernink.get(world).add(
-							                toBurn);
+						        if (wildfireBlocks.containsKey((world = toBurn.getWorld()))) {
+							        wildfireBlocks.get(world).add(toBurn);
 						        }
 
 						        for (Player p : affectedWorld.getPlayers()) {
