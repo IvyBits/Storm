@@ -50,8 +50,7 @@ public class Storm extends JavaPlugin {
         // Make per-world configuration files
         for (World w : Bukkit.getWorlds()) {
             String world = w.getName();
-            GlobalVariables config = new GlobalVariables(this, world);
-            config.workaroundLists(); // Stupid workaround for config
+            GlobalVariables config = new GlobalVariables(this, world);           
             config.load();
             wConfigs.put(world, config);
         }
