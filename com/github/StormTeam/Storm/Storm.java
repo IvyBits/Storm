@@ -29,6 +29,7 @@ import com.github.StormTeam.Storm.Earthquake.Earthquake;
 import com.github.StormTeam.Storm.Lightning.Lightning;
 import com.github.StormTeam.Storm.Meteors.Meteor;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
+import github.StormTeam.Storm.UpdaterVariables;
 
 import java.util.HashMap;
 
@@ -40,6 +41,7 @@ public class Storm extends JavaPlugin {
     public Commands cmds;
     private Database db;
     public static PluginManager pm = Bukkit.getPluginManager();
+    public static UpdaterVariables updater;
 
     @Override
     public void onEnable() {
@@ -47,12 +49,34 @@ public class Storm extends JavaPlugin {
         // Make per-world configuration files
         for (World world : Bukkit.getWorlds()) {
             String name = world.getName();
-            GlobalVariables config = new GlobalVariables(this, name);           
+            GlobalVariables config = new GlobalVariables(this, name);
             config.load();
             wConfigs.put(name, config);
         }
 
-        util = new StormUtil(this);       
+        updater = new UpdaterVariables(this, "updater");
+        updater.load();
+
+
+        boolean update = false;
+
+        if (updater.Updater_Check__For__Updates) {
+            Updater up = new Updater(this, "storm", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
+            update = up.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; // Determine if there is an update ready for us
+            if (update) {
+                util.log("A new version of Storm is available: " + up.getLatestVersionString() + " (" + up.getFileSize() + " bytes).");
+            }
+
+            if (update && updater.Updater_Automagically__Update) {
+                Updater dl = new Updater(this, "storm", this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
+            } else {
+                util.log("It is highly reccomended that you download and install this update.");
+            }
+
+        }
+
+
+        util = new StormUtil(this);
         db = Database.Obtain(this, null);
         cmds = new Commands(this);
 
@@ -83,5 +107,4 @@ public class Storm extends JavaPlugin {
         Blizzard.unload();
         this.db.getEngine().close();
     }
-    
 }

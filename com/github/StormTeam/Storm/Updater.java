@@ -139,11 +139,7 @@ public class Updater {
                 String fileLink = getFile(versionLink);
                 if (fileLink != null && type != UpdateType.NO_DOWNLOAD) {
                     String name = file.getName();
-                    // If it's a zip file, it shouldn't be downloaded as the plugin's name
-                    if (fileLink.endsWith(".zip")) {
-                        String[] split = fileLink.split("/");
-                        name = split[split.length - 1];
-                    }
+                   
                     saveFile(new File("plugins/" + updateFolder), name, fileLink);
                 } else {
                     result = UpdateResult.UPDATE_AVAILABLE;
@@ -212,10 +208,7 @@ public class Updater {
             }
             // Check to see if it's a zip file, if it is, unzip it.
             File dFile = new File(folder.getAbsolutePath() + "/" + file);
-            if (dFile.getName().endsWith(".zip")) {
-                // Unzip
-                unzip(dFile.getCanonicalPath());
-            }
+       
             if (announce) {
                 plugin.getLogger().info("Finished updating.");
             }
@@ -235,81 +228,6 @@ public class Updater {
         }
     }
 
-    /**
-     * Part of Zip-File-Extractor, modified by H31IX for use with Bukkit
-     */
-    private void unzip(String file) {
-        try {
-            File fSourceZip = new File(file);
-            String zipPath = file.substring(0, file.length() - 4);
-            ZipFile zipFile = new ZipFile(fSourceZip);
-            Enumeration e = zipFile.entries();
-            while (e.hasMoreElements()) {
-                ZipEntry entry = (ZipEntry) e.nextElement();
-                File destinationFilePath = new File(zipPath, entry.getName());
-                destinationFilePath.getParentFile().mkdirs();
-                if (entry.isDirectory()) {
-                    continue;
-                } else {
-                    BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
-                    int b;
-                    byte buffer[] = new byte[BYTE_SIZE];
-                    FileOutputStream fos = new FileOutputStream(destinationFilePath);
-                    BufferedOutputStream bos = new BufferedOutputStream(fos, BYTE_SIZE);
-                    while ((b = bis.read(buffer, 0, BYTE_SIZE)) != -1) {
-                        bos.write(buffer, 0, b);
-                    }
-                    bos.flush();
-                    bos.close();
-                    bis.close();
-                    String name = destinationFilePath.getName();
-                    if (name.endsWith(".jar") && pluginFile(name)) {
-                        destinationFilePath.renameTo(new File("plugins/" + updateFolder + "/" + name));
-                    }
-                }
-                entry = null;
-                destinationFilePath = null;
-            }
-            e = null;
-            zipFile.close();
-            zipFile = null;
-            // Move any plugin data folders that were included to the right place, Bukkit won't do this for us.
-            for (File dFile : new File(zipPath).listFiles()) {
-                if (dFile.isDirectory()) {
-                    if (pluginFile(dFile.getName())) {
-                        File oFile = new File("plugins/" + dFile.getName()); // Get current dir
-                        File[] contents = oFile.listFiles(); // List of existing files in the current dir
-                        for (File cFile : dFile.listFiles()) // Loop through all the files in the new dir
-                        {
-                            boolean found = false;
-                            for (File xFile : contents) // Loop through contents to see if it exists
-                            {
-                                if (xFile.getName().equals(cFile.getName())) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (!found) {
-                                // Move the new file into the current dir
-                                cFile.renameTo(new File(oFile.getCanonicalFile() + "/" + cFile.getName()));
-                            } else {
-                                // This file already exists, so we don't need it anymore.
-                                cFile.delete();
-                            }
-                        }
-                    }
-                }
-                dFile.delete();
-            }
-            new File(zipPath).delete();
-            fSourceZip.delete();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            plugin.getLogger().warning("The auto-updater tried to unzip a new update file, but was unsuccessful.");
-            result = Updater.UpdateResult.FAIL_DOWNLOAD;
-        }
-        new File(file).delete();
-    }
 
     /**
      * Check if the name of a jar is one of the plugins currently installed,
