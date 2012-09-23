@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import com.github.Icyene.Storm.Storm;
 import com.github.Icyene.Storm.Earthquake.Quake;
+import com.github.Icyene.Storm.Earthquake.QuakeUtil;
 
 import java.util.Random;
 
@@ -46,11 +47,12 @@ public class BlockListener implements Listener {
 		final Block b = e.getBlock();
 		if(Storm.util.isBlockProtected(b))
 			return;
+
+		if(!QuakeUtil.isBounceable(b))
+			return;
 		
 		final FallingBlock fB = e.getPlayer().getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
 		fB.setDropItem(true);
-		
-		
 
 		// Avoid block duplication by removing the placed block a tick later
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(storm, new Runnable() {
@@ -80,8 +82,10 @@ public class BlockListener implements Listener {
 		//e.setCancelled(true);
 		
 		final Block b = e.getBlock();
-		
 		if(Storm.util.isBlockProtected(b))
+			return;
+		
+		if(!QuakeUtil.isBounceable(b))
 			return;
 		
 		FallingBlock fB = e.getPlayer().getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
