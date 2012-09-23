@@ -188,10 +188,10 @@ public class MetricsLite {
                 // Reload the metrics file
                 configuration.load(getConfigFile());
             } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                Bukkit.getLogger().log(Level.INFO, "[Metrics] {0}", ex.getMessage());
                 return true;
             } catch (InvalidConfigurationException ex) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                Bukkit.getLogger().log(Level.INFO, "[Metrics] {0}", ex.getMessage());
                 return true;
             }
             return configuration.getBoolean("opt-out", false);

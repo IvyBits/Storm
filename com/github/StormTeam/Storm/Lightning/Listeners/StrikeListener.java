@@ -12,6 +12,10 @@ import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Lightning.LightningUtils;
 
+/**
+ * @author hammale
+ */
+
 public class StrikeListener implements Listener {
 
     LightningUtils util;

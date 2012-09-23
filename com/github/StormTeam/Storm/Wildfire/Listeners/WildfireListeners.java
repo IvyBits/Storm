@@ -1,7 +1,6 @@
 package com.github.StormTeam.Storm.Wildfire.Listeners;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -17,156 +16,147 @@ import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
+import static com.github.StormTeam.Storm.Wildfire.Wildfire.wildfireBlocks;
 
 public class WildfireListeners implements Listener {
 
     // TO USE: Create a fire block and add it to infernink
-
-    public static HashMap<World, List<Block>> infernink = new HashMap<World, List<Block>>();
     private List<Integer> flammableList = Arrays
-	    .asList(Wildfire.flammableBlocks);
+            .asList(Wildfire.flammableBlocks);
 
     // Dear future me. Please forgive me.
     // I can't even begin to express how sorry I am.
-
     @EventHandler
     public void onBlockIgnite(final BlockIgniteEvent event) {
 
-	if (!event.getCause().equals(IgniteCause.SPREAD)) {
-	    return;
-	}
-	final Location loc = event.getBlock().getLocation();
-	final World w = loc.getWorld();
+        if (!event.getCause().equals(IgniteCause.SPREAD)) {
+            return;
+        }
+        final Location loc = event.getBlock().getLocation();
+        final World w = loc.getWorld();
 
-	GlobalVariables glob = Storm.wConfigs.get(w.getName());
+        GlobalVariables glob = Storm.wConfigs.get(w.getName());
 
-	if (infernink.containsKey(w)
-		&& !(infernink.get(w).size() < glob.Natural__Disasters_Maximum__Fires)) {
+        if (wildfireBlocks.containsKey(w)
+                && (wildfireBlocks.get(w).size() < glob.Natural__Disasters_Maximum__Fires)) {
 
-	    if (infernink.containsKey(w)
-		    && !(infernink.get(w).size() < glob.Natural__Disasters_Maximum__Fires)) {
+            boolean doScan = false;
 
-		return;
-	    }
+            final int radiuski = glob.Natural__Disasters_Wildfires_Scan__Radius;
 
-	    boolean doScan = false;
+            for (int x = -radiuski; x <= radiuski; x++) {
+                for (int y = -radiuski; y <= radiuski; y++) {
+                    for (int z = -radiuski; z <= radiuski; z++) {
+                        if (wildfireBlocks.containsKey(w)
+                                && wildfireBlocks.get(w).contains(
+                                new Location(w, x + loc.getX(), y
+                                + loc.getY(), z + loc.getZ())
+                                .getBlock())) {
 
-	    final int radiuski = glob.Natural__Disasters_Wildfires_Scan__Radius;
+                            doScan = true;
 
-	    for (int x = -radiuski; x <= radiuski; x++) {
-		for (int y = -radiuski; y <= radiuski; y++) {
-		    for (int z = -radiuski; z <= radiuski; z++) {
-			if (infernink.containsKey(w)
-				&& infernink.get(w).contains(
-					new Location(w, x + loc.getX(), y
-						+ loc.getY(), z + loc.getZ())
-						.getBlock())) {
+                        }
 
-			    doScan = true;
+                    }
+                }
+            }
 
-			}
+            if (doScan) {
 
-		    }
-		}
-	    }
+                scanForIgnitables(loc, w, radiuski,
+                        glob.Natural__Disasters_Wildfires_Spread__Limit);
 
-	    if (doScan) {
-
-		scanForIgnitables(loc, w, radiuski,
-			glob.Natural__Disasters_Wildfires_Spread__Limit);
-
-	    }
-	}
+            }
+        }
 
     }
 
     @EventHandler
     public void onBlockEx(final BlockFadeEvent event) {
-	final Block b = event.getBlock();
-	final World w = b.getWorld();
+        final Block b = event.getBlock();
+        final World w = b.getWorld();
 
-	if (infernink.containsKey(w) && infernink.get(w).contains(b)) {
+        if (wildfireBlocks.containsKey(w) && wildfireBlocks.get(w).contains(b)) {
 
-	    if (b.getRelative(BlockFace.DOWN).getTypeId() == 0) {
-		infernink.remove(b);
-	    }
-	}
+            if (b.getRelative(BlockFace.DOWN).getTypeId() == 0) {
+                wildfireBlocks.remove(b.getWorld());
+            }
+        }
 
     }
 
     private void scanForIgnitables(final Location loc, final World w,
-	    int radiuski, int spreadLimit)
-    {
-	Block bR = w.getBlockAt(loc);
+            int radiuski, int spreadLimit) {
+        Block bR;
 
-	int C = 0;
+        int C = 0;
 
-	for (int x = -radiuski; x <= radiuski; x++) {
-	    for (int y = -radiuski; y <= radiuski; y++) {
-		for (int z = -radiuski; z <= radiuski; z++) {
+        for (int x = -radiuski; x <= radiuski; x++) {
+            for (int y = -radiuski; y <= radiuski; y++) {
+                for (int z = -radiuski; z <= radiuski; z++) {
 
-		    bR = w.getBlockAt((int) loc.getX() + x,
-			    (int) loc.getY() + y, (int) loc.getZ() + z);
-		    if (bR.getTypeId() != 0) {
-			continue;
-		    }
+                    bR = w.getBlockAt((int) loc.getX() + x,
+                            (int) loc.getY() + y, (int) loc.getZ() + z);
+                    
+                    if (bR.getTypeId() != 0) {
+                        continue;
+                    }
 
-		    bR = bR.getRelative(0, -1, 0);
+                    bR = bR.getRelative(0, -1, 0);
 
-		    if (canBurn(bR) && (C < spreadLimit)) {
-			burn(bR);
-			C++;
-		    }
+                    if (canBurn(bR) && (C < spreadLimit)) {
+                        burn(bR);
+                        C++;
+                    }
 
-		    bR = bR.getRelative(-1, 0, 0);
+                    bR = bR.getRelative(-1, 0, 0);
 
-		    if (canBurn(bR) && (C < spreadLimit)) {
-			burn(bR);
-			C++;
-		    }
+                    if (canBurn(bR) && (C < spreadLimit)) {
+                        burn(bR);
+                        C++;
+                    }
 
-		    bR = bR.getRelative(1, 0, 0);
+                    bR = bR.getRelative(1, 0, 0);
 
-		    if (canBurn(bR) && (C < spreadLimit)) {
-			burn(bR);
-			C++;
-		    }
+                    if (canBurn(bR) && (C < spreadLimit)) {
+                        burn(bR);
+                        C++;
+                    }
 
-		    bR = bR.getRelative(0, 0, -1);
+                    bR = bR.getRelative(0, 0, -1);
 
-		    if (canBurn(bR) && (C < spreadLimit)) {
-			burn(bR);
-			C++;
-		    }
+                    if (canBurn(bR) && (C < spreadLimit)) {
+                        burn(bR);
+                        C++;
+                    }
 
-		    bR = bR.getRelative(0, 0, 1);
+                    bR = bR.getRelative(0, 0, 1);
 
-		    if (canBurn(bR) || (C < spreadLimit)) {
-			burn(bR);
-			C++;
-		    }
+                    if (canBurn(bR) || (C < spreadLimit)) {
+                        burn(bR);
+                        C++;
+                    }
 
-		    burn(bR);
-		    C++;
+                    burn(bR);
+                    C++;
 
-		}
-	    }
-	}
+                }
+            }
+        }
     }
 
     public void burn(final Block toBurn) {
 
-	toBurn.setTypeId(51);
-	infernink.get(toBurn.getWorld()).add(toBurn);
+        toBurn.setTypeId(51);
+        wildfireBlocks.get(toBurn.getWorld()).add(toBurn);
 
     }
 
     public boolean canBurn(Block toCheck) {
-	if (flammableList.contains(toCheck.getTypeId())) {
-	    return true;
-	} else {
-	    return false;
-	}
+        if (flammableList.contains(toCheck.getTypeId())) {
+            return true;
+        } else {
+            return false;
+        }
     }
-
 }

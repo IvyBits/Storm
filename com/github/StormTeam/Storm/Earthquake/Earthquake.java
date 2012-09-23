@@ -17,7 +17,7 @@ public class Earthquake {
 
 	public static void load(Storm storm) {
 		Earthquake.storm = storm;
-		storm.getServer().getPluginManager().registerEvents(new PlayerListener(storm), storm);
+		Storm.pm.registerEvents(new PlayerListener(storm), storm);
 	}
 	
 	public static Integer loadQuake(Location one, Location two) {

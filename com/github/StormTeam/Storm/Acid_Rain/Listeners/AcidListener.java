@@ -14,95 +14,88 @@ import com.github.StormTeam.Storm.Acid_Rain.Events.AcidRainEvent;
 import com.github.StormTeam.Storm.Acid_Rain.Tasks.DamagerTask;
 import com.github.StormTeam.Storm.Acid_Rain.Tasks.DissolverTask;
 
-public class AcidListener implements Listener
-{
+public class AcidListener implements Listener {
 
     private static final Random rand = new Random();
-
     public static HashMap<World, DissolverTask> dissolverMap = new HashMap<World, DissolverTask>();
     public static HashMap<World, DamagerTask> damagerMap = new HashMap<World, DamagerTask>();
-
     private Storm storm;
 
-    public AcidListener(Storm storm)
-    {
-	this.storm = storm;
+    public AcidListener(Storm storm) {
+        this.storm = storm;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void acidicWeatherListener(WeatherChangeEvent event)
-    {
-	if (event.isCancelled()) {
-	    return;
-	}
+    public void acidicWeatherListener(WeatherChangeEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
 
-	final World affectedWorld = event.getWorld();
+        final World affectedWorld = event.getWorld();
 
-	GlobalVariables glob = Storm.wConfigs.get(affectedWorld.getName());
-	
-	if (event.toWeatherState()) {// gets if its set to raining
+        GlobalVariables glob = Storm.wConfigs.get(affectedWorld.getName());
 
-	    if (rand.nextInt(100) <= glob.Acid__Rain_Acid__Rain__Chance) {
+        if (event.toWeatherState()) {// gets if its set to raining
 
-		if(!glob.Features_Acid__Rain_Dissolving__Blocks && !glob.Features_Acid__Rain_Player__Damaging) {
-		    return;
-		}
-		
-		AcidRain.acidicWorlds.remove(affectedWorld);
-		AcidRain.acidicWorlds.put(affectedWorld, Boolean.TRUE);
+            if (rand.nextInt(100) <= glob.Acid__Rain_Acid__Rain__Chance) {
 
-		AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
-			true);
-		Bukkit.getServer().getPluginManager().callEvent(startEvent);
+                if (!glob.Features_Acid__Rain_Dissolving__Blocks && !glob.Features_Acid__Rain_Player__Damaging) {
+                    return;
+                }
 
-		if (startEvent.isCancelled()) {
-		    return;
-		}
+                AcidRain.acidicWorlds.remove(affectedWorld);
+                AcidRain.acidicWorlds.put(affectedWorld, true);
 
-		for (Player p : affectedWorld.getPlayers()) {
+                AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
+                        true);
+                Bukkit.getServer().getPluginManager().callEvent(startEvent);
 
-		    Storm.util
-			    .message(
-				    p,
-				    glob.Acid__Rain_Message__On__Acid__Rain__Start);
-		}
+                if (startEvent.isCancelled()) {
+                    return;
+                }
 
-	    } else {
-		return;
-	    }
-	}
-	else if (!event.toWeatherState()) {
+                for (Player p : affectedWorld.getPlayers()) {
 
-	    AcidRain.acidicWorlds.remove(affectedWorld);
-	    AcidRain.acidicWorlds.put(affectedWorld, Boolean.FALSE);
+                    Storm.util
+                            .message(
+                            p,
+                            glob.Acid__Rain_Message__On__Acid__Rain__Start);
+                }
 
-	    // Cancel damaging tasks for specific world
+            } else {
+                return;
+            }
+        } else if (!event.toWeatherState()) {
 
-	    AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
-		    false);
-	    Bukkit.getServer().getPluginManager().callEvent(startEvent);
-	    try {
-		dissolverMap.get(affectedWorld).stop();
-		damagerMap.get(affectedWorld).stop();
-	    } catch (Exception e) {
-	    }
-	    ;
+            AcidRain.acidicWorlds.remove(affectedWorld);
+            AcidRain.acidicWorlds.put(affectedWorld, false);
 
-	    return;
-	}
+            // Cancel damaging tasks for specific world
 
-	if (glob.Features_Acid__Rain_Dissolving__Blocks) {
-	    final DissolverTask dis = new DissolverTask(storm, affectedWorld);
-	    dissolverMap.put(affectedWorld, new DissolverTask(storm,
-		    affectedWorld));
-	    dis.run();
-	}
+            AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
+                    false);
+            Bukkit.getServer().getPluginManager().callEvent(startEvent);
+            try {
+                dissolverMap.get(affectedWorld).stop();
+                damagerMap.get(affectedWorld).stop();
+            } catch (Exception e) {
+            };
 
-	if (glob.Features_Acid__Rain_Player__Damaging) {
-	    final DamagerTask dam = new DamagerTask(storm, affectedWorld);
-	    damagerMap.put(affectedWorld, dam);
-	    dam.run();
-	}
+            return;
+        }
+
+        if (glob.Features_Acid__Rain_Dissolving__Blocks) {
+            final DissolverTask dis = new DissolverTask(storm, affectedWorld);
+            dissolverMap.put(affectedWorld, new DissolverTask(storm,
+                    affectedWorld));
+            dis.run();
+        }
+
+        if (glob.Features_Acid__Rain_Player__Damaging) {
+            final DamagerTask dam = new DamagerTask(storm, affectedWorld);
+            damagerMap.put(affectedWorld, dam);
+            dam.run();
+        }
 
     }
 }
