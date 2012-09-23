@@ -14,12 +14,12 @@ import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Blizzard.Blizzard;
 import com.github.StormTeam.Storm.Blizzard.Events.BlizzardEvent;
-import com.github.StormTeam.Storm.Blizzard.Tasks.BlizzardTask;
+import com.github.StormTeam.Storm.Blizzard.Tasks.PlayerTask;
 
 public class BlizzardListeners implements Listener {
 
     private Random rand = new Random();
-    public static HashMap<World, BlizzardTask> damagerMap = new HashMap<World, BlizzardTask>();
+    public static HashMap<World, PlayerTask> damagerMap = new HashMap<World, PlayerTask>();
     private Storm storm;
 
     public BlizzardListeners(Storm storm)
@@ -89,7 +89,7 @@ public class BlizzardListeners implements Listener {
 	}
 
 	if (glob.Features_Blizzards_Player__Damaging) {
-	    final BlizzardTask bliz = new BlizzardTask(storm, affectedWorld);
+	    final PlayerTask bliz = new PlayerTask(storm, affectedWorld);
 	    damagerMap.put(affectedWorld, bliz);
 	    bliz.run();
 	}

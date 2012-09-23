@@ -17,7 +17,7 @@ import com.github.StormTeam.Storm.Acid_Rain.Tasks.DissolverTask;
 import com.github.StormTeam.Storm.Blizzard.Blizzard;
 import com.github.StormTeam.Storm.Blizzard.Events.BlizzardEvent;
 import com.github.StormTeam.Storm.Blizzard.Listeners.BlizzardListeners;
-import com.github.StormTeam.Storm.Blizzard.Tasks.BlizzardTask;
+import com.github.StormTeam.Storm.Blizzard.Tasks.PlayerTask;
 import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
 import com.github.StormTeam.Storm.Wildfire.Listeners.WildfireListeners;
 
@@ -124,7 +124,7 @@ public class CommandRunners {
 
 	} else {
 
-	    final BlizzardTask dam = new BlizzardTask(storm, world);
+	    final PlayerTask dam = new PlayerTask(storm, world);
 	    BlizzardListeners.damagerMap.put(world, dam);
 	    dam.run();
 	    Blizzard.blizzardingWorlds.remove(world);
