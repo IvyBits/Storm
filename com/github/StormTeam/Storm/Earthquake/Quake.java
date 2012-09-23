@@ -1,12 +1,8 @@
 package com.github.StormTeam.Storm.Earthquake;
 
 import org.bukkit.Chunk;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import com.github.StormTeam.Storm.Pair;
 import com.github.StormTeam.Storm.Storm;
@@ -18,7 +14,7 @@ import com.github.StormTeam.Storm.Earthquake.Events.QuakeFinishEvent;
 import com.github.StormTeam.Storm.Earthquake.Events.QuakeLoadEvent;
 import com.github.StormTeam.Storm.Earthquake.Events.QuakeStartEvent;
 
-import java.util.List;
+import com.github.StormTeam.Storm.Earthquake.Tasks.QuakeTask;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 
@@ -98,31 +94,7 @@ public class Quake {
 		
 		storm.getLogger().log(Level.SEVERE, "Quake started at: [" + this.point1.LEFT + " - " + this.point1.RIGHT + "] - [" + this.point2.LEFT + " - " + this.point2.RIGHT + "]");
 		
-		tID = storm.getServer().getScheduler().scheduleSyncRepeatingTask(storm, new Runnable() {
-			
-			int i = 0;
-			
-			@Override
-			public void run() {
-				List<Player> players = storm.getServer().getWorld(world).getPlayers();
-				for(Player p : players) {
-					// Don't bother creative players
-					if(p.getGameMode() == GameMode.CREATIVE)
-						continue;
-					
-					// Player isn't quaking...
-					if(!isQuaking(p.getLocation()))
-						continue;
-					
-					if(i == 0) {
-						p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 5), true);
-					}else{
-						p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2, 5), true);
-					}
-				}
-			}
-			
-		}, 0L, 2L);
+		tID = storm.getServer().getScheduler().scheduleSyncRepeatingTask(storm, new QuakeTask(this, storm), 0L, 2L);
 	}
 	
 	public Quake(Storm storm, Integer qID, Location point1, Location point2) throws InvalidWorldException {
