@@ -14,15 +14,6 @@ public class GlobalVariables extends ReflectConfiguration {
     public GlobalVariables(Plugin storm, String world) {
         super(storm, world);
     }
-    private String configurationWorld;
-
-    public void setWorld(String w) {
-        configurationWorld = w;
-    }
-
-    public String getWorld() {
-        return configurationWorld;
-    }
 
     public int Acid__Rain_Acid__Rain__Chance = 5;
     public String Acid__Rain_Message__On__Acid__Rain__Start = "Acid has started to fall from the sky!";

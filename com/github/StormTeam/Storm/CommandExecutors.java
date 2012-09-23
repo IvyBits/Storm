@@ -1,6 +1,5 @@
 package com.github.StormTeam.Storm;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,23 +9,26 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Fireball;
 
 import com.github.StormTeam.Storm.Acid_Rain.AcidRain;
+import static com.github.StormTeam.Storm.Acid_Rain.AcidRain.acidicWorlds;
+;
 import com.github.StormTeam.Storm.Acid_Rain.Events.AcidRainEvent;
 import com.github.StormTeam.Storm.Acid_Rain.Listeners.AcidListener;
 import com.github.StormTeam.Storm.Acid_Rain.Tasks.DamagerTask;
 import com.github.StormTeam.Storm.Acid_Rain.Tasks.DissolverTask;
-import com.github.StormTeam.Storm.Blizzard.Blizzard;
+import static com.github.StormTeam.Storm.Blizzard.Blizzard.blizzardingWorlds;
 import com.github.StormTeam.Storm.Blizzard.Events.BlizzardEvent;
 import com.github.StormTeam.Storm.Blizzard.Listeners.BlizzardListeners;
 import com.github.StormTeam.Storm.Blizzard.Tasks.PlayerTask;
 import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
-import com.github.StormTeam.Storm.Wildfire.Listeners.WildfireListeners;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
 
-public class CommandRunners {
+
+
+public class CommandExecutors {
 
     private Storm storm;
 
-    public CommandRunners(Storm storm) {
+    public CommandExecutors(Storm storm) {
         this.storm = storm;
     }
 
@@ -45,8 +47,8 @@ public class CommandRunners {
                 9,
                 80,
                 Storm.wConfigs.get(mcWorld.getWorld().getName()).Natural__Disasters_Meteor_Shockwave_Damage__Message,
-                0, 
-                false, 
+                0,
+                false,
                 0);
         mm.spawn();
 
@@ -56,8 +58,6 @@ public class CommandRunners {
         meteor.setDirection(targetLoc.toVector().subtract(spawnLoc.toVector()));
         meteor.setBounce(false);
         meteor.setIsIncendiary(true);
-        meteor.setYield(0);
-
     }
 
     public void wildfire(Location targetLoc) {
@@ -70,39 +70,37 @@ public class CommandRunners {
 
     public void acidRain(World world) {
 
-        if (AcidRain.acidicWorlds.containsKey(world)
-                && AcidRain.acidicWorlds.get(world)) {
+        String name = world.getName();
 
-            AcidRain.acidicWorlds.remove(world);
-            AcidRain.acidicWorlds.put(world, Boolean.FALSE);
-            AcidListener.damagerMap.get(world).stop();
-            AcidListener.dissolverMap.get(world).stop();
+        if (acidicWorlds.containsKey(name)
+                && acidicWorlds.get(name)) {
+
+            acidicWorlds.put(name, false);
+            AcidListener.damagerMap.get(name).stop();
+            AcidListener.dissolverMap.get(name).stop();
 
             world.setStorm(false);
 
-            AcidRainEvent endEvent = new AcidRainEvent(world,
-                    false);
-            Bukkit.getServer().getPluginManager().callEvent(endEvent);
+            Storm.pm.callEvent(new AcidRainEvent(world, false));
 
         } else {
 
-            final DamagerTask dam = new DamagerTask(storm, world);
-            AcidListener.damagerMap.put(world, dam);
+            DamagerTask dam = new DamagerTask(storm, world);
+            AcidListener.damagerMap.put(name, dam);
             dam.run();
-            final DissolverTask dis = new DissolverTask(storm, world);
-            AcidListener.dissolverMap.put(world,
+
+            DissolverTask dis = new DissolverTask(storm, world);
+            AcidListener.dissolverMap.put(name,
                     new DissolverTask(storm, world));
             dis.run();
-            AcidRain.acidicWorlds.remove(world);
-            AcidRain.acidicWorlds.put(world, Boolean.TRUE);
+
+            AcidRain.acidicWorlds.put(name, true);
             Storm.util
-                    .broadcast(Storm.wConfigs.get(world.getName()).Acid__Rain_Message__On__Acid__Rain__Start);
+                    .broadcast(Storm.wConfigs.get(name).Acid__Rain_Message__On__Acid__Rain__Start);
 
             world.setStorm(true);
 
-            AcidRainEvent startEvent = new AcidRainEvent(world,
-                    true);
-            Bukkit.getServer().getPluginManager().callEvent(startEvent);
+            Storm.pm.callEvent(new AcidRainEvent(world, true));
 
         }
 
@@ -110,34 +108,31 @@ public class CommandRunners {
 
     public void blizzard(World world) {
 
-        if (Blizzard.blizzardingWorlds.containsKey(world)
-                && Blizzard.blizzardingWorlds.get(world)) {
+        String name = world.getName();
 
-            BlizzardListeners.damagerMap.get(world).stop();
-            Blizzard.blizzardingWorlds.remove(world);
-            Blizzard.blizzardingWorlds.put(world, Boolean.FALSE);
+        if (blizzardingWorlds.containsKey(name)
+                && blizzardingWorlds.get(name)) {
+
+            BlizzardListeners.damagerMap.get(name).stop();
+
+            blizzardingWorlds.put(name, false);
 
             world.setStorm(false);
 
-            BlizzardEvent endEvent = new BlizzardEvent(world,
-                    false);
-            Bukkit.getServer().getPluginManager().callEvent(endEvent);
+            Storm.pm.callEvent(new BlizzardEvent(world, false));
 
         } else {
 
-            final PlayerTask dam = new PlayerTask(storm, world);
-            BlizzardListeners.damagerMap.put(world, dam);
+            PlayerTask dam = new PlayerTask(storm, world);
+            BlizzardListeners.damagerMap.put(name, dam);
             dam.run();
-            Blizzard.blizzardingWorlds.remove(world);
-            Blizzard.blizzardingWorlds.put(world, Boolean.TRUE);
+
+            blizzardingWorlds.put(name, true);
             Storm.util
-                    .broadcast(Storm.wConfigs.get(world.getName()).Blizzard_Message__On__Blizzard__Start);
+                    .broadcast(Storm.wConfigs.get(name).Blizzard_Message__On__Blizzard__Start);
             world.setStorm(true);
 
-            BlizzardEvent startEvent = new BlizzardEvent(world,
-                    false);
-            Bukkit.getServer().getPluginManager().callEvent(startEvent);
-
+            Storm.pm.callEvent(new BlizzardEvent(world, false));
         }
 
     }

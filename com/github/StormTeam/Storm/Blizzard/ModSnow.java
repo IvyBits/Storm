@@ -11,40 +11,26 @@ public class ModSnow {
 
     public static void mod(boolean doMod) {
 
-	try {
-	    if (doMod) {
+        try {
+            if (doMod) {
 
-		Method v = Block.class.getDeclaredMethod("v");
-		Method p = Block.class.getDeclaredMethod("p");
-		Method c = Block.class.getDeclaredMethod("c", float.class);
-		Method a = Block.class.getDeclaredMethod("a", StepSound.class);
-		Method h = Block.class.getDeclaredMethod("h", int.class);
-		v.setAccessible(true);
-		p.setAccessible(true);
-		c.setAccessible(true);
-		a.setAccessible(true);
-		h.setAccessible(true);
+                Method v = Block.class.getDeclaredMethod("v");
+                Method p = Block.class.getDeclaredMethod("p");
+                Method c = Block.class.getDeclaredMethod("c", float.class);
+                Method a = Block.class.getDeclaredMethod("a", StepSound.class);
+                Method h = Block.class.getDeclaredMethod("h", int.class);
+                v.setAccessible(true);
+                p.setAccessible(true);
+                c.setAccessible(true);
+                a.setAccessible(true);
+                h.setAccessible(true);
 
-		Block.byId[Block.SNOW.id] = null;
-		Block SNOW = ((SnowLayer) (new SnowLayer(78, 66)).b("snow"));
+                Block.byId[Block.SNOW.id] = (Block) h.invoke(a.invoke(c.invoke(p.invoke(v.invoke(((SnowLayer) 
+                        (new SnowLayer(78, 66)).b("snow")))), 0.1F), Block.k), 0);
+            } else {                
+                Block.byId[Block.SNOW.id] = Block.SNOW;
+            }
 
-		SNOW = (Block) v.invoke(SNOW);
-		SNOW = (Block) p.invoke(SNOW);
-		SNOW = (Block) c.invoke(SNOW, 0.1F);
-		SNOW = (Block) a.invoke(SNOW, Block.k);
-		SNOW = (Block) h.invoke(SNOW, 0);
-		Block.byId[Block.SNOW.id] = SNOW;
-	    } else {
-
-		Block.byId[Block.SNOW.id] = null;
-		Block.byId[Block.SNOW.id] = Block.SNOW;
-
-	    }
-
-	} catch (Exception e) {
-	}
-	;
-
+        } catch (Exception e) {};
     }
-
 }

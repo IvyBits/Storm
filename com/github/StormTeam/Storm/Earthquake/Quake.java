@@ -48,7 +48,7 @@ public class Quake {
 
         World w = storm.getServer().getWorld(world);
         int x = (point1.x + point2.x) / 2;
-        int z = (point1.Pair.this.z + point2.Pair.this.z) / 2;
+        int z = (point1.z + point2.z) / 2;
         this.epicenter = new Tuple<Integer, Integer>(x, z);
 
         // Calculate blocks

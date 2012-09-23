@@ -27,297 +27,259 @@ import com.sk89q.worldguard.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 
-public class StormUtil extends BiomeGroups
-{
-	public final Logger log = Logger.getLogger("Storm");
-	private final Random rand = new Random();
-	private WorldGuardPlugin wg;
-	private boolean hasWG = false;
-	private HashMap<String, BlockTickSelector> blockTickers = new HashMap<String, BlockTickSelector>();
+public class StormUtil extends BiomeGroups {
 
-	/** Creates a util object.
-	 * @param plugin
-	 *            The plugin. */
-	public StormUtil(Plugin plugin)
-	{
+    public final Logger log = Logger.getLogger("Storm");
+    private final Random rand = new Random();
+    private WorldGuardPlugin wg;
+    private boolean hasWG = false;
+    private HashMap<String, BlockTickSelector> blockTickers = new HashMap<String, BlockTickSelector>();
 
-		final Plugin wgp = plugin.getServer().getPluginManager().getPlugin(
-		        "WorldGuard");
-		hasWG = wgp == null ? false : true; // Short and sweet
-		if (hasWG)
-		{
-			wg = (WorldGuardPlugin) wgp;
-		}
+    /**
+     * Creates a util object.
+     *
+     * @param plugin The plugin.
+     */
+    public StormUtil(Plugin plugin) {
 
-		for (World w : Bukkit.getWorlds()) {
-			String world = w.getName();
-			BlockTickSelector ticker;
-			try {
-				ticker = new BlockTickSelector(w, 16);
-				blockTickers.put(world, ticker);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+        final Plugin wgp = plugin.getServer().getPluginManager().getPlugin(
+                "WorldGuard");
+        hasWG = wgp == null ? false : true; // Short and sweet
+        if (hasWG) {
+            wg = (WorldGuardPlugin) wgp;
+        }
 
-		}
+        for (World w : Bukkit.getWorlds()) {
+            String world = w.getName();
+            BlockTickSelector ticker;
+            try {
+                ticker = new BlockTickSelector(w, 16);
+                blockTickers.put(world, ticker);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-	}
+        }
 
-	/** Logs.
-	 * @param logM
-	 *            The message. */
+    }
 
-	public void log(String logM)
-	{
-		log.log(Level.INFO, logM);
-	}
+    /**
+     * Logs.
+     *
+     * @param logM The message.
+     */
+    public void log(String logM) {
+        log.log(Level.INFO, logM);
+    }
 
-	/** Logs.
-	 * @param level
-	 *            The severity level.
-	 * @param logM
-	 *            The log message. */
+    /**
+     * Logs.
+     *
+     * @param level The severity level.
+     * @param logM The log message.
+     */
+    public void log(Level level, String logM) {
+        log.log(level, logM);
+    }
 
-	public void log(Level level, String logM)
-	{
-		log.log(level, logM);
-	}
+    /**
+     * Broadcasts a message.
+     *
+     * @param message The message.
+     */
+    public void broadcast(String message) {
+        if (message.isEmpty()) {
+            return;
+        }
+        Bukkit.getServer().broadcastMessage(parseColors(message));
+    }
 
-	/** Broadcasts a message.
-	 * @param message
-	 *            The message. */
+    /**
+     * Send ChatColor formatted message to player.
+     *
+     * @param player The player.
+     * @param message The message.
+     */
+    public void message(Player player, String message) {
+        if (message.isEmpty()) {
+            return;
+        }
 
-	public void broadcast(String message)
-	{
-		if (message.isEmpty())
-		{
-			return;
-		}
-		Bukkit.getServer().broadcastMessage(parseColors(message));
-	}
+        player.sendMessage(parseColors(message));
+    }
 
-	/** Send ChatColor formatted message to player.
-	 * @param player
-	 *            The player.
-	 * @param message
-	 *            The message. */
+    /**
+     * Parses colors in string.
+     *
+     * @param msg The string.
+     * @return The formatted string.
+     */
+    public String parseColors(String msg) {
+        return ChatColor.translateAlternateColorCodes('&', msg);
+    }
 
-	public void message(Player player, String message)
-	{
-		if (message.isEmpty())
-		{
-			return;
-		}
+    /**
+     * Damages players in radius from given location.
+     *
+     * @param location The location.
+     * @param radius The radius.
+     * @param damage These values are obvious... The damage.
+     * @param message Message given to the player when damaged.
+     */
+    public void damageNearbyPlayers(Location location, double radius,
+            int damage, String message) {
 
-		player.sendMessage(parseColors(message));
-	}
+        ArrayList<Player> damagees = getNearbyPlayers(location, radius);
 
-	/** Parses colors in string.
-	 * @param msg
-	 *            The string.
-	 * @return The formatted string. */
+        for (Player p : damagees) {
 
-	public String parseColors(String msg)
-	{
-		return ChatColor.translateAlternateColorCodes('&', msg);
-	}
+            if (p.getGameMode() != GameMode.CREATIVE) {
 
-	/** Damages players in radius from given location.
-	 * @param location
-	 *            The location.
-	 * @param radius
-	 *            The radius.
-	 * @param damage
-	 *            These values are obvious... The damage.
-	 * @param message
-	 *            Message given to the player when damaged. */
+                p.damage(damage * 2);
 
-	public void damageNearbyPlayers(Location location, double radius,
-	        int damage, String message)
-	{
+                if (!message.isEmpty()) {
+                    this.message(p, message);
+                }
+            }
+        }
+    }
 
-		ArrayList<Player> damagees = getNearbyPlayers(location, radius);
+    /**
+     * Wrapper method around WG to check if any regions apply to given block.
+     *
+     * @param b The block.
+     * @return True if protected, false otherwise.
+     */
+    public boolean isBlockProtected(Block b) {
 
-		for (Player p : damagees)
-		{
+        if (hasWG && wg.getGlobalRegionManager().get(b.getWorld()).getApplicableRegions(BukkitUtil.toVector(b.getLocation()))
+                .size() > 0) {
+            return true;
+        }
 
-			if (p.getGameMode() != GameMode.CREATIVE)
-			{
+        return false;
+    }
 
-				p.damage(damage * 2);
+    public ArrayList<Player> getNearbyPlayers(Location location,
+            double radius) {
 
-				if (message.isEmpty())
-				{
-					return;
-				}
+        ArrayList<Player> playerList = new ArrayList<Player>();
+        World locWorld = location.getWorld();
 
-				this.message(p, message);
+        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+            if (p.getWorld().equals(locWorld)) {
+                if (p.getLocation().distance(location) <= radius) {
+                    playerList.add(p);
+                }
+            }
+        }
 
-			}
-		}
-	}
+        return playerList;
+    }
 
-	/** Wrapper method around WG to check if any regions apply to given block.
-	 * @param b
-	 *            The block.
-	 * @return
-	 *         True if protected, false otherwise. */
+    public void transform(Block toTransform, List<List<String>> transformations) {
 
-	public boolean isBlockProtected(Block b)
-	{
+        if (isBlockProtected(toTransform)) {
+            return;
+        }
 
-		if (!hasWG)
-		{
-			return false;
-		}
+        for (List<String> toCheck : transformations) {
+            ArrayList<String[]> stateIndex = new ArrayList<String[]>();
 
-		RegionManager mgr = wg.getGlobalRegionManager().get(b.getWorld());
-		if (mgr.getApplicableRegions(BukkitUtil.toVector(b.getLocation()))
-		        .size() > 0)
-		{
-			return true;
+            for (int i = 0; i != 2; ++i) {
+                String got = toCheck.get(i);
 
-		} else
-		{
-			return false;
-		}
+                if (got.contains(":")) // Check for data value appended.
+                {
+                    stateIndex.add(got.split(":"));
+                } else {
+                    stateIndex.add(new String[]{got, "0"});
+                }
+            }
 
-	}
+            final String[] curState = stateIndex.get(0), toState = stateIndex
+                    .get(1);
 
-	public ArrayList<Player> getNearbyPlayers(Location location,
-	        double radius)
-	{
+            if (Integer.valueOf(curState[0]) == toTransform.getTypeId()
+                    && Integer.valueOf(curState[1]) == toTransform.getData()) {
+                toTransform.setTypeIdAndData(Integer.valueOf(toState[0]), Byte
+                        .parseByte(toState[1]), true);
+                return;
+            }
 
-		ArrayList<Player> playerList = new ArrayList<Player>();
+        }
 
-		for (Player p : Bukkit.getServer().getOnlinePlayers())
-		{
-			if (p.getWorld().equals(location.getWorld()))
-			{
-				Location ploc = p.getLocation();
-				ploc.setY(location.getY());
-				if (ploc.distance(location) <= radius)
-				{
-					playerList.add(p);
+    }
 
-				}
-			}
-		}
+    /**
+     * Gets random chunk in given world.
+     *
+     * @param w The world.
+     * @return a chunk.
+     */
+    public Chunk pickChunk(World w) {
+        Chunk[] loadedChunks = w.getLoadedChunks();
+        return loadedChunks[rand.nextInt(loadedChunks.length)];
 
-		return playerList;
-	}
+    }
 
-	public void transform(Block toTransform, List<List<String>> transformations)
-	{
+    /**
+     * Sets a texture on given player.
+     *
+     * @param toSetOn The player.
+     * @param pathToTexture A URL to texture pack. Won't work with https.
+     */
+    public void setTexture(Player toSetOn, String pathToTexture) {
+        ((CraftPlayer) toSetOn).getHandle().netServerHandler
+                .sendPacket(new Packet250CustomPayload("MC|TPack",
+                (pathToTexture + "\0" + 16).getBytes()));
+    }
 
-		if (isBlockProtected(toTransform))
-			return;
+    /**
+     * Sets player texture pack to default.
+     *
+     * @param toClear The player to set.
+     */
+    public void clearTexture(Player toClear) {
+        setTexture(
+                toClear,
+                Storm.wConfigs.get(toClear.getWorld().getName()).Textures_Default__Texture__Path);
+    }
 
-		for (List<String> toCheck : transformations)
-		{
-			ArrayList<String[]> stateIndex = new ArrayList<String[]>();
+    /**
+     * Checks if a player is visible to sky.
+     *
+     * @param player The player to check.
+     * @return True if visible, false otherwise.
+     */
+    public boolean isPlayerUnderSky(Player player) {
+        World world = player.getWorld();
+        if (world.hasStorm()) {
+            Location loc = player.getLocation();
+            if (isRainy(world
+                    .getBiome(loc.getBlockX(), loc.getBlockZ()))
+                    && world.getHighestBlockYAt(loc) <= loc.getBlockY()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-			for (int i = 0; i != 2; ++i)
-			{
-				String got = toCheck.get(i);
+    /**
+     * Interface method against MineCraft block selection. Damn fast.
+     *
+     * @param world The world to return blocks of.
+     * @return Returns an ArrayList<Block> of the ticked blocks. Only 1/16 of
+     * these should be modified.
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public ArrayList<Block> getRandomTickedBlocks(World world)
+            throws IllegalArgumentException, IllegalAccessException,
+            InvocationTargetException {
 
-				if (got.contains(":")) // Check for data value appended.
-				{
-					stateIndex.add(got.split(":"));
-				} else
-				{
-					stateIndex.add(new String[] { got, "0" });
-				}
-			}
+        return blockTickers.get(world.getName()).getRandomTickedBlocks();
 
-			final String[] curState = stateIndex.get(0), toState = stateIndex
-			        .get(1);
-
-			if (Integer.valueOf(curState[0]) == toTransform.getTypeId()
-			        && Integer.valueOf(curState[1]) == toTransform.getData())
-			{
-				toTransform.setTypeIdAndData(Integer.valueOf(toState[0]), Byte
-				        .parseByte(toState[1]), true);
-				return;
-			}
-
-		}
-
-	}
-
-	/** Gets random chunk in given world.
-	 * @param w
-	 *            The world.
-	 * @return a chunk. */
-
-	public Chunk pickChunk(World w)
-	{
-		final Chunk[] loadedChunks = w.getLoadedChunks();
-		return loadedChunks[rand.nextInt(loadedChunks.length)];
-
-	}
-
-	/** Sets a texture on given player.
-	 * @param toSetOn
-	 *            The player.
-	 * @param pathToTexture
-	 *            A URL to texture pack. Won't work with https. */
-
-	public void setTexture(Player toSetOn, String pathToTexture)
-	{
-		((CraftPlayer) toSetOn).getHandle().netServerHandler
-		        .sendPacket(new Packet250CustomPayload("MC|TPack",
-		                (pathToTexture + "\0" + 16).getBytes()));
-	}
-
-	/** Sets player texture pack to default.
-	 * @param toClear
-	 *            The player to set. */
-
-	public void clearTexture(Player toClear)
-	{
-		setTexture(
-		        toClear,
-		        Storm.wConfigs.get(toClear.getWorld().getName()).Textures_Default__Texture__Path);
-	}
-
-	/** Checks if a player is visible to sky.
-	 * @param player
-	 *            The player to check.
-	 * @return True if visible, false otherwise. */
-
-	public boolean isPlayerUnderSky(Player player)
-	{
-		final World world = player.getWorld();
-		if (world.hasStorm())
-		{
-			final Location loc = player.getLocation();
-			final Biome biome = world
-			        .getBiome(loc.getBlockX(), loc.getBlockZ());
-			if (Storm.biomes.isRainy(biome)
-			        && world.getHighestBlockYAt(loc) <= loc.getBlockY())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/** Interface method against MineCraft block selection. Damn fast.
-	 * @param world
-	 *            The world to return blocks of.
-	 * @return Returns an ArrayList<Block> of the ticked blocks. Only 1/16 of
-	 *         these should be modified.
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException */
-
-	public ArrayList<Block> getRandomTickedBlocks(World world)
-	        throws IllegalArgumentException, IllegalAccessException,
-	        InvocationTargetException {
-
-		return blockTickers.get(world.getName()).getRandomTickedBlocks();
-
-	}
-
+    }
 }

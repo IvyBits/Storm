@@ -32,8 +32,8 @@ public class WildfireListeners implements Listener {
         if (!event.getCause().equals(IgniteCause.SPREAD)) {
             return;
         }
-        final Location loc = event.getBlock().getLocation();
-        final World w = loc.getWorld();
+        Location loc = event.getBlock().getLocation();
+        World w = loc.getWorld();
 
         GlobalVariables glob = Storm.wConfigs.get(w.getName());
 
@@ -76,13 +76,9 @@ public class WildfireListeners implements Listener {
         final Block b = event.getBlock();
         final World w = b.getWorld();
 
-        if (wildfireBlocks.containsKey(w) && wildfireBlocks.get(w).contains(b)) {
-
-            if (b.getRelative(BlockFace.DOWN).getTypeId() == 0) {
-                wildfireBlocks.remove(b.getWorld());
-            }
+        if (wildfireBlocks.containsKey(w) && wildfireBlocks.get(w).contains(b) && b.getRelative(BlockFace.DOWN).getTypeId() == 0) {
+            wildfireBlocks.remove(b.getWorld());
         }
-
     }
 
     private void scanForIgnitables(final Location loc, final World w,
@@ -97,7 +93,7 @@ public class WildfireListeners implements Listener {
 
                     bR = w.getBlockAt((int) loc.getX() + x,
                             (int) loc.getY() + y, (int) loc.getZ() + z);
-                    
+
                     if (bR.getTypeId() != 0) {
                         continue;
                     }
@@ -148,6 +144,7 @@ public class WildfireListeners implements Listener {
     public void burn(final Block toBurn) {
 
         toBurn.setTypeId(51);
+        // No need to check because we checked earlier
         wildfireBlocks.get(toBurn.getWorld()).add(toBurn);
 
     }
@@ -155,8 +152,7 @@ public class WildfireListeners implements Listener {
     public boolean canBurn(Block toCheck) {
         if (flammableList.contains(toCheck.getTypeId())) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }

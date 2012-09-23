@@ -9,7 +9,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Storm;
-import com.github.StormTeam.Storm.Acid_Rain.AcidRain;
+import static com.github.StormTeam.Storm.Acid_Rain.AcidRain.acidicWorlds;
 import com.github.StormTeam.Storm.Acid_Rain.Events.AcidRainEvent;
 import com.github.StormTeam.Storm.Acid_Rain.Tasks.DamagerTask;
 import com.github.StormTeam.Storm.Acid_Rain.Tasks.DissolverTask;
@@ -17,8 +17,8 @@ import com.github.StormTeam.Storm.Acid_Rain.Tasks.DissolverTask;
 public class AcidListener implements Listener {
 
     private static final Random rand = new Random();
-    public static HashMap<World, DissolverTask> dissolverMap = new HashMap<World, DissolverTask>();
-    public static HashMap<World, DamagerTask> damagerMap = new HashMap<World, DamagerTask>();
+    public static HashMap<String, DissolverTask> dissolverMap = new HashMap<String, DissolverTask>();
+    public static HashMap<String, DamagerTask> damagerMap = new HashMap<String, DamagerTask>();
     private Storm storm;
 
     public AcidListener(Storm storm) {
@@ -31,9 +31,10 @@ public class AcidListener implements Listener {
             return;
         }
 
-        final World affectedWorld = event.getWorld();
+        World affectedWorld = event.getWorld();
+        String name = affectedWorld.getName();
 
-        GlobalVariables glob = Storm.wConfigs.get(affectedWorld.getName());
+        GlobalVariables glob = Storm.wConfigs.get(name);
 
         if (event.toWeatherState()) {// gets if its set to raining
 
@@ -43,12 +44,11 @@ public class AcidListener implements Listener {
                     return;
                 }
 
-                AcidRain.acidicWorlds.remove(affectedWorld);
-                AcidRain.acidicWorlds.put(affectedWorld, true);
+                acidicWorlds.put(name, true);
 
                 AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
                         true);
-                Bukkit.getServer().getPluginManager().callEvent(startEvent);
+                Storm.pm.callEvent(new AcidRainEvent(affectedWorld, true));
 
                 if (startEvent.isCancelled()) {
                     return;
@@ -56,28 +56,23 @@ public class AcidListener implements Listener {
 
                 for (Player p : affectedWorld.getPlayers()) {
 
-                    Storm.util
-                            .message(
-                            p,
-                            glob.Acid__Rain_Message__On__Acid__Rain__Start);
+                    Storm.util.message(p, glob.Acid__Rain_Message__On__Acid__Rain__Start);
                 }
 
             } else {
                 return;
             }
         } else if (!event.toWeatherState()) {
-
-            AcidRain.acidicWorlds.remove(affectedWorld);
-            AcidRain.acidicWorlds.put(affectedWorld, false);
+          
+            acidicWorlds.put(name, false);
 
             // Cancel damaging tasks for specific world
-
             AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
                     false);
             Bukkit.getServer().getPluginManager().callEvent(startEvent);
             try {
-                dissolverMap.get(affectedWorld).stop();
-                damagerMap.get(affectedWorld).stop();
+                dissolverMap.get(name).stop();
+                damagerMap.get(name).stop();
             } catch (Exception e) {
             };
 
@@ -85,15 +80,14 @@ public class AcidListener implements Listener {
         }
 
         if (glob.Features_Acid__Rain_Dissolving__Blocks) {
-            final DissolverTask dis = new DissolverTask(storm, affectedWorld);
-            dissolverMap.put(affectedWorld, new DissolverTask(storm,
-                    affectedWorld));
+            DissolverTask dis = new DissolverTask(storm, affectedWorld);
+            dissolverMap.put(name, new DissolverTask(storm, affectedWorld));
             dis.run();
         }
 
         if (glob.Features_Acid__Rain_Player__Damaging) {
-            final DamagerTask dam = new DamagerTask(storm, affectedWorld);
-            damagerMap.put(affectedWorld, dam);
+            DamagerTask dam = new DamagerTask(storm, affectedWorld);
+            damagerMap.put(name, dam);
             dam.run();
         }
 

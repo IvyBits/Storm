@@ -18,69 +18,57 @@ public class DamagerTask {
     private Random rand = new Random();
     private World affectedWorld;
     private Storm storm;
-
     private GlobalVariables glob;
 
     public DamagerTask(Storm storm, World affectedWorld) {
-	this.storm = storm;
-	this.affectedWorld = affectedWorld;
-	glob = Storm.wConfigs.get(affectedWorld.getName());
+        this.storm = storm;
+        this.affectedWorld = affectedWorld;
+        glob = Storm.wConfigs.get(affectedWorld.getName());
     }
 
     public void run() {
 
-	id = Bukkit.getScheduler()
-		.scheduleSyncRepeatingTask(
-			storm,
-			new Runnable()
-			{
-			    @Override
-			    public void run()
-			    {
+        id = Bukkit.getScheduler()
+                .scheduleSyncRepeatingTask(
+                storm,
+                new Runnable() {
+                    @Override
+                    public void run() {
 
-				for (Player damagee : affectedWorld
-					.getPlayers())
-				{
-				    if (!damagee.getGameMode().equals(
-					    GameMode.CREATIVE))
-				    {
+                        for (Player damagee : affectedWorld
+                                .getPlayers()) {
+                            if (!damagee.getGameMode().equals(
+                                    GameMode.CREATIVE)) {
 
-					if (!Storm.util
-						.isPlayerUnderSky(damagee)) {
-					    return;
-					} else {
+                                if (!Storm.util
+                                        .isPlayerUnderSky(damagee)) {
+                                    return;
+                                } else {
+                                }
 
-					}
+                                damagee.damage(glob.Acid__Rain_Player_Damage__From__Exposure * 2);
 
-					damagee.damage(glob.Acid__Rain_Player_Damage__From__Exposure * 2);
+                                damagee.addPotionEffect(
+                                        new PotionEffect(
+                                        PotionEffectType.HUNGER,
+                                        rand.nextInt(600) + 300,
+                                        1), true);            
 
-					damagee.addPotionEffect(
-						new PotionEffect(
-							PotionEffectType.HUNGER,
-							rand.nextInt(600) + 300,
-							1), true);
-					damagee.addPotionEffect(
-						new PotionEffect(
-							PotionEffectType.BLINDNESS,
-							300, 1), true);
+                                Storm.util
+                                        .message(
+                                        damagee,
+                                        glob.Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain);
 
-					Storm.util
-						.message(
-							damagee,
-							glob.Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain);
-
-				    }
-				}
-			    }
-
-			},
-			glob.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks,
-			glob.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks);
+                            }
+                        }
+                    }
+                },
+                glob.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks,
+                glob.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks);
 
     }
 
     public void stop() {
-	Bukkit.getScheduler().cancelTask(id);
+        Bukkit.getScheduler().cancelTask(id);
     }
-
 }

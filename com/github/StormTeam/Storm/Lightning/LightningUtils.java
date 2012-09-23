@@ -64,7 +64,7 @@ public class LightningUtils {
 	return oldLoc;
     }
 
-    public Location pickLightningRod(Chunk chunk)
+    private Location pickLightningRod(Chunk chunk)
     {
 	ChunkSnapshot snapshot = chunk.getChunkSnapshot(true, false, false);
 	List<Location> list = findLightningRods(chunk);
@@ -93,7 +93,7 @@ public class LightningUtils {
 	return null;
     }
 
-    public List<Location> findLightningRods(Chunk chunk)
+    private List<Location> findLightningRods(Chunk chunk)
     {
 	ArrayList<Location> list = new ArrayList<Location>();
 
@@ -129,7 +129,7 @@ public class LightningUtils {
 	return list;
     }
 
-    public Chunk pickChunk(World world)
+    private Chunk pickChunk(World world)
     {
 	List<Player> players = world.getPlayers();
 	if ((players == null) || (players.isEmpty()))

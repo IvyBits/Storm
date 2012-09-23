@@ -13,116 +13,105 @@ import com.github.StormTeam.Storm.Acid_Rain.Events.AcidRainEvent;
 import com.github.StormTeam.Storm.Blizzard.Blizzard;
 import com.github.StormTeam.Storm.Blizzard.Events.BlizzardEvent;
 
-public class TextureManager implements Listener
-{
+public class TextureManager implements Listener {
 
-	@EventHandler
-	public void worldEvent(PlayerChangedWorldEvent e){
+    @EventHandler
+    public void worldEvent(PlayerChangedWorldEvent e) {
 
-		final Player hopper = e.getPlayer();
-		final World toWorld = hopper.getWorld();
-		final World fromWorld = e.getFrom();
+        Player hopper = e.getPlayer();
+        World toWorld = hopper.getWorld();
 
-		if (!toWorld.equals(fromWorld)) {
-			if (Blizzard.blizzardingWorlds.containsKey(toWorld)
-			        && Blizzard.blizzardingWorlds.get(toWorld)) {
+        if (!toWorld.equals(e.getFrom())) {
 
-				Storm.util
-				        .setTexture(
-				                hopper,
-				                Storm.wConfigs.get(toWorld.getName()).Textures_Blizzard__Texture__Path);
+            if (setBlizzardTPack(toWorld, hopper)) {
+                return;
+            }
 
-				return;
+            if (setAcidTPack(toWorld, hopper)) {
+                return;
+            }
 
-			}
+            Storm.util.clearTexture(hopper);
+        }
+    }
 
-			if (AcidRain.acidicWorlds.containsKey(toWorld)
-			        && AcidRain.acidicWorlds.get(toWorld)) {
+    @EventHandler
+    public void loginEvent(PlayerJoinEvent e) {
+        Player hopper = e.getPlayer();
 
-				Storm.util
-				        .setTexture(
-				                hopper,
-				                Storm.wConfigs.get(toWorld.getName()).Textures_Acid__Rain__Texture__Path);
+        if (setBlizzardTPack(hopper.getWorld(), hopper)) {
+            return;
+        }
+        if (setAcidTPack(hopper.getWorld(), hopper)) {
+            return;
+        }
+    }
 
-				return;
+    @EventHandler
+    public void setAcidTexture(AcidRainEvent event) {
 
-			}
-			Storm.util.clearTexture(hopper);
-		}
-	}
+        final World world = event.getAffectedWorld();
 
-	@EventHandler
-	public void loginEvent(PlayerJoinEvent e) {
-		final Player hopper = e.getPlayer();
-		final World world = hopper.getWorld();
+        if (event.getWeatherState()) {
 
-		if (Blizzard.blizzardingWorlds.containsKey(world)
-		        && Blizzard.blizzardingWorlds.get(world)) {
+            for (Player p : world.getPlayers()) {
+                setAcidTPack(world, p);
+            }
+        } else {
 
-			Storm.util
-			        .setTexture(
-			                hopper,
-			                Storm.wConfigs.get(world.getName()).Textures_Blizzard__Texture__Path);
+            for (Player p : world.getPlayers()) {
+                Storm.util.clearTexture(p);
+            }
+        }
+    }
 
-			return;
+    @EventHandler
+    public void setBlizzardTexture(BlizzardEvent event) {
 
-		}
+        final World world = event.getAffectedWorld();
 
-		if (AcidRain.acidicWorlds.containsKey(world)
-		        && AcidRain.acidicWorlds.get(world)) {
-			Storm.util
-			        .setTexture(
-			                hopper,
-			                Storm.wConfigs.get(world.getName()).Textures_Acid__Rain__Texture__Path);
+        if (event.getWeatherState()) {
 
-			return;
+            for (Player p : world.getPlayers()) {
+                setBlizzardTPack(world, p);
+            }
+        } else {
 
-		}
-		Storm.util.clearTexture(hopper);
+            for (Player p : world.getPlayers()) {
+                Storm.util.clearTexture(p);
+            }
+        }
+    }
 
-	}
+    private boolean setAcidTPack(World world, Player hopper) {
+        if (AcidRain.acidicWorlds.containsKey(world)
+                && AcidRain.acidicWorlds.get(world)) {
+            Storm.util
+                    .setTexture(
+                    hopper,
+                    Storm.wConfigs.get(world.getName()).Textures_Acid__Rain__Texture__Path);
 
-	@EventHandler
-	public void setAcidTexture(AcidRainEvent event) {		
-		
-		final World world = event.getAffectedWorld();
+            return true;
 
-		if (event.getWeatherState()) {
+        }
+        return false;
 
-			for (Player p : world.getPlayers()) {
-				Storm.util
-				        .setTexture(
-				                p,
-				                Storm.wConfigs.get(p.getWorld().getName()).Textures_Acid__Rain__Texture__Path);
 
-			}
-		} else {
+    }
 
-			for (Player p : world.getPlayers()) {
-				Storm.util.clearTexture(p);
-			}
-		}
-	}
+    private boolean setBlizzardTPack(World world, Player hopper) {
 
-	@EventHandler
-	public void setBlizzardTexture(BlizzardEvent event) {
+        if (Blizzard.blizzardingWorlds.containsKey(world)
+                && Blizzard.blizzardingWorlds.get(world)) {
 
-		final World world = event.getAffectedWorld();
+            Storm.util
+                    .setTexture(
+                    hopper,
+                    Storm.wConfigs.get(world.getName()).Textures_Blizzard__Texture__Path);
 
-		if (event.getWeatherState()) {
+            return true;
 
-			for (Player p : world.getPlayers()) {
-				Storm.util
-				        .setTexture(
-				                p,
-				                Storm.wConfigs.get(p.getWorld().getName()).Textures_Blizzard__Texture__Path);
-
-			}
-		} else {
-
-			for (Player p : world.getPlayers()) {
-				Storm.util.clearTexture(p);
-			}
-		}
-	}
+        }
+        return false;
+    }
 }
