@@ -8,24 +8,20 @@ import org.bukkit.plugin.PluginManager;
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Blizzard.Listeners.BlizzardListeners;
 
-public class Blizzard
-{
+public class Blizzard {
 
-	public static HashMap<World, Boolean>	blizzardingWorlds	= new HashMap<World, Boolean>();
+    public static HashMap<World, Boolean> blizzardingWorlds = new HashMap<World, Boolean>();
 
-	public static void load(Storm storm)
-	{
+    public static void load(Storm storm) {
 
-		PluginManager pm = storm.getServer().getPluginManager();
-		pm.registerEvents(new BlizzardListeners(storm), storm);
+        PluginManager pm = storm.getServer().getPluginManager();
+        pm.registerEvents(new BlizzardListeners(storm), storm);
 
-		ModSnow.mod(true);
+        ModSnow.mod(true);
 
-	}
+    }
 
-	public static void unload()
-	{
-		ModSnow.mod(false);
-	}
-
+    public static void unload() {
+        ModSnow.mod(false);
+    }
 }

@@ -1,5 +1,6 @@
 package com.github.StormTeam.Storm;
 
+import com.github.StormTeam.Storm.Storm;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
