@@ -20,7 +20,6 @@ package com.github.StormTeam.Storm;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.PluginManager;
 
 import com.github.StormTeam.Storm.Acid_Rain.AcidRain;
 import com.github.StormTeam.Storm.Blizzard.Blizzard;
@@ -31,27 +30,29 @@ import com.github.StormTeam.Storm.Meteors.Meteor;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
 import github.StormTeam.Storm.UpdaterVariables;
 
+import java.util.logging.Level;
 import java.util.HashMap;
+import org.bukkit.plugin.PluginManager;
 
 public class Storm extends JavaPlugin {
 
     public static HashMap<String, GlobalVariables> wConfigs = new HashMap<String, GlobalVariables>();
-    public static BiomeGroups biomes = new BiomeGroups();
+    public static UpdaterVariables updater;
+    public static BiomeGroups biomes;
     public static StormUtil util;
-    public Commands cmds;
+    public static Commands cmds;
     private Database db;
     public static PluginManager pm = Bukkit.getPluginManager();
-    public static UpdaterVariables updater;
 
     @Override
     public void onEnable() {
 
         // Make per-world configuration files
-        for (World world : Bukkit.getWorlds()) {
-            String name = world.getName();
-            GlobalVariables config = new GlobalVariables(this, name);
+        for (World w : Bukkit.getWorlds()) {
+            String world = w.getName();
+            GlobalVariables config = new GlobalVariables(this, world);           
             config.load();
-            wConfigs.put(name, config);
+            wConfigs.put(world, config);
         }
 
         updater = new UpdaterVariables(this, "updater");
@@ -64,19 +65,19 @@ public class Storm extends JavaPlugin {
             Updater up = new Updater(this, "storm", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
             update = up.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; // Determine if there is an update ready for us
             if (update) {
-                util.log("A new version of Storm is available: " + up.getLatestVersionString() + " (" + up.getFileSize() + " bytes).");
+                util.log(Level.INFO, "A new version of Storm is available: " + up.getLatestVersionString() + " (" + up.getFileSize() + " bytes).");
             }
 
             if (update && updater.Updater_Automagically__Update) {
                 Updater dl = new Updater(this, "storm", this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
             } else {
-                util.log("It is highly reccomended that you download and install this update.");
+                util.log(Level.INFO, "It is highly reccomended that you download and install this update.");
             }
 
         }
 
-
         util = new StormUtil(this);
+        biomes = new BiomeGroups();
         db = Database.Obtain(this, null);
         cmds = new Commands(this);
 
@@ -106,5 +107,10 @@ public class Storm extends JavaPlugin {
     public void onDisable() {
         Blizzard.unload();
         this.db.getEngine().close();
+    }
+
+    public void crashDisable(String crash) {
+        util.log(Level.SEVERE, crash + " Storm disabled.");
+        this.setEnabled(false);
     }
 }

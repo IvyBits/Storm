@@ -1,7 +1,7 @@
 package com.github.StormTeam.Storm.Earthquake.Events;
 
 import com.github.StormTeam.Storm.Earthquake.Quake;
-import com.github.StormTeam.Storm.Tuple;
+import com.github.StormTeam.Storm.Pair;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -16,9 +16,9 @@ public class QuakeFinishEvent extends Event {
 	
 	private Quake q;
 	private World w;
-	private Tuple<Integer, Integer> e;
-	private Tuple<Integer, Integer> p1;
-	private Tuple<Integer, Integer> p2;
+	private Pair<Integer, Integer> e;
+	private Pair<Integer, Integer> p1;
+	private Pair<Integer, Integer> p2;
 	
 	public QuakeFinishEvent(Quake q) {
 		this.q = q;
@@ -36,15 +36,15 @@ public class QuakeFinishEvent extends Event {
 		return this.w;
 	}
 	
-	public Tuple<Integer, Integer> getEpicenter() {
+	public Pair<Integer, Integer> getEpicenter() {
 		return this.e;
 	}
 	
-	public Tuple<Integer, Integer> getPointOne() {
+	public Pair<Integer, Integer> getPointOne() {
 		return this.p1;
 	}
 	
-	public Tuple<Integer, Integer> getPointTwo() {
+	public Pair<Integer, Integer> getPointTwo() {
 		return this.p2;
 	}
 	

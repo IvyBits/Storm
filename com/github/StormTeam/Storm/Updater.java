@@ -126,10 +126,7 @@ public class Updater {
         try {
             // Obtain the results of the project's file feed
             url = new URL(DBOUrl + slug + "/files.rss");
-        } catch (MalformedURLException ex) {
-            // The slug doesn't exist
-            plugin.getLogger().warning("The author of this plugin has misconfigured their Auto Update system");
-            plugin.getLogger().warning("The project slug added ('" + slug + "') is invalid, and does not exist on dev.bukkit.org");
+        } catch (MalformedURLException ex) {  
             result = Updater.UpdateResult.FAIL_BADSLUG; // Bad slug! Bad!
         }
         if (url != null) {

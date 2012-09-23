@@ -13,40 +13,40 @@ import org.bukkit.potion.PotionEffectType;
  * @author Giant
  */
 public class QuakeTask implements Runnable {
+	
+	private Storm s;
+	private Quake q;
+	private int i = 0;
+	
+	public QuakeTask(Quake q, Storm s) {
+		this.q = q;
+		this.s = s;
+	}
+	
+	
 
-    private Storm s;
-    private Quake q;
-    private int i = 0;
+	@Override
+	public void run() {
+		List<Player> players = q.getWorld().getPlayers();
+		for(Player p : players) {
+			// Don't bother creative players
+			if(p.getGameMode() == GameMode.CREATIVE)
+				continue;
 
-    public QuakeTask(Quake q, Storm s) {
-        this.q = q;
-        this.s = s;
-    }
-
-    @Override
-    public void run() {
-        List<Player> players = q.getWorld().getPlayers();
-        for (Player p : players) {
-            // Don't bother creative players
-            if (p.getGameMode() == GameMode.CREATIVE) {
-                continue;
-            }
-
-            // Player isn't quaking...
-            if (!q.isQuaking(p.getLocation())) {
-                continue;
-            }
-
-            int x = q.getEpicenter().x - p.getLocation().getBlockX() + 1;
-            int z = q.getEpicenter().z - p.getLocation().getBlockZ() + 1;
-
-            int a = 5 / ((x + z) / 2);
-
-            if (i == 0) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, a), true);
-            } else {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2, a), true);
-            }
-        }
-    }
+			// Player isn't quaking...
+			if(!q.isQuaking(p.getLocation()))
+				continue;
+			
+			int x = q.getEpicenter().LEFT - p.getLocation().getBlockX() + 1;
+			int z = q.getEpicenter().RIGHT - p.getLocation().getBlockZ() + 1;
+			
+			int a = 5 / ((x + z) / 2);
+			
+			if(i == 0) {
+				p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, a), true);
+			}else{
+				p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2, a), true);
+			}
+		}
+	}
 }
