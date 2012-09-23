@@ -43,6 +43,7 @@ public class EntityMeteor extends EntityFireball {
             boolean spawnOnImpact, int radius) {
         super(world);
 
+        // Massive objects require massive initializations...
         this.burrowPower = burrowPower;
         this.burrowCount = burrowCount;
         this.trailPower = trailPower;
