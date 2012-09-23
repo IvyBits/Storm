@@ -32,6 +32,7 @@ import github.StormTeam.Storm.UpdaterVariables;
 
 import java.util.logging.Level;
 import java.util.HashMap;
+import org.bukkit.plugin.PluginManager;
 
 public class Storm extends JavaPlugin {
 
@@ -41,6 +42,7 @@ public class Storm extends JavaPlugin {
     public static StormUtil util;
     public static Commands cmds;
     private Database db;
+    public static PluginManager pm = Bukkit.getPluginManager();
 
     @Override
     public void onEnable() {
@@ -99,8 +101,7 @@ public class Storm extends JavaPlugin {
         Meteor.load(this);
         Earthquake.load(this);
         //Puddles.load(this);
-        this.getServer().getPluginManager().registerEvents(
-                new TextureManager(), this);
+        pm.registerEvents(new TextureManager(), this);
     }
 
     @Override

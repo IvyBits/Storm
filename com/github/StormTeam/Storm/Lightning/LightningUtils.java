@@ -18,6 +18,10 @@ import org.bukkit.inventory.ItemStack;
 import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Storm;
 
+/**
+ * @author hammale
+ */
+
 public class LightningUtils {
 
     final Random rand = new Random();

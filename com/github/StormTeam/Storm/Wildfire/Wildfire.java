@@ -16,7 +16,6 @@ import java.util.HashMap;
 public class Wildfire {
 
     public static HashMap<World, List<org.bukkit.block.Block>> wildfireBlocks = new HashMap<World, List<org.bukkit.block.Block>>();
-    
     public static Integer[] flammableBlocks = new Integer[]{
         Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
         Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
@@ -29,7 +28,7 @@ public class Wildfire {
 
     public static void load(Storm storm) {
 
-        storm.getServer().getPluginManager().registerEvents(new WildfireListeners(), storm);
+        Storm.pm.registerEvents(new WildfireListeners(), storm);
         for (World w : storm.getServer().getWorlds()) {
             if (Storm.wConfigs.get(w.getName()).Features_Meteor) {
                 new Igniter(storm, w).run();

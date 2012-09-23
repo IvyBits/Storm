@@ -1,6 +1,5 @@
 package com.github.StormTeam.Storm;
 
-import com.github.StormTeam.Storm.Storm;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +20,7 @@ import com.github.StormTeam.Storm.Blizzard.Listeners.BlizzardListeners;
 import com.github.StormTeam.Storm.Blizzard.Tasks.PlayerTask;
 import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
 import com.github.StormTeam.Storm.Wildfire.Listeners.WildfireListeners;
+import com.github.StormTeam.Storm.Wildfire.Wildfire;
 
 public class CommandRunners {
 
@@ -64,7 +64,7 @@ public class CommandRunners {
 
         Block fire = targetLoc.getBlock().getRelative(BlockFace.UP);
         fire.setType(Material.FIRE);
-        WildfireListeners.infernink.get(targetLoc.getWorld()).add(fire);
+        Wildfire.wildfireBlocks.get(targetLoc.getWorld()).add(fire);
 
     }
 
