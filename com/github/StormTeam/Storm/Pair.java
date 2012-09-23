@@ -1,13 +1,13 @@
 package com.github.StormTeam.Storm;
 
-public class Pair<Left, Right> {
+public class Pair<X, Y> {
 	
-	public Left LEFT;
-	public Right RIGHT;
+	public X x;
+	public Y y;
 	
-	public Pair(Left left, Right right) {
-		this.LEFT = left;
-		this.RIGHT = right;
+	public Pair(X x, Y y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 }
