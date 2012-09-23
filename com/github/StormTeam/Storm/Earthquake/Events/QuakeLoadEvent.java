@@ -1,6 +1,6 @@
 package com.github.StormTeam.Storm.Earthquake.Events;
 
-import com.github.StormTeam.Storm.Pair;
+import com.github.StormTeam.Storm.Tuple;
 import com.github.StormTeam.Storm.Earthquake.Quake;
 
 import org.bukkit.World;
@@ -19,9 +19,9 @@ public class QuakeLoadEvent extends Event implements Cancellable {
 	
 	private Quake q;
 	private World w;
-	private Pair<Integer, Integer> e;
-	private Pair<Integer, Integer> p1;
-	private Pair<Integer, Integer> p2;
+	private Tuple<Integer, Integer> e;
+	private Tuple<Integer, Integer> p1;
+	private Tuple<Integer, Integer> p2;
 	
 	public QuakeLoadEvent(Quake q) {
 		this.q = q;
@@ -39,15 +39,15 @@ public class QuakeLoadEvent extends Event implements Cancellable {
 		return this.w;
 	}
 	
-	public Pair<Integer, Integer> getEpicenter() {
+	public Tuple<Integer, Integer> getEpicenter() {
 		return this.e;
 	}
 	
-	public Pair<Integer, Integer> getPointOne() {
+	public Tuple<Integer, Integer> getPointOne() {
 		return this.p1;
 	}
 	
-	public Pair<Integer, Integer> getPointTwo() {
+	public Tuple<Integer, Integer> getPointTwo() {
 		return this.p2;
 	}
 	

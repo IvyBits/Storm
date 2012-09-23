@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.github.StormTeam.Storm.Pair;
+import com.github.StormTeam.Storm.Tuple;
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Earthquake.Exceptions.InvalidWorldException;
 import com.github.StormTeam.Storm.Earthquake.Listeners.BlockListener;
@@ -27,9 +27,9 @@ public class Quake {
     private Storm storm;
     private Integer quakeID;
     private String world;
-    private Pair<Integer, Integer> point1;
-    private Pair<Integer, Integer> point2;
-    private Pair<Integer, Integer> epicenter;
+    private Tuple<Integer, Integer> point1;
+    private Tuple<Integer, Integer> point2;
+    private Tuple<Integer, Integer> epicenter;
     private MobListener mL;
     private BlockListener bL;
     private Integer tID, rLID;
@@ -47,9 +47,9 @@ public class Quake {
         this.isLoading = true;
 
         World w = storm.getServer().getWorld(world);
-        int x = (point1.LEFT + point2.LEFT) / 2;
-        int z = (point1.RIGHT + point2.RIGHT) / 2;
-        this.epicenter = new Pair<Integer, Integer>(x, z);
+        int x = (point1.x + point2.x) / 2;
+        int z = (point1.Pair.this.z + point2.Pair.this.z) / 2;
+        this.epicenter = new Tuple<Integer, Integer>(x, z);
 
         // Calculate blocks
         Chunk c = w.getChunkAt(x, z);
@@ -91,7 +91,7 @@ public class Quake {
         bL = new BlockListener(this, storm);
         storm.getServer().getPluginManager().registerEvents(bL, storm);
 
-        storm.getLogger().log(Level.SEVERE, "Quake started at: [" + this.point1.LEFT + " - " + this.point1.RIGHT + "] - [" + this.point2.LEFT + " - " + this.point2.RIGHT + "]");
+        storm.getLogger().log(Level.SEVERE, "Quake started at: [" + this.point1.x + " - " + this.point1.z + "] - [" + this.point2.x + " - " + this.point2.z + "]");
 
         tID = storm.getServer().getScheduler().scheduleSyncRepeatingTask(storm, new Runnable() {
             int i = 0;
@@ -132,10 +132,10 @@ public class Quake {
             int maxX = Math.max(point1.getBlockX(), point2.getBlockX());
             int maxZ = Math.max(point1.getBlockZ(), point2.getBlockZ());
             this.world = w;
-            this.point1 = new Pair<Integer, Integer>(minX, minZ);
-            this.point2 = new Pair<Integer, Integer>(maxX, maxZ);
+            this.point1 = new Tuple<Integer, Integer>(minX, minZ);
+            this.point2 = new Tuple<Integer, Integer>(maxX, maxZ);
 
-            storm.getLogger().log(Level.SEVERE, "Quake loading at: [" + this.point1.LEFT + " - " + this.point1.RIGHT + "] - [" + this.point2.LEFT + " - " + this.point2.RIGHT + "]");
+            storm.getLogger().log(Level.SEVERE, "Quake loading at: [" + this.point1.x + " - " + this.point1.z + "] - [" + this.point2.x + " - " + this.point2.z + "]");
             this.load();
         } else {
             throw new InvalidWorldException("World " + w + " and World " + w2 + " do not match!");
@@ -192,23 +192,23 @@ public class Quake {
          storm.getLogger().severe("quake max z: " + point2.RIGHT);*/
 
 
-        return (point.getBlockX() >= point1.LEFT && point.getBlockZ() >= point1.RIGHT
-                && point.getBlockX() <= point2.LEFT && point.getBlockZ() <= point2.RIGHT);
+        return (point.getBlockX() >= point1.x && point.getBlockZ() >= point1.z
+                && point.getBlockX() <= point2.x && point.getBlockZ() <= point2.z);
     }
 
     public World getWorld() {
         return storm.getServer().getWorld(this.world);
     }
 
-    public Pair<Integer, Integer> getEpicenter() {
+    public Tuple<Integer, Integer> getEpicenter() {
         return this.epicenter;
     }
 
-    public Pair<Integer, Integer> getPointOne() {
+    public Tuple<Integer, Integer> getPointOne() {
         return this.point1;
     }
 
-    public Pair<Integer, Integer> getPointTwo() {
+    public Tuple<Integer, Integer> getPointTwo() {
         return this.point2;
     }
 }
