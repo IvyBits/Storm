@@ -42,11 +42,12 @@ public class Storm extends JavaPlugin {
     public static StormUtil util;
     public static Commands cmds;
     private Database db;
-    public static PluginManager pm = Bukkit.getPluginManager();
+    public static PluginManager pm;
 
     @Override
     public void onEnable() {
-
+		pm = getServer().getPluginManager();
+		
         // Make per-world configuration files
         for (World w : Bukkit.getWorlds()) {
             String world = w.getName();
