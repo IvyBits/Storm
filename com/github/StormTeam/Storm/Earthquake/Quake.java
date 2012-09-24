@@ -38,7 +38,7 @@ public class Quake {
 	
 	private void load() {
 		QuakeLoadEvent QLE = new QuakeLoadEvent(this);
-		Bukkit.getServer().getPluginManager().callEvent(QLE);
+		Storm.pm.callEvent(QLE);
 		
 		if(QLE.isCancelled())
 			return;
@@ -86,7 +86,7 @@ public class Quake {
 	
 	private void go() {
 		QuakeStartEvent QSE = new QuakeStartEvent(this);
-		Bukkit.getServer().getPluginManager().callEvent(QSE);
+		Storm.pm.callEvent(QSE);
 		
 		// Blocks will bounce everywhere in the quake!
 		bL = new BlockListener(this, storm);
@@ -127,7 +127,7 @@ public class Quake {
 	
 	public void stop() {
 		QuakeFinishEvent QFE = new QuakeFinishEvent(this);
-		Bukkit.getServer().getPluginManager().callEvent(QFE);
+		Storm.pm.callEvent(QFE);
 		this.isLoading = false;
 		this.isRunning = false;
 		if(null != mL) {
