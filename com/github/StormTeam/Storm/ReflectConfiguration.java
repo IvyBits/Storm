@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -25,16 +24,13 @@ public class ReflectConfiguration {
     }
 
     public void load() {
-        if (plugin != null) {
-            try {
-                onLoad(plugin);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            new InvalidConfigurationException("Plugin cannot be null!")
-                    .printStackTrace();
+
+        try {
+            onLoad(plugin);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     private void onLoad(Plugin plugin) throws Exception {
