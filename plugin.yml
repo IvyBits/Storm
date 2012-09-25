@@ -1,7 +1,7 @@
 name: Storm
-author: [Icyene, hammale]
+author: [Icyene, hammale, Thidox]
 version: 0.0.7B
-main: com.github.Icyene.Storm.Storm
+main: com.github.StormSteam.Storm.Storm
 description: Redifining weather.
 
 commands:
