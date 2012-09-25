@@ -1,7 +1,5 @@
-package github.StormTeam.Storm;
+package com.github.StormTeam.Storm;
 
-import com.github.StormTeam.Storm.ReflectConfiguration;
-import com.github.StormTeam.Storm.Storm;
 
 /**
  *
