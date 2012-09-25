@@ -28,7 +28,6 @@ import com.github.StormTeam.Storm.Earthquake.Earthquake;
 import com.github.StormTeam.Storm.Lightning.Lightning;
 import com.github.StormTeam.Storm.Meteors.Meteor;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
-import com.github.StormTeam.Storm.UpdaterVariables;
 
 import java.util.logging.Level;
 import java.util.HashMap;
