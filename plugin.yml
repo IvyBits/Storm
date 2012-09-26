@@ -2,7 +2,7 @@ name: Storm
 author: [Icyene, hammale, Thidox]
 version: 0.0.7B
 main: com.github.StormTeam.Storm.Storm
-description: Redifining weather.
+description: Redefining weather.
 
 commands:
    meteor:
