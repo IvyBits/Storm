@@ -8,7 +8,7 @@ import com.github.StormTeam.Storm.Acid_Rain.Listeners.AcidListener;
 
 public class AcidRain
 {
-    public static HashMap<String, Boolean> acidicWorlds = new HashMap<String, Boolean>();
+    public static HashMap<World, Boolean> acidicWorlds = new HashMap<World, Boolean>();
 
     public static void load(Storm storm)
     {	

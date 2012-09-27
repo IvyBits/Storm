@@ -27,7 +27,7 @@ public class Igniter {
 	public Igniter(Storm storm, World spawnWorld) {
 		this.storm = storm;
 		this.affectedWorld = spawnWorld;
-		glob = Storm.wConfigs.get(spawnWorld.getName());
+		glob = Storm.wConfigs.get(spawnWorld);
 	}
 
 	public void run() {

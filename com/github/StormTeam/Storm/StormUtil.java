@@ -1,6 +1,5 @@
 package com.github.StormTeam.Storm;
 
-import com.github.StormTeam.Storm.Storm;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -25,7 +23,6 @@ import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.managers.RegionManager;
 
 public class StormUtil extends BiomeGroups {
 
@@ -243,7 +240,7 @@ public class StormUtil extends BiomeGroups {
     public void clearTexture(Player toClear) {
         setTexture(
                 toClear,
-                Storm.wConfigs.get(toClear.getWorld().getName()).Textures_Default__Texture__Path);
+                Storm.wConfigs.get(toClear.getWorld()).Textures_Default__Texture__Path);
     }
 
     /**

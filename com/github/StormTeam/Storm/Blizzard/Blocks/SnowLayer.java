@@ -42,10 +42,13 @@ public class SnowLayer extends BlockSnow {
 
         final CraftWorld cWorld = (CraftWorld) w.getWorld();
 
-        if (!Storm.wConfigs.containsKey(cWorld.getName()) || !Storm.wConfigs.get(cWorld.getName()).Features_Blizzards_Slowing__Snow || !Blizzard.blizzardingWorlds.containsKey(cWorld)) {
+        if(!Blizzard.blizzardingWorlds.containsKey(cWorld)) {
             return;
         }
-
+        
+        if (!Storm.wConfigs.containsKey(cWorld) && !Storm.wConfigs.get(cWorld).Features_Blizzards_Slowing__Snow) {
+            return;
+        }
 
         final org.bukkit.entity.Entity inSnow = e.getBukkitEntity();
         if (inSnow instanceof EntityPlayer && ((Player) (inSnow)).getGameMode() == GameMode.CREATIVE) {

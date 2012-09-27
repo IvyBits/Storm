@@ -35,7 +35,13 @@ public class WildfireListeners implements Listener {
         Location loc = event.getBlock().getLocation();
         World w = loc.getWorld();
 
-        GlobalVariables glob = Storm.wConfigs.get(w.getName());
+        GlobalVariables glob;
+
+        if (Storm.wConfigs.containsKey(w)) {
+            glob = Storm.wConfigs.get(w);
+        } else {
+            return;
+        }
 
         if (wildfireBlocks.containsKey(w)
                 && (wildfireBlocks.get(w).size() < glob.Natural__Disasters_Maximum__Fires)) {
@@ -150,9 +156,7 @@ public class WildfireListeners implements Listener {
     }
 
     public boolean canBurn(Block toCheck) {
-        if (flammableList.contains(toCheck.getTypeId())) {
-            return true;
-        }
-        return false;
+        return flammableList.contains(toCheck.getTypeId());
+
     }
 }

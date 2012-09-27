@@ -1,5 +1,7 @@
 package com.github.StormTeam.Storm.Meteors;
 
+import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Fireball;
 
 import com.github.StormTeam.Storm.Storm;
-import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
 import com.github.StormTeam.Storm.Meteors.Tasks.MeteorSpawnerTask;
 
 public class Meteor {
@@ -33,7 +34,7 @@ public class Meteor {
         }
 
         for (World w : sStorm.getServer().getWorlds()) {
-            if (Storm.wConfigs.get(w.getName()).Features_Meteor) {
+            if (Storm.wConfigs.get(w).Features_Meteor) {
                 new MeteorSpawnerTask(storm, w).run();
             }
         }

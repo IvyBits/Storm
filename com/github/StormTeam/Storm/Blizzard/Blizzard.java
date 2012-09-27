@@ -10,7 +10,7 @@ import com.github.StormTeam.Storm.Blizzard.Listeners.BlizzardListeners;
 
 public class Blizzard {
 
-    public static HashMap<String, Boolean> blizzardingWorlds = new HashMap<String, Boolean>();
+    public static HashMap<World, Boolean> blizzardingWorlds = new HashMap<World, Boolean>();
 
     public static void load(Storm storm) {
         

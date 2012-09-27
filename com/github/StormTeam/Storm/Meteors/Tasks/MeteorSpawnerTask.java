@@ -11,8 +11,10 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.github.StormTeam.Storm.GlobalVariables;
-import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
+import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor13X;
+import com.github.StormTeam.Storm.Meteors.Entities.MeteorBase;
+import com.github.StormTeam.Storm.Storm;
 
 public class MeteorSpawnerTask {
 
@@ -26,7 +28,7 @@ public class MeteorSpawnerTask {
 	public MeteorSpawnerTask(Storm storm, World spawnWorld) {
 		this.storm = storm;
 		this.spawnWorld = spawnWorld;
-		glob = Storm.wConfigs.get(spawnWorld.getName());
+		glob = Storm.wConfigs.get(spawnWorld);
 	}
 
 	public void run() {
@@ -69,7 +71,12 @@ public class MeteorSpawnerTask {
 		net.minecraft.server.World meteoriteWorld = ((CraftWorld) world)
 		        .getHandle();
 
-		EntityMeteor meteor = new EntityMeteor(
+		MeteorBase meteor = null;
+                
+                
+                if(Storm.version == 1.2) {
+                    
+                    meteor  = new EntityMeteor(
 		        meteoriteWorld,
 		        rand.nextInt(7) + 1,
 		        10,
@@ -82,7 +89,29 @@ public class MeteorSpawnerTask {
 		        glob.Natural__Disasters_Meteor_Shockwave_Damage__Message,
 		        rand.nextInt(100) + 200,
 		        glob.Natural__Disasters_Meteor_Meteor_Spawn,
-		        glob.Natural__Disasters_Meteor_Meteor_Radius);
+		        glob.Natural__Disasters_Meteor_Meteor_Radius);              
+                    
+                }
+               
+                 if(Storm.version == 1.3) {
+                    
+                    meteor  = new EntityMeteor13X(
+		        meteoriteWorld,
+		        rand.nextInt(7) + 1,
+		        10,
+		        rand.nextInt(5) + 5,
+		        rand.nextInt(50) + 25,
+		        100,
+		        glob.Natural__Disasters_Meteor_Message__On__Meteor__Crash,
+		        9,
+		        80,
+		        glob.Natural__Disasters_Meteor_Shockwave_Damage__Message,
+		        rand.nextInt(100) + 200,
+		        glob.Natural__Disasters_Meteor_Meteor_Spawn,
+		        glob.Natural__Disasters_Meteor_Meteor_Radius);              
+                    
+                }
+                
 
 		meteor.spawn();
 

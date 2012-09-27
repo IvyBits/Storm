@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.concurrent.Semaphore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,6 +18,7 @@ public class ReflectConfiguration {
      */
     private Plugin plugin;
     private String name;
+    private Semaphore mutex = new Semaphore(1);
 
     public ReflectConfiguration(Plugin storm, String name) {
         this.plugin = storm;
@@ -24,9 +26,12 @@ public class ReflectConfiguration {
     }
 
     public void load() {
-
+ 
         try {
+            mutex.acquire();
+            Storm.util.log("Loading configuration file: " + name);
             onLoad(plugin);
+            mutex.release();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,9 +40,9 @@ public class ReflectConfiguration {
 
     private void onLoad(Plugin plugin) throws Exception {
 
-        File worldFile = new File(plugin.getDataFolder(), name + ".yml");
+        File worldFile = new File(plugin.getDataFolder(), File.separator + name + ".yml");
 
-        FileConfiguration worlds = YamlConfiguration
+        YamlConfiguration worlds = YamlConfiguration
                 .loadConfiguration(worldFile);
 
         for (Field field : getClass().getDeclaredFields()) {
@@ -52,26 +57,8 @@ public class ReflectConfiguration {
             }
         }
 
-        final FileConfiguration finalWorlds = worlds;
-        final File finalWorldFile = worldFile;
 
-        // Nasty, no good fix for the stupidity of FileConfiguration.save not
-        // using BufferedOutputStream when saving. Causes only one file to be
-        // generated.
-
-        Bukkit.getScheduler()
-                .scheduleAsyncDelayedTask(
-                plugin,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            finalWorlds.save(finalWorldFile);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, 1);
+        worlds.save(worldFile);      
     }
 
     private boolean doSkip(Field field) {

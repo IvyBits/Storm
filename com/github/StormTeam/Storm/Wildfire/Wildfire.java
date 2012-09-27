@@ -30,7 +30,7 @@ public class Wildfire {
 
         Storm.pm.registerEvents(new WildfireListeners(), storm);
         for (World w : storm.getServer().getWorlds()) {
-            if (Storm.wConfigs.get(w.getName()).Features_Meteor) {
+            if (Storm.wConfigs.get(w).Features_Wildfires) {
                 new Igniter(storm, w).run();
             }
         }

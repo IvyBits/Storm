@@ -17,8 +17,8 @@ import com.github.StormTeam.Storm.Acid_Rain.Tasks.DissolverTask;
 public class AcidListener implements Listener {
 
     private static final Random rand = new Random();
-    public static HashMap<String, DissolverTask> dissolverMap = new HashMap<String, DissolverTask>();
-    public static HashMap<String, DamagerTask> damagerMap = new HashMap<String, DamagerTask>();
+    public static HashMap<World, DissolverTask> dissolverMap = new HashMap<World, DissolverTask>();
+    public static HashMap<World, DamagerTask> damagerMap = new HashMap<World, DamagerTask>();
     private Storm storm;
 
     public AcidListener(Storm storm) {
@@ -32,9 +32,8 @@ public class AcidListener implements Listener {
         }
 
         World affectedWorld = event.getWorld();
-        String name = affectedWorld.getName();
-
-        GlobalVariables glob = Storm.wConfigs.get(name);
+      
+        GlobalVariables glob = Storm.wConfigs.get(affectedWorld);
 
         if (event.toWeatherState()) {// gets if its set to raining
 
@@ -44,7 +43,7 @@ public class AcidListener implements Listener {
                     return;
                 }
 
-                acidicWorlds.put(name, true);
+                acidicWorlds.put(affectedWorld, true);
 
                 AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
                         true);
@@ -64,15 +63,15 @@ public class AcidListener implements Listener {
             }
         } else if (!event.toWeatherState()) {
           
-            acidicWorlds.put(name, false);
+            acidicWorlds.put(affectedWorld, false);
 
             // Cancel damaging tasks for specific world
             AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
                     false);
             Bukkit.getServer().getPluginManager().callEvent(startEvent);
             try {
-                dissolverMap.get(name).stop();
-                damagerMap.get(name).stop();
+                dissolverMap.get(affectedWorld).stop();
+                damagerMap.get(affectedWorld).stop();
             } catch (Exception e) {
             };
 
@@ -81,13 +80,13 @@ public class AcidListener implements Listener {
 
         if (glob.Features_Acid__Rain_Dissolving__Blocks) {
             DissolverTask dis = new DissolverTask(storm, affectedWorld);
-            dissolverMap.put(name, new DissolverTask(storm, affectedWorld));
+            dissolverMap.put(affectedWorld, new DissolverTask(storm, affectedWorld));
             dis.run();
         }
 
         if (glob.Features_Acid__Rain_Player__Damaging) {
             DamagerTask dam = new DamagerTask(storm, affectedWorld);
-            damagerMap.put(name, dam);
+            damagerMap.put(affectedWorld, dam);
             dam.run();
         }
 

@@ -18,33 +18,67 @@ public class TextureManager implements Listener {
     @EventHandler
     public void worldEvent(PlayerChangedWorldEvent e) {
 
-        Player hopper = e.getPlayer();
-        World toWorld = hopper.getWorld();
+        final Player hopper = e.getPlayer();
+        final World toWorld = hopper.getWorld();
+        final World fromWorld = e.getFrom();
 
-        if (!toWorld.equals(e.getFrom())) {
+        if (!toWorld.equals(fromWorld)) {
+            if (Blizzard.blizzardingWorlds.containsKey(toWorld)
+                    && Blizzard.blizzardingWorlds.get(toWorld)) {
 
-            if (setBlizzardTPack(toWorld, hopper)) {
+                Storm.util
+                        .setTexture(
+                        hopper,
+                        Storm.wConfigs.get(toWorld.getName()).Textures_Blizzard__Texture__Path);
+
                 return;
+
             }
 
-            if (setAcidTPack(toWorld, hopper)) {
-                return;
-            }
+            if (AcidRain.acidicWorlds.containsKey(toWorld)
+                    && AcidRain.acidicWorlds.get(toWorld)) {
 
+                Storm.util
+                        .setTexture(
+                        hopper,
+                        Storm.wConfigs.get(toWorld.getName()).Textures_Acid__Rain__Texture__Path);
+
+                return;
+
+            }
             Storm.util.clearTexture(hopper);
         }
     }
 
     @EventHandler
     public void loginEvent(PlayerJoinEvent e) {
-        Player hopper = e.getPlayer();
+        final Player hopper = e.getPlayer();
+        final World world = hopper.getWorld();
 
-        if (setBlizzardTPack(hopper.getWorld(), hopper)) {
+        if (Blizzard.blizzardingWorlds.containsKey(world)
+                && Blizzard.blizzardingWorlds.get(world)) {
+
+            Storm.util
+                    .setTexture(
+                    hopper,
+                    Storm.wConfigs.get(world.getName()).Textures_Blizzard__Texture__Path);
+
             return;
+
         }
-        if (setAcidTPack(hopper.getWorld(), hopper)) {
+
+        if (AcidRain.acidicWorlds.containsKey(world)
+                && AcidRain.acidicWorlds.get(world)) {
+            Storm.util
+                    .setTexture(
+                    hopper,
+                    Storm.wConfigs.get(world.getName()).Textures_Acid__Rain__Texture__Path);
+
             return;
+
         }
+        Storm.util.clearTexture(hopper);
+
     }
 
     @EventHandler
@@ -55,7 +89,11 @@ public class TextureManager implements Listener {
         if (event.getWeatherState()) {
 
             for (Player p : world.getPlayers()) {
-                setAcidTPack(world, p);
+                Storm.util
+                        .setTexture(
+                        p,
+                        Storm.wConfigs.get(p.getWorld().getName()).Textures_Acid__Rain__Texture__Path);
+
             }
         } else {
 
@@ -73,7 +111,11 @@ public class TextureManager implements Listener {
         if (event.getWeatherState()) {
 
             for (Player p : world.getPlayers()) {
-                setBlizzardTPack(world, p);
+                Storm.util
+                        .setTexture(
+                        p,
+                        Storm.wConfigs.get(p.getWorld().getName()).Textures_Blizzard__Texture__Path);
+
             }
         } else {
 
@@ -81,37 +123,5 @@ public class TextureManager implements Listener {
                 Storm.util.clearTexture(p);
             }
         }
-    }
-
-    private boolean setAcidTPack(World world, Player hopper) {
-        if (AcidRain.acidicWorlds.containsKey(world)
-                && AcidRain.acidicWorlds.get(world)) {
-            Storm.util
-                    .setTexture(
-                    hopper,
-                    Storm.wConfigs.get(world.getName()).Textures_Acid__Rain__Texture__Path);
-
-            return true;
-
-        }
-        return false;
-
-
-    }
-
-    private boolean setBlizzardTPack(World world, Player hopper) {
-
-        if (Blizzard.blizzardingWorlds.containsKey(world)
-                && Blizzard.blizzardingWorlds.get(world)) {
-
-            Storm.util
-                    .setTexture(
-                    hopper,
-                    Storm.wConfigs.get(world.getName()).Textures_Blizzard__Texture__Path);
-
-            return true;
-
-        }
-        return false;
     }
 }
