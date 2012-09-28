@@ -23,7 +23,7 @@ public class DamagerTask {
     public DamagerTask(Storm storm, World affectedWorld) {
         this.storm = storm;
         this.affectedWorld = affectedWorld;
-        glob = Storm.wConfigs.get(affectedWorld.getName());
+        glob = Storm.wConfigs.get(affectedWorld);
     }
 
     public void run() {

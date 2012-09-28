@@ -19,8 +19,7 @@ public class Wildfire {
     public static Integer[] flammableBlocks = new Integer[]{
         Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
         Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
-        Block.GRASS.id, Block.WOOL.id, Block.VINE.id,
-        Block.BIRCH_WOOD_STAIRS.id,};
+        Block.GRASS.id, Block.WOOL.id, Block.VINE.id,};
     public static List<Biome> leafyBiomes = Arrays.asList(new Biome[]{
                 Biome.FOREST, Biome.FOREST_HILLS, Biome.JUNGLE, Biome.JUNGLE_HILLS,
                 Biome.HELL

@@ -20,7 +20,7 @@ public class DissolverTask
 	public DissolverTask(Storm storm, World affectedWorld)
 	{
 		this.storm = storm;
-		glob = Storm.wConfigs.get(affectedWorld.getName());
+		glob = Storm.wConfigs.get(affectedWorld);
 		try {
 			ticker = new BlockTickSelector(affectedWorld,
 			        glob.Acid__Rain_Dissolver_Block__Deterioration__Chance);

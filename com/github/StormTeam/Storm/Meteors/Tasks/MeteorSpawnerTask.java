@@ -12,7 +12,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
-import com.github.StormTeam.Storm.Meteors.Entities.MeteorBase;
 import com.github.StormTeam.Storm.Storm;
 
 public class MeteorSpawnerTask {
@@ -66,9 +65,8 @@ public class MeteorSpawnerTask {
         net.minecraft.server.World meteoriteWorld = ((CraftWorld) world)
                 .getHandle();
 
-        MeteorBase meteor = null;
 
-        meteor = new EntityMeteor(
+        EntityMeteor meteor = new EntityMeteor(
                 meteoriteWorld,
                 rand.nextInt(7) + 1,
                 10,

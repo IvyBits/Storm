@@ -35,7 +35,7 @@ public class StrikeListener implements Listener {
 	    return;
 	}
 
-	GlobalVariables glob = Storm.wConfigs.get(strike.getWorld().getName());
+	GlobalVariables glob = Storm.wConfigs.get(strike.getWorld());
 
 	Location strikeLocation = strike.getLightning().getLocation();
 

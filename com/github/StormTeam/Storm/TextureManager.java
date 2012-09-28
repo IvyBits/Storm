@@ -1,6 +1,5 @@
 package com.github.StormTeam.Storm;
 
-import com.github.StormTeam.Storm.Storm;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +28,7 @@ public class TextureManager implements Listener {
                 Storm.util
                         .setTexture(
                         hopper,
-                        Storm.wConfigs.get(toWorld.getName()).Textures_Blizzard__Texture__Path);
+                        Storm.wConfigs.get(toWorld).Textures_Blizzard__Texture__Path);
 
                 return;
 
@@ -41,7 +40,7 @@ public class TextureManager implements Listener {
                 Storm.util
                         .setTexture(
                         hopper,
-                        Storm.wConfigs.get(toWorld.getName()).Textures_Acid__Rain__Texture__Path);
+                        Storm.wConfigs.get(toWorld).Textures_Acid__Rain__Texture__Path);
 
                 return;
 
@@ -61,7 +60,7 @@ public class TextureManager implements Listener {
             Storm.util
                     .setTexture(
                     hopper,
-                    Storm.wConfigs.get(world.getName()).Textures_Blizzard__Texture__Path);
+                    Storm.wConfigs.get(world).Textures_Blizzard__Texture__Path);
 
             return;
 
@@ -72,7 +71,7 @@ public class TextureManager implements Listener {
             Storm.util
                     .setTexture(
                     hopper,
-                    Storm.wConfigs.get(world.getName()).Textures_Acid__Rain__Texture__Path);
+                    Storm.wConfigs.get(world).Textures_Acid__Rain__Texture__Path);
 
             return;
 
@@ -92,7 +91,7 @@ public class TextureManager implements Listener {
                 Storm.util
                         .setTexture(
                         p,
-                        Storm.wConfigs.get(p.getWorld().getName()).Textures_Acid__Rain__Texture__Path);
+                        Storm.wConfigs.get(p.getWorld()).Textures_Acid__Rain__Texture__Path);
 
             }
         } else {
@@ -114,7 +113,7 @@ public class TextureManager implements Listener {
                 Storm.util
                         .setTexture(
                         p,
-                        Storm.wConfigs.get(p.getWorld().getName()).Textures_Blizzard__Texture__Path);
+                        Storm.wConfigs.get(p.getWorld()).Textures_Blizzard__Texture__Path);
 
             }
         } else {

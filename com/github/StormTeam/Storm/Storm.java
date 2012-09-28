@@ -46,42 +46,45 @@ public class Storm extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        pm = getServer().getPluginManager();
+        try {
+            pm = getServer().getPluginManager();
 
-        String v = getServer().getVersion();
-        if (v.contains("1.2.")) {
-            version = 1.2;
-            System.out.println("MC 1.2.x detected!");
-        } else {
-            if (v.contains("1.3.")) {
-                version = 1.3;
-                System.out.println("MC 1.3.x detected!");
+            String v = getServer().getVersion();
+            if (v.contains("1.2.")) {
+                version = 1.2;
+                getLogger().log(Level.INFO, "Loading with MC 1.2.X compatibility.");
             } else {
-                crashDisable("Unsupported version detected!");
+                if (v.contains("1.3.")) {
+                    version = 1.3;
+                    getLogger().log(Level.INFO, "Loading with MC 1.3.X compatibility.");
+                } else {
+                    getLogger().log(Level.SEVERE, "Unsupported MC version detected!");
+
+                }
             }
-        }
-        
-        util = new StormUtil(this);
-        biomes = new BiomeGroups();
-        db = Database.Obtain(this, null);
-        cmds = new Commands(this);
 
-        // Make per-world configuration files
-        System.out.println(Bukkit.getWorlds());
-        for (World w : Bukkit.getWorlds()) {
-            String world = w.getName();
-            GlobalVariables config = new GlobalVariables(this, world);
-            config.load();
-            wConfigs.put(w, config);
-        }
+            util = new StormUtil(this);
 
-       
+            biomes = new BiomeGroups();
+            db = Database.Obtain(this, null);
+            cmds = new Commands(this);
 
-        updater = new UpdaterVariables(this, "updater");
-        updater.load();
+            // Make per-world configuration files
+            System.out.println(Bukkit.getWorlds());
+            for (World w : Bukkit.getWorlds()) {
+                String world = w.getName();
+                GlobalVariables config = new GlobalVariables(this, world);
+                config.load();
+                wConfigs.put(w, config);
+            }
 
 
-        boolean update = false;
+
+            updater = new UpdaterVariables(this, "updater");
+            updater.load();
+
+
+            boolean update = false;
 
 //        if (updater.Updater_Check__For__Updates) {
 //            Updater up = new Updater(this, "storm", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
@@ -100,26 +103,29 @@ public class Storm extends JavaPlugin {
 //
 //        }
 
-        getCommand("meteor").setExecutor(cmds);
-        getCommand("wildfire").setExecutor(cmds);
-        getCommand("acidrain").setExecutor(cmds);
-        getCommand("blizzard").setExecutor(cmds);
+            getCommand("meteor").setExecutor(cmds);
+            getCommand("wildfire").setExecutor(cmds);
+            getCommand("acidrain").setExecutor(cmds);
+            getCommand("blizzard").setExecutor(cmds);
 
-        // Stats
-        try {
-            new MetricsLite(this).start();
+            // Stats
+            try {
+                new MetricsLite(this).start();
+            } catch (Exception e) {
+            }
+
+            //Modularity FTW!
+            AcidRain.load(this);
+            Lightning.load(this);
+            Wildfire.load(this);
+            Blizzard.load(this);
+            Meteor.load(this);
+            Earthquake.load(this);
+            //Puddles.load(this);
+            //pm.registerEvents(new TextureManager(), this);
         } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        //Modularity FTW!
-        AcidRain.load(this);
-        Lightning.load(this);
-        Wildfire.load(this);
-        Blizzard.load(this);
-        Meteor.load(this);
-        Earthquake.load(this);
-        //Puddles.load(this);
-        pm.registerEvents(new TextureManager(), this);
     }
 
     @Override

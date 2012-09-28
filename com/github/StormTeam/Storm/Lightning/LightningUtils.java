@@ -45,7 +45,7 @@ public class LightningUtils {
     public Location hitPlayers(Location oldLoc) {
 	final Location chunk = pickChunk(oldLoc.getWorld()).getBlock(8, 255, 8)
 		.getLocation();
-	GlobalVariables glob = Storm.wConfigs.get(oldLoc.getWorld().getName());
+	GlobalVariables glob = Storm.wConfigs.get(oldLoc.getWorld());
 	
 	for (Player p : storm.getServer().getOnlinePlayers()) {
 	    Location ploc = new Location(p.getWorld(), p.getLocation().getX(),
@@ -99,7 +99,7 @@ public class LightningUtils {
 
 	ChunkSnapshot snapshot = chunk.getChunkSnapshot(true, false, false);
 
-	GlobalVariables glob = Storm.wConfigs.get(chunk.getWorld().getName());
+	GlobalVariables glob = Storm.wConfigs.get(chunk.getWorld());
 	
 	for (int x = 0; x < 16; x++)
 	{

@@ -3,7 +3,6 @@ package com.github.StormTeam.Storm.Blizzard;
 import java.util.HashMap;
 
 import org.bukkit.World;
-import org.bukkit.plugin.PluginManager;
 
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Blizzard.Listeners.BlizzardListeners;

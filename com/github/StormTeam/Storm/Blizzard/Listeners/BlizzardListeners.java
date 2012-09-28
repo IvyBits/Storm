@@ -26,7 +26,7 @@ public class BlizzardListeners implements Listener {
         this.storm = storm;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST)  
     public void blizzardListener(WeatherChangeEvent event) {
 
         if (event.isCancelled()) {

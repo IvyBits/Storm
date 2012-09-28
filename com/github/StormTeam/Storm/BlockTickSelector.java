@@ -14,33 +14,57 @@ import net.minecraft.server.ChunkCoordIntPair;
 import net.minecraft.server.EntityHuman;
 import net.minecraft.server.WorldServer;
 import net.minecraft.server.Chunk;
+import net.minecraft.server.ChunkProviderServer;
+import net.minecraft.server.LongHashMap;
 
 public class BlockTickSelector {
 
     private WorldServer world;
     private Field l;
-    private Method a;
+    private Method a, contains;
     private int chan;
     private Object crap;
-    private Method contains;
 
     public BlockTickSelector(World world, int selChance)
             throws NoSuchMethodException,
-            SecurityException, NoSuchFieldException {
+            SecurityException, NoSuchFieldException, InstantiationException, IllegalAccessException {
 
         this.world = ((CraftWorld) world).getHandle();
         this.chan = selChance;
 
-        crap = this.world.chunkProviderServer.unloadQueue;
 
-        Class<?> cls = crap.getClass();
-        contains = cls.getDeclaredMethod(Storm.version < 1.2 ? "containsKey" : "contains", int.class, int.class);
-        l = net.minecraft.server.World.class.getDeclaredField(Storm.version < 1.2 ? "g" : "l"); //Because inlining is cool like that.
+        Field que = ChunkProviderServer.class.getDeclaredField("unloadQueue");
+        Class<?> cls = que.getType();
+
+        System.out.println(cls);
+
+        if (Storm.version == 1.2) {
+
+            contains = cls.getDeclaredMethod("containsKey", long.class);
+
+        } else {
+            contains = cls.getDeclaredMethod("contains", int.class, int.class);
+        }
+
+        l = net.minecraft.server.World.class.getDeclaredField(Storm.version == 1.2 ? "l" : "g"); //Because inlining is cool like that.
         a = net.minecraft.server.World.class.getDeclaredMethod("a", int.class, int.class, Chunk.class);
 
         l.setAccessible(true);
         a.setAccessible(true);
         contains.setAccessible(true);
+    }
+
+    private long toLong(int msw, int lsw) {
+        return (msw << 32) + lsw - -2147483648L;
+    }
+
+    private boolean contains(Object ob, int x, int z) throws IllegalAccessException, IllegalAccessException, IllegalArgumentException, IllegalArgumentException, InvocationTargetException {
+
+        if (Storm.version == 1.2) {
+            return (Boolean) contains.invoke(ob, toLong(x, z));
+        }
+
+        return (Boolean) contains.invoke(ob, x, z);
     }
 
     public ArrayList<ChunkCoordIntPair> getRandomTickedChunks() throws InvocationTargetException, IllegalAccessException {
@@ -60,7 +84,7 @@ public class BlockTickSelector {
             byte range = 7;
             for (int x = -range; x <= range; x++) {
                 for (int z = -range; z <= range; z++) {
-                    if (!((Boolean) contains.invoke(crap, x + eX, z + eZ))) {
+                    if (!(contains(world.chunkProviderServer.unloadQueue, x + eX, z + eZ))) {
                         doTick.add(new ChunkCoordIntPair(x + eX, z + eZ));
                     }
                 }

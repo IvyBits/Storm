@@ -28,7 +28,8 @@ public class Meteor {
             a.setAccessible(true);
 
             a.invoke(a, EntityMeteor.class, "Fireball", 12);
-
+           
+            
         } catch (Exception e) {
             Storm.util.log(Level.SEVERE, "Failed to create meteor entity!");
         }
