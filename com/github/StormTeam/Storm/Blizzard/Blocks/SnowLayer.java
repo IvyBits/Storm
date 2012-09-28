@@ -60,7 +60,7 @@ public class SnowLayer extends BlockSnow {
         }
 
         inSnow.setVelocity(inSnow.getVelocity().clone()
-                .multiply(Storm.wConfigs.get(w.getWorld().getName()).Blizzard_Player_Speed__Loss__While__In__Snow));
+                .multiply(Storm.wConfigs.get(w.getWorld()).Blizzard_Player_Speed__Loss__While__In__Snow));
 
     }
 }

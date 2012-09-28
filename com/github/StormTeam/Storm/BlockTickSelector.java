@@ -21,6 +21,8 @@ public class BlockTickSelector {
     private Field l;
     private Method a;
     private int chan;
+    private Object crap;
+    private Method contains;
 
     public BlockTickSelector(World world, int selChance)
             throws NoSuchMethodException,
@@ -29,22 +31,19 @@ public class BlockTickSelector {
         this.world = ((CraftWorld) world).getHandle();
         this.chan = selChance;
 
-        String ln = "";
-        if(Storm.version == 1.3) {
-            ln = "l";
-        }
-        if(Storm.version == 1.2) {
-            ln = "g";
-        }
-        
-        l = net.minecraft.server.World.class.getDeclaredField(ln);
+        crap = this.world.chunkProviderServer.unloadQueue;
+
+        Class<?> cls = crap.getClass();
+        contains = cls.getDeclaredMethod(Storm.version < 1.2 ? "containsKey" : "contains", int.class, int.class);
+        l = net.minecraft.server.World.class.getDeclaredField(Storm.version < 1.2 ? "g" : "l"); //Because inlining is cool like that.
         a = net.minecraft.server.World.class.getDeclaredMethod("a", int.class, int.class, Chunk.class);
 
         l.setAccessible(true);
         a.setAccessible(true);
+        contains.setAccessible(true);
     }
 
-    public ArrayList<ChunkCoordIntPair> getRandomTickedChunks() {
+    public ArrayList<ChunkCoordIntPair> getRandomTickedChunks() throws InvocationTargetException, IllegalAccessException {
 
         ArrayList<ChunkCoordIntPair> doTick = new ArrayList<ChunkCoordIntPair>();
 
@@ -61,7 +60,7 @@ public class BlockTickSelector {
             byte range = 7;
             for (int x = -range; x <= range; x++) {
                 for (int z = -range; z <= range; z++) {
-                    if (!world.chunkProviderServer.unloadQueue.contains(x + eX, z + eZ)) {
+                    if (!((Boolean) contains.invoke(crap, x + eX, z + eZ))) {
                         doTick.add(new ChunkCoordIntPair(x + eX, z + eZ));
                     }
                 }

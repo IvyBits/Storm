@@ -3,17 +3,25 @@ package com.github.StormTeam.Storm.Meteors.Entities;
 import com.github.StormTeam.Storm.Storm;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import net.minecraft.server.AxisAlignedBB;
+import net.minecraft.server.Entity;
 
 import net.minecraft.server.EntityFireball;
 import net.minecraft.server.EntityLiving;
+import net.minecraft.server.MathHelper;
+import net.minecraft.server.MovingObjectPosition;
+import net.minecraft.server.Vec3D;
 import net.minecraft.server.World;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class MeteorBase extends EntityFireball {
 
@@ -278,6 +286,106 @@ public class MeteorBase extends EntityFireball {
             }
         }
     }
+    
+    public void updatePosition() {
+        
+            if ((!this.world.isStatic) && (((this.shooter != null) && (this.shooter.dead)) || (!this.world.isLoaded((int)this.locX, (int)this.locY, (int)this.locZ)))) {
+      die();
+    } else {
+      //super.F_();
+      setOnFire(1);
+//      if (this.i) {
+//        int i = this.world.getTypeId(this.e, this.f, this.g);
+//
+//        if (i == this.h) {
+//          this.j += 1;
+//          if (this.j == 600) {
+//            die();
+//          }
+//
+//          return;
+//        }
+//
+//        this.i = false;
+//        this.motX *= this.random.nextFloat() * 0.2F;
+//        this.motY *= this.random.nextFloat() * 0.2F;
+//        this.motZ *= this.random.nextFloat() * 0.2F;
+//        this.j = 0;
+//        this.k = 0; //an in newer
+//      } else {
+//        this.k += 1;
+//      }
+
+      Vec3D vec3d = Vec3D.a(this.locX, this.locY, this.locZ);
+      Vec3D vec3d1 = Vec3D.a(this.locX + this.motX, this.locY + this.motY, this.locZ + this.motZ);
+      MovingObjectPosition movingobjectposition = this.world.a(vec3d, vec3d1);
+
+      vec3d = Vec3D.a(this.locX, this.locY, this.locZ);
+      vec3d1 = Vec3D.a(this.locX + this.motX, this.locY + this.motY, this.locZ + this.motZ);
+      if (movingobjectposition != null) {
+        vec3d1 = Vec3D.a(movingobjectposition.pos.a, movingobjectposition.pos.b, movingobjectposition.pos.c);
+      }
+
+      Entity entity = null;
+      List list = this.world.getEntities(this, this.boundingBox.a(this.motX, this.motY, this.motZ).grow(1.0D, 1.0D, 1.0D));
+      double d0 = 0.0D;
+
+      for (int j = 0; j < list.size(); j++) {
+        Entity entity1 = (Entity)list.get(j);
+
+
+      }
+
+      if (entity != null) {
+        movingobjectposition = new MovingObjectPosition(entity);
+      }
+
+      if (movingobjectposition != null) {
+        a(movingobjectposition);
+
+        if (this.dead) {
+          ProjectileHitEvent phe = new ProjectileHitEvent((Projectile)getBukkitEntity());
+          this.world.getServer().getPluginManager().callEvent(phe);
+        }
+
+      }
+
+      this.locX += this.motX;
+      this.locY += this.motY;
+      this.locZ += this.motZ;
+      float f1 = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
+
+      this.yaw = (float)(Math.atan2(this.motX, this.motZ) * 180.0D / 3.141592741012573D);
+
+      for (this.pitch = (float)(Math.atan2(this.motY, f1) * 180.0D / 3.141592741012573D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F);
+      while (this.pitch - this.lastPitch >= 180.0F) {
+        this.lastPitch += 360.0F;
+      }
+
+      while (this.yaw - this.lastYaw < -180.0F) {
+        this.lastYaw -= 360.0F;
+      }
+
+      while (this.yaw - this.lastYaw >= 180.0F) {
+        this.lastYaw += 360.0F;
+      }
+
+      this.pitch = (this.lastPitch + (this.pitch - this.lastPitch) * 0.2F);
+      this.yaw = (this.lastYaw + (this.yaw - this.lastYaw) * 0.2F);
+      float f2 = 0.95F;
+
+      this.motX += this.dirX;
+      this.motY += this.dirY;
+      this.motZ += this.dirZ;
+      this.motX *= f2;
+      this.motY *= f2;
+      this.motZ *= f2;
+      this.world.a("smoke", this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
+      setPosition(this.locX, this.locY, this.locZ);
+    }
+        
+    }
+    
     public EntityLiving shooter;
     public double dirX;
     public double dirY;

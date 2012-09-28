@@ -18,13 +18,11 @@ public class EntityMeteor extends MeteorBase {
 
     }
 
-    
     //1.3.x
-    
     public void h_() {
-        if(this.move()) {
-            super.h_();
-        }      
+        if (this.move()) {
+            updatePosition();
+        }
     }
 
     public void a(MovingObjectPosition movingobjectposition) {
@@ -35,14 +33,14 @@ public class EntityMeteor extends MeteorBase {
     public float c(float f) {
         return this.brightness;
     }
-    
+
     //1.2.x
     public void F_() {
         if (this.move()) {
-          //  super.F_();
+            updatePosition();
         }
-    }  
-    
+    }
+
     public float b(float f) {
         return this.brightness;
     }
