@@ -227,6 +227,9 @@ public class StormUtil extends BiomeGroups {
      * @param pathToTexture A URL to texture pack. Won't work with https.
      */
     public void setTexture(Player toSetOn, String pathToTexture) {
+        if (Storm.version < 1.3) {
+            return;
+        }
         ((CraftPlayer) toSetOn).getHandle().netServerHandler
                 .sendPacket(new Packet250CustomPayload("MC|TPack",
                 (pathToTexture + "\0" + 16).getBytes()));
@@ -238,6 +241,9 @@ public class StormUtil extends BiomeGroups {
      * @param toClear The player to set.
      */
     public void clearTexture(Player toClear) {
+        if (Storm.version < 1.3) {
+            return;
+        }
         setTexture(
                 toClear,
                 Storm.wConfigs.get(toClear.getWorld()).Textures_Default__Texture__Path);
