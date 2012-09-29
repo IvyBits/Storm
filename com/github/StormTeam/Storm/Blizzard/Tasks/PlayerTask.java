@@ -47,40 +47,11 @@ public class PlayerTask {
                                     return;
                                 }
 
-                                if (glob.Acid__Rain__Absorbing__Blocks.contains(damagee.getItemInHand().getTypeId())) {
+                                if (glob.Blizzard_Damager_Heating__Blocks.contains(damagee.getItemInHand().getTypeId())) {
                                     return;
                                 }
 
-                                final Location loc = damagee.getLocation();
-                                final World world = damagee.getWorld();
-                                int radius = glob.Acid__Rain__Absorbing__Radius;
-                                for (int y = 1; y > -radius; y--) {
-                                    for (int x = 1; x > -radius; x--) {
-                                        for (int z = 1; z > -radius; z--) {
-                                            Block scan = world
-                                                    .getBlockAt(
-                                                    (int) loc
-                                                    .getX()
-                                                    + x,
-                                                    (int) loc
-                                                    .getY()
-                                                    + y,
-                                                    (int) loc
-                                                    .getZ()
-                                                    + z);
-                                            if (glob.Acid__Rain__Absorbing__Blocks
-                                                    .contains(scan
-                                                    .getTypeId())) {
-                                                return; // Don't damage
-                                                // if they are
-                                                // near hot
-                                                // blocks
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (Storm.util.isLocationNearBlock(damagee.getLocation(), 
+                                if (Storm.util.isLocationNearBlock(damagee.getLocation(),
                                         glob.Blizzard_Damager_Heating__Blocks, glob.Blizzard_Damager_Heat__Radius)) {
                                     return;
                                 }
@@ -88,14 +59,14 @@ public class PlayerTask {
 
                                 if (Storm.util
                                         .isPlayerUnderSky(damagee)) {
+                                     damagee.damage(glob.Blizzard_Player_Damage__From__Exposure * 2);
                                     damagee.addPotionEffect(
                                             new PotionEffect(
                                             PotionEffectType.BLINDNESS,
                                             glob.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks + 60,
                                             glob.Blizzard_Damager_Blindness__Amplitude),
                                             true);
-                                    damagee.damage(glob.Blizzard_Player_Damage__From__Exposure * 2);
-                                    Storm.util
+                                   Storm.util
                                             .message(
                                             damagee,
                                             glob.Blizzard_Damager_Message__On__Player__Damaged__Cold);

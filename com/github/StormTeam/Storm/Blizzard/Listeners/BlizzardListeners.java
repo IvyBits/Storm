@@ -46,7 +46,7 @@ public class BlizzardListeners implements Listener {
                         && !glob.Features_Blizzards_Slowing__Snow) {
                     return;
                 }
-                blizzardingWorlds.put(affectedWorld, true);
+                blizzardingWorlds.add(affectedWorld);
 
                 BlizzardEvent startEvent = new BlizzardEvent(affectedWorld, true);
                 Bukkit.getServer().getPluginManager().callEvent(startEvent);
@@ -67,7 +67,7 @@ public class BlizzardListeners implements Listener {
             }
         } else if (!event.toWeatherState()) {
 
-            blizzardingWorlds.put(affectedWorld, false);
+            blizzardingWorlds.remove(affectedWorld);
             // Cancel damaging tasks for specific world
 
             try {

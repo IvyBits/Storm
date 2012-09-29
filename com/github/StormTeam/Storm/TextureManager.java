@@ -22,8 +22,7 @@ public class TextureManager implements Listener {
         final World fromWorld = e.getFrom();
 
         if (!toWorld.equals(fromWorld)) {
-            if (Blizzard.blizzardingWorlds.containsKey(toWorld)
-                    && Blizzard.blizzardingWorlds.get(toWorld)) {
+            if (Blizzard.blizzardingWorlds.contains(toWorld)) {
 
                 Storm.util
                         .setTexture(
@@ -34,8 +33,7 @@ public class TextureManager implements Listener {
 
             }
 
-            if (AcidRain.acidicWorlds.containsKey(toWorld)
-                    && AcidRain.acidicWorlds.get(toWorld)) {
+            if (AcidRain.acidicWorlds.contains(toWorld)) {
 
                 Storm.util
                         .setTexture(
@@ -54,8 +52,7 @@ public class TextureManager implements Listener {
         final Player hopper = e.getPlayer();
         final World world = hopper.getWorld();
 
-        if (Blizzard.blizzardingWorlds.containsKey(world)
-                && Blizzard.blizzardingWorlds.get(world)) {
+        if (Blizzard.blizzardingWorlds.contains(world)) {
 
             Storm.util
                     .setTexture(
@@ -66,8 +63,7 @@ public class TextureManager implements Listener {
 
         }
 
-        if (AcidRain.acidicWorlds.containsKey(world)
-                && AcidRain.acidicWorlds.get(world)) {
+        if (AcidRain.acidicWorlds.contains(world)) {
             Storm.util
                     .setTexture(
                     hopper,

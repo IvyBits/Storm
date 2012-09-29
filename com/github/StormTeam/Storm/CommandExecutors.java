@@ -8,7 +8,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Fireball;
 
-import com.github.StormTeam.Storm.Acid_Rain.AcidRain;
 import static com.github.StormTeam.Storm.Acid_Rain.AcidRain.acidicWorlds;
 import com.github.StormTeam.Storm.Acid_Rain.Events.AcidRainEvent;
 import com.github.StormTeam.Storm.Acid_Rain.Listeners.AcidListener;
@@ -75,11 +74,10 @@ public class CommandExecutors {
 
     public void acidRain(World world) {
 
-        if (acidicWorlds.containsKey(world)
-                && acidicWorlds.get(world)) {
+        if (acidicWorlds.contains(world)) {
 
-            acidicWorlds.put(world, false);
-            blizzardingWorlds.put(world, false);
+            acidicWorlds.remove(world);
+            blizzardingWorlds.remove(world);
             AcidListener.damagerMap.get(world).stop();
             AcidListener.dissolverMap.get(world).stop();
 
@@ -97,7 +95,7 @@ public class CommandExecutors {
             AcidListener.dissolverMap.put(world, dis);
             dis.run();
 
-            acidicWorlds.put(world, true);
+            acidicWorlds.add(world);
 
             Storm.util
                     .broadcast(Storm.wConfigs.get(world).Acid__Rain_Message__On__Acid__Rain__Start);
@@ -112,13 +110,12 @@ public class CommandExecutors {
 
     public void blizzard(World world) {
 
-        if (blizzardingWorlds.containsKey(world)
-                && blizzardingWorlds.get(world)) {
+        if (blizzardingWorlds.contains(world)) {
 
             BlizzardListeners.damagerMap.get(world).stop();
 
-            blizzardingWorlds.put(world, false);
-            acidicWorlds.put(world, false);
+            blizzardingWorlds.remove(world);
+            acidicWorlds.remove(world);
             world.setStorm(false);
 
             Storm.pm.callEvent(new BlizzardEvent(world, false));
@@ -129,7 +126,7 @@ public class CommandExecutors {
             dam.run();
             BlizzardListeners.damagerMap.put(world, dam);
 
-            blizzardingWorlds.put(world, true);
+            blizzardingWorlds.add(world);
             Storm.util
                     .broadcast(Storm.wConfigs.get(world).Blizzard_Message__On__Blizzard__Start);
             world.setStorm(true);

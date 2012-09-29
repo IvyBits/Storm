@@ -43,7 +43,7 @@ public class AcidListener implements Listener {
                     return;
                 }
 
-                acidicWorlds.put(affectedWorld, true);
+                acidicWorlds.add(affectedWorld);
 
                 AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,
                         true);
@@ -63,7 +63,7 @@ public class AcidListener implements Listener {
             }
         } else if (!event.toWeatherState()) {
           
-            acidicWorlds.put(affectedWorld, false);
+            acidicWorlds.remove(affectedWorld);
 
             // Cancel damaging tasks for specific world
             AcidRainEvent startEvent = new AcidRainEvent(affectedWorld,

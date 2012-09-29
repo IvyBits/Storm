@@ -21,10 +21,10 @@ public class SnowLayer extends BlockSnow {
 
         final CraftWorld cWorld = (CraftWorld) w.getWorld();
 
-        if(!Blizzard.blizzardingWorlds.containsKey(cWorld)) {
+        if (!Blizzard.blizzardingWorlds.contains(cWorld)) {
             return;
         }
-        
+
         if (!Storm.wConfigs.containsKey(cWorld) && !Storm.wConfigs.get(cWorld).Features_Blizzards_Slowing__Snow) {
             return;
         }

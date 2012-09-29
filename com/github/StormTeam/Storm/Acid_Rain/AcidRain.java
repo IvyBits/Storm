@@ -1,14 +1,14 @@
 package com.github.StormTeam.Storm.Acid_Rain;
 
-import java.util.HashMap;
 import org.bukkit.World;
 
 import com.github.StormTeam.Storm.Storm;
 import com.github.StormTeam.Storm.Acid_Rain.Listeners.AcidListener;
+import java.util.ArrayList;
 
 public class AcidRain
 {
-    public static HashMap<World, Boolean> acidicWorlds = new HashMap<World, Boolean>();
+    public static ArrayList<World> acidicWorlds = new ArrayList<World>();
 
     public static void load(Storm storm)
     {	
