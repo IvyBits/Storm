@@ -15,27 +15,6 @@ public class SnowLayer extends BlockSnow {
         super(i, j);
     }
 
-    /* You are not expected to understand this. */
-    @Override
-    public boolean canPlace(World world, int i, int j, int k) {
-
-        int l = world.getTypeId(i, j - 1, k);
-
-        if (l == Block.SNOW.id) {
-            int data = world.getData(i, j - 1, k);
-            if (data == 7) {
-                world.setTypeId(i, j - 1, k, Block.SNOW_BLOCK.id);
-                return false;
-            } else {
-                world.setData(i, j - 1, k, ++data);
-                return false;
-            }
-        }
-
-        return l == 0 || l != Block.LEAVES.id && !Block.byId[l].d() ? false
-                : world.getMaterial(i, j - 1, k).isSolid();
-    }
-
     @Override
     public void a(final World w, final int x, final int y,
             final int z, final Entity e) {
@@ -51,7 +30,7 @@ public class SnowLayer extends BlockSnow {
         }
 
         final org.bukkit.entity.Entity inSnow = e.getBukkitEntity();
-        if (inSnow instanceof EntityPlayer && ((Player) (inSnow)).getGameMode() == GameMode.CREATIVE) {
+        if (inSnow instanceof Player && ((Player) (inSnow)).getGameMode() == GameMode.CREATIVE) {
             return;
         }
 

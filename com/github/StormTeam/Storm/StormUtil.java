@@ -174,38 +174,19 @@ public class StormUtil extends BiomeGroups {
         return playerList;
     }
 
-    public void transform(Block toTransform, List<List<String>> transformations) {
+    public void transform(Block toTransform, List<List<Integer>> transformations) {
 
-        if (isBlockProtected(toTransform)) {
-            return;
-        }
-
-        for (List<String> toCheck : transformations) {
-            ArrayList<String[]> stateIndex = new ArrayList<String[]>();
-
-            for (int i = 0; i != 2; ++i) {
-                String got = toCheck.get(i);
-
-                if (got.contains(":")) // Check for data value appended.
-                {
-                    stateIndex.add(got.split(":"));
-                } else {
-                    stateIndex.add(new String[]{got, "0"});
-                }
-            }
-
-            final String[] curState = stateIndex.get(0), toState = stateIndex
-                    .get(1);
-
-            if (Integer.valueOf(curState[0]) == toTransform.getTypeId()
-                    && Integer.valueOf(curState[1]) == toTransform.getData()) {
-                toTransform.setTypeIdAndData(Integer.valueOf(toState[0]), Byte
-                        .parseByte(toState[1]), true);
+        final int blockId = toTransform.getTypeId();
+        
+        System.out.println("Transforming " + toTransform);
+        
+        for (List<Integer> toCheck : transformations) {
+            if (toCheck.get(0) == blockId) {             
+                toTransform.setTypeId(toCheck.get(1));
+                System.out.println("Transformed block to " + toTransform);
                 return;
             }
-
         }
-
     }
 
     /**
@@ -230,6 +211,7 @@ public class StormUtil extends BiomeGroups {
         if (Storm.version < 1.3) {
             return;
         }
+
         ((CraftPlayer) toSetOn).getHandle().netServerHandler
                 .sendPacket(new Packet250CustomPayload("MC|TPack",
                 (pathToTexture + "\0" + 16).getBytes()));
@@ -244,6 +226,7 @@ public class StormUtil extends BiomeGroups {
         if (Storm.version < 1.3) {
             return;
         }
+
         setTexture(
                 toClear,
                 Storm.wConfigs.get(toClear.getWorld()).Textures_Default__Texture__Path);

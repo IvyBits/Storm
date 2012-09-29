@@ -14,21 +14,26 @@ public class GlobalVariables extends ReflectConfiguration {
     public GlobalVariables(Plugin storm, String world) {
         super(storm, world);
     }
-
     public int Acid__Rain_Acid__Rain__Chance = 5;
     public String Acid__Rain_Message__On__Acid__Rain__Start = "Acid has started to fall from the sky!";
     public String Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain = "You have been hurt by the acidic downfall!";
     public int Acid__Rain_Player_Damage__From__Exposure = 2;
-    public List<List<String>> Acid__Rain_Dissolver_Block__Transformations = new ArrayList<List<String>>() {
+    public List<List<Integer>> Acid__Rain_Dissolver_Block__Transformations = new ArrayList<List<Integer>>() {
         {
-            add(Arrays.asList("18", "0"));
-            add(Arrays.asList("2", "3"));
-            add(Arrays.asList("1", "4"));
-            add(Arrays.asList("44:5", "44:3"));
-            add(Arrays.asList("4", "48"));
+            add(Arrays.asList(18, 0));
+            add(Arrays.asList(2, 3));
+            add(Arrays.asList(1, 4));         
+            add(Arrays.asList(4, 48));
 
         }
     };
+    public List<Integer> Acid__Rain__Absorbing__Blocks = new ArrayList<Integer>() {
+        {
+            add(Block.GOLD_BLOCK.id);
+        }
+    };
+    
+    public int Acid__Rain__Absorbing__Radius = 2;
     public int Acid__Rain_Dissolver_Blocks__To__Deteriorate__Per__Calculation = 10;
     public int Acid__Rain_Dissolver_Block__Deterioration__Chance = 100;
     public int Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks = 100;
@@ -64,9 +69,9 @@ public class GlobalVariables extends ReflectConfiguration {
             Item.DIAMOND_AXE.id, Item.DIAMOND_HOE.id, Item.DIAMOND_PICKAXE.id, Item.DIAMOND_SPADE.id, Item.DIAMOND_SWORD.id,
             Item.GOLD_AXE.id, Item.GOLD_HOE.id, Item.GOLD_PICKAXE.id, Item.GOLD_SPADE.id, Item.GOLD_SWORD.id,
             Item.MINECART.id);
-    public List<List<String>> Lightning_Melter_Block__Transformations = new ArrayList<List<String>>() {
+    public List<List<Integer>> Lightning_Melter_Block__Transformations = new ArrayList<List<Integer>>() {
         {
-            add(Arrays.asList("12", "20"));
+            add(Arrays.asList(12, 20));
 
         }
     };

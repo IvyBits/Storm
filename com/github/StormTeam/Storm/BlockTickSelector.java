@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -21,9 +22,10 @@ public class BlockTickSelector {
 
     private WorldServer world;
     private Field l;
-    private Method a, contains;
+    private Method a, contains, chunk_k;
     private int chan;
-    private Object crap;
+    private Object crap;  
+    private int val = new Random().nextInt();
 
     public BlockTickSelector(World world, int selChance)
             throws NoSuchMethodException,
@@ -41,9 +43,11 @@ public class BlockTickSelector {
         if (Storm.version == 1.2) {
 
             contains = cls.getDeclaredMethod("containsKey", long.class);
+            chunk_k = Chunk.class.getDeclaredMethod("o");
 
         } else {
             contains = cls.getDeclaredMethod("contains", int.class, int.class);
+            chunk_k = Chunk.class.getDeclaredMethod("k");
         }
 
         l = net.minecraft.server.World.class.getDeclaredField(Storm.version == 1.2 ? "l" : "g"); //Because inlining is cool like that.
@@ -52,6 +56,7 @@ public class BlockTickSelector {
         l.setAccessible(true);
         a.setAccessible(true);
         contains.setAccessible(true);
+        chunk_k.setAccessible(true);
     }
 
     private long toLong(int msw, int lsw) {
@@ -116,22 +121,23 @@ public class BlockTickSelector {
             Chunk chunk = world.getChunkAt(pair.x, pair.z);
 
             a.invoke(world, xOffset, zOffset, chunk);
-            chunk.k();
+
+            chunk_k.invoke(chunk);
+
             int x, y, z, i1;
 
-            if (world.random.nextInt(chan) == 0) {
-                int val = (Integer) l.get(world);
+            if (world.random.nextInt(chan) == 0) {               
                 val = val * 3 + 1013904223;
                 i1 = val >> 2;
                 x = i1 & 15;
                 z = i1 >> 8 & 15;
-                y = world.g(x + xOffset, z + zOffset);
-                this.l.set(world, val);
+                y = world.g(x + xOffset, z + zOffset);              
                 doTick.add(world.getWorld().getBlockAt(x + xOffset, y,
                         z + zOffset));
             }
 
         }
+        System.out.println(doTick);
         return doTick;
     }
 }

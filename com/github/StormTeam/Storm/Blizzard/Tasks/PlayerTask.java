@@ -47,23 +47,13 @@ public class PlayerTask {
                                     return;
                                 }
 
-                                if (Storm.util
-                                        .isPlayerUnderSky(damagee)) {
-                                    damagee.addPotionEffect(
-                                            new PotionEffect(
-                                            PotionEffectType.BLINDNESS,
-                                            glob.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks + 60,
-                                            glob.Blizzard_Damager_Blindness__Amplitude),
-                                            true);
-                                }
-
-                                if (glob.Blizzard_Damager_Heating__Blocks.contains(damagee.getItemInHand().getTypeId())) {
+                                if (glob.Acid__Rain__Absorbing__Blocks.contains(damagee.getItemInHand().getTypeId())) {
                                     return;
                                 }
 
                                 final Location loc = damagee.getLocation();
                                 final World world = damagee.getWorld();
-                                int radius = glob.Blizzard_Damager_Heat__Radius;
+                                int radius = glob.Acid__Rain__Absorbing__Radius;
                                 for (int y = 1; y > -radius; y--) {
                                     for (int x = 1; x > -radius; x--) {
                                         for (int z = 1; z > -radius; z--) {
@@ -78,7 +68,7 @@ public class PlayerTask {
                                                     (int) loc
                                                     .getZ()
                                                     + z);
-                                            if (glob.Blizzard_Damager_Heating__Blocks
+                                            if (glob.Acid__Rain__Absorbing__Blocks
                                                     .contains(scan
                                                     .getTypeId())) {
                                                 return; // Don't damage
@@ -90,11 +80,22 @@ public class PlayerTask {
                                     }
                                 }
 
-                                damagee.damage(glob.Blizzard_Player_Damage__From__Exposure * 2);
-                                Storm.util
-                                        .message(
-                                        damagee,
-                                        glob.Blizzard_Damager_Message__On__Player__Damaged__Cold);
+
+                                if (Storm.util
+                                        .isPlayerUnderSky(damagee)) {
+                                    damagee.addPotionEffect(
+                                            new PotionEffect(
+                                            PotionEffectType.BLINDNESS,
+                                            glob.Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks + 60,
+                                            glob.Blizzard_Damager_Blindness__Amplitude),
+                                            true);
+                                    damagee.damage(glob.Blizzard_Player_Damage__From__Exposure * 2);
+                                    Storm.util
+                                            .message(
+                                            damagee,
+                                            glob.Blizzard_Damager_Message__On__Player__Damaged__Cold);
+                                }
+
 
                             }
                         }
