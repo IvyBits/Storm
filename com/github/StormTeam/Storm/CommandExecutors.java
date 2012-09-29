@@ -60,9 +60,9 @@ public class CommandExecutors {
     }
 
     public void wildfire(Location targetLoc) {
-        
+
         try {
-        System.out.println(Storm.util.getRandomTickedBlocks(targetLoc.getBlock().getWorld()));
+            System.out.println(Storm.util.getRandomTickedBlocks(targetLoc.getBlock().getWorld()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,6 +79,7 @@ public class CommandExecutors {
                 && acidicWorlds.get(world)) {
 
             acidicWorlds.put(world, false);
+            blizzardingWorlds.put(world, false);
             AcidListener.damagerMap.get(world).stop();
             AcidListener.dissolverMap.get(world).stop();
 
@@ -96,7 +97,8 @@ public class CommandExecutors {
             AcidListener.dissolverMap.put(world, dis);
             dis.run();
 
-            AcidRain.acidicWorlds.put(world, true);
+            acidicWorlds.put(world, true);
+
             Storm.util
                     .broadcast(Storm.wConfigs.get(world).Acid__Rain_Message__On__Acid__Rain__Start);
 
@@ -116,7 +118,7 @@ public class CommandExecutors {
             BlizzardListeners.damagerMap.get(world).stop();
 
             blizzardingWorlds.put(world, false);
-
+            acidicWorlds.put(world, false);
             world.setStorm(false);
 
             Storm.pm.callEvent(new BlizzardEvent(world, false));
