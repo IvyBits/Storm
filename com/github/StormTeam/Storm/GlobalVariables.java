@@ -33,8 +33,7 @@ public class GlobalVariables extends ReflectConfiguration {
         }
     };
     
-    public int Acid__Rain__Absorbing__Radius = 2;
-    public int Acid__Rain_Dissolver_Blocks__To__Deteriorate__Per__Calculation = 10;
+    public int Acid__Rain__Absorbing__Radius = 2;  
     public int Acid__Rain_Dissolver_Block__Deterioration__Chance = 100;
     public int Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks = 100;
     public int Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;

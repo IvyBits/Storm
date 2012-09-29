@@ -177,11 +177,11 @@ public class StormUtil extends BiomeGroups {
     public void transform(Block toTransform, List<List<Integer>> transformations) {
 
         final int blockId = toTransform.getTypeId();
-        
+
         System.out.println("Transforming " + toTransform);
-        
+
         for (List<Integer> toCheck : transformations) {
-            if (toCheck.get(0) == blockId) {             
+            if (toCheck.get(0) == blockId) {
                 toTransform.setTypeId(toCheck.get(1));
                 System.out.println("Transformed block to " + toTransform);
                 return;
@@ -267,5 +267,34 @@ public class StormUtil extends BiomeGroups {
 
         return blockTickers.get(world.getName()).getRandomTickedBlocks();
 
+    }
+
+    public boolean isLocationNearBlock(Location loc, List<Integer> blocks, int radius) {
+
+        final World world = loc.getWorld();
+        for (int y = 1; y > -radius; y--) {
+            for (int x = 1; x > -radius; x--) {
+                for (int z = 1; z > -radius; z--) {
+                    Block scan = world
+                            .getBlockAt(
+                            (int) loc
+                            .getX()
+                            + x,
+                            (int) loc
+                            .getY()
+                            + y,
+                            (int) loc
+                            .getZ()
+                            + z);
+                    if (blocks.contains(scan
+                            .getTypeId())) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+
+        return false;
     }
 }

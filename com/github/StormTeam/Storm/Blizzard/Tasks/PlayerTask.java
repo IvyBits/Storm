@@ -80,6 +80,11 @@ public class PlayerTask {
                                     }
                                 }
 
+                                if (Storm.util.isLocationNearBlock(damagee.getLocation(), 
+                                        glob.Blizzard_Damager_Heating__Blocks, glob.Blizzard_Damager_Heat__Radius)) {
+                                    return;
+                                }
+
 
                                 if (Storm.util
                                         .isPlayerUnderSky(damagee)) {

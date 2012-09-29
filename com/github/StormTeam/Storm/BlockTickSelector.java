@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -16,15 +17,13 @@ import net.minecraft.server.EntityHuman;
 import net.minecraft.server.WorldServer;
 import net.minecraft.server.Chunk;
 import net.minecraft.server.ChunkProviderServer;
-import net.minecraft.server.LongHashMap;
 
 public class BlockTickSelector {
 
     private WorldServer world;
-    private Field l;
-    private Method a, contains, chunk_k;
+    private Method a, chunk_k;
     private int chan;
-    private Object crap;  
+    private Object crap;
     private int val = new Random().nextInt();
 
     public BlockTickSelector(World world, int selChance)
@@ -41,35 +40,16 @@ public class BlockTickSelector {
         System.out.println(cls);
 
         if (Storm.version == 1.2) {
-
-            contains = cls.getDeclaredMethod("containsKey", long.class);
             chunk_k = Chunk.class.getDeclaredMethod("o");
 
         } else {
-            contains = cls.getDeclaredMethod("contains", int.class, int.class);
             chunk_k = Chunk.class.getDeclaredMethod("k");
         }
 
-        l = net.minecraft.server.World.class.getDeclaredField(Storm.version == 1.2 ? "l" : "g"); //Because inlining is cool like that.
         a = net.minecraft.server.World.class.getDeclaredMethod("a", int.class, int.class, Chunk.class);
-
-        l.setAccessible(true);
         a.setAccessible(true);
-        contains.setAccessible(true);
+
         chunk_k.setAccessible(true);
-    }
-
-    private long toLong(int msw, int lsw) {
-        return (msw << 32) + lsw - -2147483648L;
-    }
-
-    private boolean contains(Object ob, int x, int z) throws IllegalAccessException, IllegalAccessException, IllegalArgumentException, IllegalArgumentException, InvocationTargetException {
-
-        if (Storm.version == 1.2) {
-            return (Boolean) contains.invoke(ob, toLong(x, z));
-        }
-
-        return (Boolean) contains.invoke(ob, x, z);
     }
 
     public ArrayList<ChunkCoordIntPair> getRandomTickedChunks() throws InvocationTargetException, IllegalAccessException {
@@ -80,6 +60,8 @@ public class BlockTickSelector {
             return doTick;
         }
 
+        List<org.bukkit.Chunk> loadedChunks = Arrays.asList(world.getWorld().getLoadedChunks());
+
         for (Object ob : world.players) {
             EntityHuman entityhuman = (EntityHuman) ob;
 
@@ -89,7 +71,7 @@ public class BlockTickSelector {
             byte range = 7;
             for (int x = -range; x <= range; x++) {
                 for (int z = -range; z <= range; z++) {
-                    if (!(contains(world.chunkProviderServer.unloadQueue, x + eX, z + eZ))) {
+                    if (loadedChunks.contains(world.getChunkAt(x + eX, z + eZ).bukkitChunk)) {
                         doTick.add(new ChunkCoordIntPair(x + eX, z + eZ));
                     }
                 }
@@ -126,12 +108,12 @@ public class BlockTickSelector {
 
             int x, y, z, i1;
 
-            if (world.random.nextInt(chan) == 0) {               
+            if (world.random.nextInt(chan) == 0) {
                 val = val * 3 + 1013904223;
                 i1 = val >> 2;
                 x = i1 & 15;
                 z = i1 >> 8 & 15;
-                y = world.g(x + xOffset, z + zOffset);              
+                y = world.g(x + xOffset, z + zOffset);
                 doTick.add(world.getWorld().getBlockAt(x + xOffset, y,
                         z + zOffset));
             }
