@@ -19,6 +19,7 @@ import com.github.StormTeam.Storm.Blizzard.Listeners.BlizzardListeners;
 import com.github.StormTeam.Storm.Blizzard.Tasks.PlayerTask;
 import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
+import java.util.Arrays;
 
 public class CommandExecutors {
 
@@ -60,15 +61,15 @@ public class CommandExecutors {
 
     public void wildfire(Location targetLoc) {
 
-        try {
-            System.out.println(Storm.util.getRandomTickedBlocks(targetLoc.getBlock().getWorld()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         Block fire = targetLoc.getBlock().getRelative(BlockFace.UP);
         fire.setType(Material.FIRE);
-        Wildfire.wildfireBlocks.get(targetLoc.getWorld()).add(fire);
+        World world = targetLoc.getWorld();
+
+        if (Wildfire.wildfireBlocks.containsKey(world)) {
+            Wildfire.wildfireBlocks.get(world).add(fire);
+        } else {
+            Wildfire.wildfireBlocks.put(world, Arrays.asList(fire));
+        }
 
     }
 

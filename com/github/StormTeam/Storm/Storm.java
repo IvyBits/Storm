@@ -96,7 +96,7 @@ public class Storm extends JavaPlugin {
             Meteor.load(this);
            
             pm.registerEvents(new TextureManager(), this);
-            pm.registerEvents(new WorldConfigLoader(this), this);
+            pm.registerEvents(new WorldMemoryManager(this), this);
              
         } catch (Exception e) {
             e.printStackTrace();

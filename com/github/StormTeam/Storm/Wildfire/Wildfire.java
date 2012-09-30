@@ -16,6 +16,7 @@ import java.util.HashMap;
 public class Wildfire {
 
     public static HashMap<World, List<org.bukkit.block.Block>> wildfireBlocks = new HashMap<World, List<org.bukkit.block.Block>>();
+    
     public static Integer[] flammableBlocks = new Integer[]{
         Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
         Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
