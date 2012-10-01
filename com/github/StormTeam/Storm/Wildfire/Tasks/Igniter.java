@@ -1,6 +1,5 @@
 package com.github.StormTeam.Storm.Wildfire.Tasks;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -70,10 +69,9 @@ public class Igniter {
 
 						        } else {
 
-							        if (Wildfire.leafyBiomes.contains(toBurn
+							        if (Storm.util.isForest(toBurn
 							                .getBiome())
-							                && Arrays
-							                        .asList(Wildfire.flammableBlocks)
+							                && Wildfire.flammableList
 							                        .contains(
 							                                toBurn.getTypeId())) {
 								        break;

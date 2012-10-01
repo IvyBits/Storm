@@ -22,8 +22,7 @@ public class BlockTickSelector {
 
     private WorldServer world;
     private Method a, chunk_k;
-    private int chan;
-    private Object crap;
+    private int chan;    
     private int val = new Random().nextInt();
 
     public BlockTickSelector(World world, int selChance)

@@ -1,12 +1,8 @@
 package com.github.StormTeam.Storm.Wildfire.Listeners;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFadeEvent;
@@ -19,10 +15,6 @@ import com.github.StormTeam.Storm.Wildfire.Wildfire;
 import static com.github.StormTeam.Storm.Wildfire.Wildfire.wildfireBlocks;
 
 public class WildfireListeners implements Listener {
-
-    // TO USE: Create a fire block and add it to infernink
-    private List<Integer> flammableList = Arrays
-            .asList(Wildfire.flammableBlocks);
 
     // Dear future me. Please forgive me.
     // I can't even begin to express how sorry I am.
@@ -82,9 +74,10 @@ public class WildfireListeners implements Listener {
         final Block b = event.getBlock();
         final World w = b.getWorld();
 
-        if (wildfireBlocks.containsKey(w) && wildfireBlocks.get(w).contains(b) && b.getRelative(BlockFace.DOWN).getTypeId() == 0) {
+        if (wildfireBlocks.containsKey(w)) {
             wildfireBlocks.remove(b.getWorld());
         }
+
     }
 
     private void scanForIgnitables(final Location loc, final World w,
@@ -149,14 +142,20 @@ public class WildfireListeners implements Listener {
 
     public void burn(final Block toBurn) {
 
+        if (!canBurn(toBurn)) {
+            return;
+        }
+
         toBurn.setTypeId(51);
-        // No need to check because we checked earlier
-        wildfireBlocks.get(toBurn.getWorld()).add(toBurn);
+        World world = toBurn.getWorld();
+        if (wildfireBlocks.containsKey(world)) {
+            wildfireBlocks.get(world).add(toBurn);
+        }
 
     }
 
     public boolean canBurn(Block toCheck) {
-        return flammableList.contains(toCheck.getTypeId());
+        return Wildfire.flammableList.contains(toCheck.getTypeId());
 
     }
 }

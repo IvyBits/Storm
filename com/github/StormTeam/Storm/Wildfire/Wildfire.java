@@ -16,15 +16,11 @@ import java.util.HashMap;
 public class Wildfire {
 
     public static HashMap<World, List<org.bukkit.block.Block>> wildfireBlocks = new HashMap<World, List<org.bukkit.block.Block>>();
-    
-    public static Integer[] flammableBlocks = new Integer[]{
-        Block.FENCE.id, Block.WOOD.id, Block.WOOD_STAIRS.id,
-        Block.WOODEN_DOOR.id, Block.LEAVES.id, Block.BOOKSHELF.id,
-        Block.GRASS.id, Block.WOOL.id, Block.VINE.id,};
-    public static List<Biome> leafyBiomes = Arrays.asList(new Biome[]{
-                Biome.FOREST, Biome.FOREST_HILLS, Biome.JUNGLE, Biome.JUNGLE_HILLS,
-                Biome.HELL
-            });
+    public static List<Integer> flammableList = Arrays
+            .asList(new Integer[]{
+                net.minecraft.server.Block.FENCE.id, net.minecraft.server.Block.WOOD.id, net.minecraft.server.Block.WOOD_STAIRS.id,
+                net.minecraft.server.Block.WOODEN_DOOR.id, net.minecraft.server.Block.LEAVES.id, net.minecraft.server.Block.BOOKSHELF.id,
+                net.minecraft.server.Block.GRASS.id, net.minecraft.server.Block.WOOL.id, net.minecraft.server.Block.VINE.id});
 
     public static void load(Storm storm) {
 

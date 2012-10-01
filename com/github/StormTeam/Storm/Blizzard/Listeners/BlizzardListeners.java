@@ -14,6 +14,7 @@ import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Storm;
 import static com.github.StormTeam.Storm.Blizzard.Blizzard.blizzardingWorlds;
 import com.github.StormTeam.Storm.Blizzard.Events.BlizzardEvent;
+import com.github.StormTeam.Storm.Blizzard.ModSnow;
 import com.github.StormTeam.Storm.Blizzard.Tasks.PlayerTask;
 
 public class BlizzardListeners implements Listener {
@@ -51,6 +52,9 @@ public class BlizzardListeners implements Listener {
                 BlizzardEvent startEvent = new BlizzardEvent(affectedWorld, true);
                 Bukkit.getServer().getPluginManager().callEvent(startEvent);
 
+                if(glob.Features_Blizzards_Slowing__Snow)
+                    ModSnow.mod(true);
+                
                 if (startEvent.isCancelled()) {
                     return;
                 }
@@ -75,8 +79,11 @@ public class BlizzardListeners implements Listener {
             } catch (Exception e) {
             };
 
-            BlizzardEvent startEvent = new BlizzardEvent(affectedWorld, false);
-            Bukkit.getServer().getPluginManager().callEvent(startEvent);
+            BlizzardEvent endEvent = new BlizzardEvent(affectedWorld, false);
+            Bukkit.getServer().getPluginManager().callEvent(endEvent);
+            
+             if(glob.Features_Blizzards_Slowing__Snow)
+                    ModSnow.mod(false);
 
             return;
         }
