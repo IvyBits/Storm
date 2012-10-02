@@ -8,6 +8,7 @@ import com.github.StormTeam.Storm.BlockTickSelector;
 import com.github.StormTeam.Storm.GlobalVariables;
 import com.github.StormTeam.Storm.Storm;
 import java.util.ArrayList;
+import org.bukkit.block.BlockFace;
 
 public class DissolverTask {
 
@@ -42,13 +43,15 @@ public class DissolverTask {
 
                             for (Block b : bloks) {
 
-                                if (!Storm.util.isBlockProtected(b)) {
-                                    if (Storm.biomes.isRainy(b
+                                Block tran = b.getRelative(BlockFace.DOWN);
+
+                                if (!Storm.util.isBlockProtected(tran)) {
+                                    if (Storm.biomes.isRainy(tran
                                             .getBiome())
-                                            && b.getTypeId() != 0) {                                        
+                                            && tran.getTypeId() != 0) {
                                         Storm.util
                                                 .transform(
-                                                b,
+                                                tran,
                                                 glob.Acid__Rain_Dissolver_Block__Transformations);
                                     }
                                 }

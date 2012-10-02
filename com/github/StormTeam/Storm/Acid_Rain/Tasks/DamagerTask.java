@@ -19,6 +19,10 @@ public class DamagerTask {
     private World affectedWorld;
     private Storm storm;
     private GlobalVariables glob;
+    private PotionEffect hunger = new PotionEffect(
+            PotionEffectType.HUNGER,
+            rand.nextInt(600) + 300,
+            1);
 
     public DamagerTask(Storm storm, World affectedWorld) {
         this.storm = storm;
@@ -38,25 +42,18 @@ public class DamagerTask {
                         for (Player damagee : affectedWorld
                                 .getPlayers()) {
                             if (!damagee.getGameMode().equals(
-                                    GameMode.CREATIVE)) {
+                                    GameMode.CREATIVE) && Storm.util
+                                    .isPlayerUnderSky(damagee)) {
 
-                                if (!Storm.util
-                                        .isPlayerUnderSky(damagee)) {
-                                    return;
-                                }
-                                
-                                 if (Storm.util.isLocationNearBlock(damagee.getLocation(), 
+                                if (glob.Acid__Rain__Absorbing__Blocks.contains(damagee.getItemInHand().getTypeId()) || Storm.util.isLocationNearBlock(damagee.getLocation(),
                                         glob.Acid__Rain__Absorbing__Blocks, glob.Acid__Rain__Absorbing__Radius)) {
                                     return;
                                 }
-                                
+
+
                                 damagee.damage(glob.Acid__Rain_Player_Damage__From__Exposure * 2);
 
-                                damagee.addPotionEffect(
-                                        new PotionEffect(
-                                        PotionEffectType.HUNGER,
-                                        rand.nextInt(600) + 300,
-                                        1), true);
+                                damagee.addPotionEffect(hunger, true);
 
                                 Storm.util
                                         .message(

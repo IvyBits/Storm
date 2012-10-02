@@ -23,7 +23,8 @@ public class BlockTickSelector {
     private WorldServer world;
     private Method a, chunk_k;
     private int chan;    
-    private int val = new Random().nextInt();
+    private final Random rand = new Random();
+    private int val = rand.nextInt();
 
     public BlockTickSelector(World world, int selChance)
             throws NoSuchMethodException,
@@ -107,7 +108,7 @@ public class BlockTickSelector {
 
             int x, y, z, i1;
 
-            if (world.random.nextInt(chan) == 0) {
+            if (rand.nextInt(100) <= chan) {
                 val = val * 3 + 1013904223;
                 i1 = val >> 2;
                 x = i1 & 15;
@@ -117,8 +118,7 @@ public class BlockTickSelector {
                         z + zOffset));
             }
 
-        }
-        System.out.println(doTick);
+        }     
         return doTick;
     }
 }

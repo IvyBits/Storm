@@ -174,19 +174,38 @@ public class StormUtil extends BiomeGroups {
         return playerList;
     }
 
-    public void transform(Block toTransform, List<List<Integer>> transformations) {
+    public void transform(Block toTransform, List<List<String>> transformations) {
 
-        final int blockId = toTransform.getTypeId();
+        if (isBlockProtected(toTransform)) {
+            return;
+        }
 
-        System.out.println("Transforming " + toTransform);
+        for (List<String> toCheck : transformations) {
+            ArrayList<String[]> stateIndex = new ArrayList<String[]>();
 
-        for (List<Integer> toCheck : transformations) {
-            if (toCheck.get(0) == blockId) {
-                toTransform.setTypeId(toCheck.get(1));
-                System.out.println("Transformed block to " + toTransform);
+            for (int i = 0; i != 2; ++i) {
+                String got = toCheck.get(i);
+
+                if (got.contains(":")) // Check for data value appended.
+                {
+                    stateIndex.add(got.split(":"));
+                } else {
+                    stateIndex.add(new String[]{got, "0"});
+                }
+            }
+
+            final String[] curState = stateIndex.get(0), toState = stateIndex
+                    .get(1);
+
+            if (Integer.valueOf(curState[0]) == toTransform.getTypeId()
+                    && Integer.valueOf(curState[1]) == toTransform.getData()) {
+                toTransform.setTypeIdAndData(Integer.valueOf(toState[0]), Byte
+                        .parseByte(toState[1]), true);
                 return;
             }
+
         }
+
     }
 
     /**
@@ -271,30 +290,32 @@ public class StormUtil extends BiomeGroups {
 
     public boolean isLocationNearBlock(Location loc, List<Integer> blocks, int radius) {
 
-        final World world = loc.getWorld();
-        for (int y = 1; y > -radius; y--) {
-            for (int x = 1; x > -radius; x--) {
-                for (int z = 1; z > -radius; z--) {
-                    Block scan = world
-                            .getBlockAt(
-                            (int) loc
-                            .getX()
-                            + x,
-                            (int) loc
-                            .getY()
-                            + y,
-                            (int) loc
-                            .getZ()
-                            + z);
-                    if (blocks.contains(scan
-                            .getTypeId())) {
-                        return true;
-                    }
+        int x = loc.getBlockX();
+        int y = loc.getBlockY();
+        int z = loc.getBlockZ();
+        World world = loc.getWorld();
+
+        for (int cy = 2; cy < 512; cy++) {
+            int testY;
+            if ((cy & 1) == 0) //if even
+            {
+                testY = y + cy / 2;
+                if (testY > 255) {
+                    continue;
                 }
+            } else {
+                testY = y - cy / 2;
+                if (testY < 0) {
+                    continue;
+                }
+            }
+
+            if (blocks.contains(world.getBlockTypeIdAt(x, testY, z))) {
+                return true;
             }
         }
 
-
         return false;
+
     }
 }
