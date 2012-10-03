@@ -32,16 +32,15 @@ public class AcidListener implements Listener {
         }
 
         World affectedWorld = event.getWorld();
-      
+
         GlobalVariables glob = Storm.wConfigs.get(affectedWorld);
 
+        if (!glob.Features_Acid__Rain_Dissolving__Blocks && !glob.Features_Acid__Rain_Player__Damaging) {
+            return;
+        }
         if (event.toWeatherState()) {// gets if its set to raining
 
             if (rand.nextInt(100) <= glob.Acid__Rain_Acid__Rain__Chance) {
-
-                if (!glob.Features_Acid__Rain_Dissolving__Blocks && !glob.Features_Acid__Rain_Player__Damaging) {
-                    return;
-                }
 
                 acidicWorlds.add(affectedWorld);
 
@@ -62,7 +61,7 @@ public class AcidListener implements Listener {
                 return;
             }
         } else if (!event.toWeatherState()) {
-          
+
             acidicWorlds.remove(affectedWorld);
 
             // Cancel damaging tasks for specific world

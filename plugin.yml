@@ -16,34 +16,43 @@ commands:
       permission: storm.wildfire
       permission-message: You don't have the permission to start a wildfire! No mass destruction for you!
    acidrain:
-      description: Starts acid rain in specified world
+      description: Starts acid rain in specified world.
       usage: /<command> 
       permission: storm.acidrain
       permission-message: You don't have the permission to make green drops fall!
    blizzard:
-      description: Starts a blizzard in specified world
+      description: Starts a blizzard in specified world.
       usage: /<command> 
       permission: storm.blizzard
       permission-message: You don't have the permission to freeze player's toes off!
+   thunderstorm:
+      description: Starts a thunder storm in specified world.
+      usage: /<command>
+      permission: storm.thunderstorm
+      permission-message: "You do not have the permission to start a thunder storm!"
 
 permissions:
     storm.*:
-        description: Gives access to all Storm commands
+        description: Gives access to all Storm commands.
         children:
             storm.meteor: true
             storm.wildfire: true
             storm.acidrain: true
             storm.blizzard: true
+            storm.thunderstorm: true
     storm.meteor:
-        description: Allows you to fire a meteor        
+        description: Allows you to fire a meteor.        
         default: op
     storm.wildfire:
-        description: Allows you to start a wildfire    
+        description: Allows you to start a wildfire.    
         default: op
     storm.acidrain:
-        description: Allows you to toggle acid rain      
+        description: Allows you to toggle acid rain.      
         default: op 
     storm.blizzard:
-        description: Allows you to toggle blizzards
+        description: Allows you to toggle blizzards.
+        default: op
+    storm.thunderstorm:
+        description: Allows you to toggle thunder storms.
         default: op
         

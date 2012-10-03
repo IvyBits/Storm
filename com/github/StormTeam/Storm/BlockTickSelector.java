@@ -98,7 +98,7 @@ public class BlockTickSelector {
 
         for (ChunkCoordIntPair pair : ticked) {
 
-            final int xOffset = pair.x * 16, zOffset = pair.z * 16;
+            final int xOffset = pair.x << 4, zOffset = pair.z << 4;
 
             Chunk chunk = world.getChunkAt(pair.x, pair.z);
 
@@ -109,7 +109,7 @@ public class BlockTickSelector {
             int x, y, z, i1;
 
             if (rand.nextInt(100) <= chan) {
-                val = val * 3 + 1013904223;
+                val = val << 1 + val + 1013904223;
                 i1 = val >> 2;
                 x = i1 & 15;
                 z = i1 >> 8 & 15;

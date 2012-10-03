@@ -14,6 +14,7 @@ public class GlobalVariables extends ReflectConfiguration {
     public GlobalVariables(Plugin storm, String world) {
         super(storm, world);
     }
+    //Acid Rain
     public int Acid__Rain_Acid__Rain__Chance = 5;
     public String Acid__Rain_Message__On__Acid__Rain__Start = "Acid has started to fall from the sky!";
     public String Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain = "You have been hurt by the acidic downfall!";
@@ -33,9 +34,15 @@ public class GlobalVariables extends ReflectConfiguration {
         }
     };
     public int Acid__Rain__Absorbing__Radius = 2;
-    public int Acid__Rain_Dissolver_Block__Deterioration__Chance = 100;
+    public int Acid__Rain_Dissolver_Block__Deterioration__Chance = 60;
     public int Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks = 100;
     public int Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
+    //Thunder Storms
+    public int Thunder__Storm_Thunder__Storm__Chance = 3;
+    public String Thunder__Storm_Message__On__Thunder__Storm__Start = "An electrical storm has started! Get inside for safety!";
+    public int Thunder__Storm_Strike__Chance = 70;
+    public int Thunder__Storm_Scheduler_Striker__Calculation__Intervals__In__Ticks = 100;
+    //Blizzards
     public int Blizzard_Blizzard__Chance = 20;
     public String Blizzard_Message__On__Blizzard__Start = "It has started to snow violently! Seek a warm biome for safety!";
     public String Blizzard_Damager_Message__On__Player__Damaged__Cold = "You are freezing!";
@@ -49,6 +56,7 @@ public class GlobalVariables extends ReflectConfiguration {
     public int Blizzard_Block_Snow__Pile__Chance = 32;
     public int Blizzard_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
     public int Blizzard_Scheduler_Player__Piler__Calculation__Intervals__In__Ticks = 30;
+    //Better Lightning
     public int Lightning_Damage_Damage = 5;
     public int Lightning_Damage_Damage__Radius = 10;
     public String Lightning_Damage_Hit__Message = "You were zapped by lightning. Ouch!";
@@ -73,6 +81,8 @@ public class GlobalVariables extends ReflectConfiguration {
 
         }
     };
+    //Natural Disasters
+    //-Meteors
     public double Natural__Disasters_Meteor_Chance__To__Spawn = 8;
     public String Natural__Disasters_Meteor_Message__On__Meteor__Crash = "A meteor has exploded at %x, %y, %z.";
     public int Natural__Disasters_Meteor_Shockwave_Damage = 10;
@@ -80,7 +90,7 @@ public class GlobalVariables extends ReflectConfiguration {
     public String Natural__Disasters_Meteor_Shockwave_Damage__Message = "You have been flattened by a meteor!";
     public long Natural__Disasters_Meteor_Scheduler__Recalculation__Intervals__In__Ticks = 72000;
     public boolean Natural__Disasters_Meteor_Meteor_Spawn = true;
-    public int Natural__Disasters_Meteor_Meteor_Radius = 4;
+    //-Wildfires
     public int Natural__Disasters_Wildfires_Chance__To__Start = 20;
     public int Natural__Disasters_Wildfires_Spread__Limit = 2;
     public int Natural__Disasters_Wildfires_Scan__Radius = 2;
@@ -91,13 +101,14 @@ public class GlobalVariables extends ReflectConfiguration {
 //   public String Natural__Disasters_Earthquakes_Message__On__Earthquake__Start = "The ground beneath you begins quaking! Run mortal, run!";
 //   public List<Integer> Natural__Disasters_Earthquakes_Blocks__Can__Fall = Arrays.asList(Block.STONE.id, Block.COBBLESTONE.id);
 //   public long Natural__Disasters_Earthquake_Scheduler_Recalculation__Intervals__In__Ticks = 72000;
-    // TPACKS
+    // Texture Packs
     public String Textures_Acid__Rain__Texture__Path = "http://dl.dropbox.com/u/67341745/Storm/Acid_Rain.zip";
     public String Textures_Blizzard__Texture__Path = "http://dl.dropbox.com/u/67341745/Storm/Blizzard.zip";
     public String Textures_Default__Texture__Path = "http://dl.dropbox.com/u/67341745/Storm/Default.zip";
     // Features
     public boolean Features_Acid__Rain_Dissolving__Blocks = true;
     public boolean Features_Acid__Rain_Player__Damaging = true;
+    public boolean Features_Thunder__Storms = true;
     public boolean Features_Lightning_Greater__Range__And__Damage = true;
     public boolean Features_Lightning_Player__Attraction = true;
     public boolean Features_Lightning_Block__Attraction = true;

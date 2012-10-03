@@ -18,7 +18,11 @@ import com.github.StormTeam.Storm.Blizzard.Events.BlizzardEvent;
 import com.github.StormTeam.Storm.Blizzard.Listeners.BlizzardListeners;
 import com.github.StormTeam.Storm.Blizzard.Tasks.PlayerTask;
 import com.github.StormTeam.Storm.Meteors.Entities.EntityMeteor;
+import com.github.StormTeam.Storm.Thunder_Storm.Events.ThunderStormEvent;
+import com.github.StormTeam.Storm.Thunder_Storm.Listeners.ThunderListener;
+import com.github.StormTeam.Storm.Thunder_Storm.Tasks.StrikerTask;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
+import static com.github.StormTeam.Storm.Thunder_Storm.ThunderStorm.thunderingWorlds;
 
 import java.util.Arrays;
 
@@ -78,8 +82,9 @@ public class CommandExecutors {
 
         if (acidicWorlds.contains(world)) {
 
-            acidicWorlds.remove(world);
             blizzardingWorlds.remove(world);
+            acidicWorlds.remove(world);
+            thunderingWorlds.remove(world);;
             AcidListener.damagerMap.get(world).stop();
             AcidListener.dissolverMap.get(world).stop();
 
@@ -118,6 +123,7 @@ public class CommandExecutors {
 
             blizzardingWorlds.remove(world);
             acidicWorlds.remove(world);
+            thunderingWorlds.remove(world);
             world.setStorm(false);
 
             Storm.pm.callEvent(new BlizzardEvent(world, false));
@@ -133,7 +139,37 @@ public class CommandExecutors {
                     .broadcast(Storm.wConfigs.get(world).Blizzard_Message__On__Blizzard__Start);
             world.setStorm(true);
 
-            Storm.pm.callEvent(new BlizzardEvent(world, false));
+            Storm.pm.callEvent(new BlizzardEvent(world, true));
+        }
+
+    }
+
+    public void thunderstorm(World world) {
+
+        if (thunderingWorlds.contains(world)) {
+
+            ThunderListener.strikerMap.get(world).stop();
+
+            blizzardingWorlds.remove(world);
+            acidicWorlds.remove(world);
+            thunderingWorlds.remove(world);
+
+            world.setStorm(false);
+
+            Storm.pm.callEvent(new ThunderStormEvent(world, false));
+
+        } else {
+
+            StrikerTask stik = new StrikerTask(storm, world);
+            stik.run();
+            ThunderListener.strikerMap.put(world, stik);
+
+            thunderingWorlds.add(world);
+            Storm.util
+                    .broadcast(Storm.wConfigs.get(world).Thunder__Storm_Message__On__Thunder__Storm__Start);
+            world.setStorm(true);
+
+            Storm.pm.callEvent(new ThunderStormEvent(world, true));
         }
 
     }

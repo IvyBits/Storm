@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
 
 import static com.github.StormTeam.Storm.Storm.wConfigs;
+import com.github.StormTeam.Storm.Thunder_Storm.Listeners.ThunderListener;
+import com.github.StormTeam.Storm.Thunder_Storm.ThunderStorm;
 import org.bukkit.World;
 import org.bukkit.event.world.WorldUnloadEvent;
 
@@ -47,13 +49,21 @@ public class WorldMemoryManager implements Listener {
             if (AcidListener.dissolverMap.containsKey(world)) {
                 AcidListener.dissolverMap.get(world).stop();
             }
+            AcidRain.acidicWorlds.remove(world);
         }
         if (Blizzard.blizzardingWorlds.contains(world)) {
             if (BlizzardListeners.damagerMap.containsKey(world)) {
                 BlizzardListeners.damagerMap.get(world).stop();
             }
+            Blizzard.blizzardingWorlds.remove(world);
         }
 
+        if (ThunderStorm.thunderingWorlds.contains(world)) {
+            if (ThunderListener.strikerMap.containsKey(world)) {
+                ThunderListener.strikerMap.get(world).stop();
+            }
+            ThunderStorm.thunderingWorlds.remove(world);
+        }
 
     }
 }

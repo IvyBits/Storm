@@ -26,6 +26,7 @@ import com.github.StormTeam.Storm.Blizzard.Blizzard;
 import com.github.StormTeam.Storm.Database.Database;
 import com.github.StormTeam.Storm.Lightning.Lightning;
 import com.github.StormTeam.Storm.Meteors.Meteor;
+import com.github.StormTeam.Storm.Thunder_Storm.ThunderStorm;
 import com.github.StormTeam.Storm.Wildfire.Wildfire;
 
 import java.util.HashMap;
@@ -81,6 +82,8 @@ public class Storm extends JavaPlugin {
             getCommand("wildfire").setExecutor(cmds);
             getCommand("acidrain").setExecutor(cmds);
             getCommand("blizzard").setExecutor(cmds);
+            getCommand("thunderstorm").setExecutor(cmds);
+                    
 
             // Stats
             try {
@@ -94,6 +97,7 @@ public class Storm extends JavaPlugin {
             Wildfire.load(this);
             Blizzard.load(this);
             Meteor.load(this);
+            ThunderStorm.load(this);
            
             pm.registerEvents(new TextureManager(), this);
             pm.registerEvents(new WorldMemoryManager(this), this);
