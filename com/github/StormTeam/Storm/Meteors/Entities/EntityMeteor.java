@@ -101,7 +101,7 @@ public class EntityMeteor extends EntityFireball {
                 return;
             }
 
-            world.createExplosion(this, locX, locY, locZ, trailPower, true);
+            world.createExplosion(this, locX, this.locY, locZ, trailPower, true);
         } while (false);
         motX *= 0.909F;
         motY *= 0.909F;
@@ -116,7 +116,9 @@ public class EntityMeteor extends EntityFireball {
             return;
         }
         makeWinter();
+        try {
         explode();
+        } catch (Exception e) {}; //Throws an NPE if explodes in unloaded chunk (locs are null). Can be ignored without consequence.
 
     }
 
@@ -146,7 +148,9 @@ public class EntityMeteor extends EntityFireball {
         m.add(Material.IRON_ORE);
         m.add(Material.REDSTONE_ORE);
         m.add(Material.GOLD_ORE);
-        m.add(Material.EMERALD_ORE);
+        if (Storm.version == 1.3) {
+            m.add(Material.EMERALD_ORE);
+        }
         m.add(Material.DIAMOND_ORE);
         m.add(Material.LAPIS_ORE);
         while (expl.getBlock().getType().equals(Material.AIR)) {

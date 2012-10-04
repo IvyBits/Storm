@@ -37,7 +37,7 @@ public class ThunderListener
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void acidicWeatherListener(WeatherChangeEvent event) {
+    public void thunderListener(WeatherChangeEvent event) {
         if (event.isCancelled()) {
             return;
         }

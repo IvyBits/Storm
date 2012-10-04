@@ -27,7 +27,7 @@ public class BlizzardListeners implements Listener {
         this.storm = storm;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)  
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void blizzardListener(WeatherChangeEvent event) {
 
         if (event.isCancelled()) {
@@ -52,9 +52,10 @@ public class BlizzardListeners implements Listener {
                 BlizzardEvent startEvent = new BlizzardEvent(affectedWorld, true);
                 Bukkit.getServer().getPluginManager().callEvent(startEvent);
 
-                if(glob.Features_Blizzards_Slowing__Snow)
+                if (glob.Features_Blizzards_Slowing__Snow) {
                     ModSnow.mod(true);
-                
+                }
+
                 if (startEvent.isCancelled()) {
                     return;
                 }
@@ -64,6 +65,12 @@ public class BlizzardListeners implements Listener {
                             .message(
                             p,
                             glob.Blizzard_Message__On__Blizzard__Start);
+                }
+
+                if (glob.Features_Blizzards_Player__Damaging) {
+                    PlayerTask bliz = new PlayerTask(storm, affectedWorld);
+                    damagerMap.put(affectedWorld, bliz);
+                    bliz.run();
                 }
 
             } else {
@@ -81,18 +88,15 @@ public class BlizzardListeners implements Listener {
 
             BlizzardEvent endEvent = new BlizzardEvent(affectedWorld, false);
             Bukkit.getServer().getPluginManager().callEvent(endEvent);
-            
-             if(glob.Features_Blizzards_Slowing__Snow)
-                    ModSnow.mod(false);
+
+            if (glob.Features_Blizzards_Slowing__Snow) {
+                ModSnow.mod(false);
+            }
 
             return;
         }
 
-        if (glob.Features_Blizzards_Player__Damaging) {
-            PlayerTask bliz = new PlayerTask(storm, affectedWorld);
-            damagerMap.put(affectedWorld, bliz);
-            bliz.run();
-        }
+
 
     }
 }

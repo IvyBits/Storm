@@ -23,6 +23,9 @@ import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import java.lang.reflect.Field;
+import net.minecraft.server.WorldData;
+import org.bukkit.craftbukkit.CraftWorld;
 
 public class StormUtil extends BiomeGroups {
 
@@ -31,6 +34,8 @@ public class StormUtil extends BiomeGroups {
     private WorldGuardPlugin wg;
     private boolean hasWG = false;
     private HashMap<String, BlockTickSelector> blockTickers = new HashMap<String, BlockTickSelector>();
+    private Field isRaining;
+    private Class<?> wClass = net.minecraft.server.World.class;
 
     /**
      * Creates a util object.
@@ -57,7 +62,21 @@ public class StormUtil extends BiomeGroups {
             }
 
         }
+        try {
+            isRaining = WorldData.class.getDeclaredField("isRaining");
+            isRaining.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+    }
+
+    public void setStormNoEvent(World world, boolean flag) {     
+        try {
+            isRaining.set(flag, ((CraftWorld) world).getHandle());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**

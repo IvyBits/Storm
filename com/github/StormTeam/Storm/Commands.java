@@ -12,7 +12,7 @@ public class Commands implements CommandExecutor {
     private CommandExecutors commands;
 
     public Commands(Storm storm) {
-        commands = new CommandExecutors(storm);
+        commands = new CommandExecutors();
     }
 
     @Override
@@ -27,18 +27,12 @@ public class Commands implements CommandExecutor {
         Player player = (Player) sender;
         Location toTarget = player.getTargetBlock(null, 0).getLocation();
 
-
         if (cmd.getName().equalsIgnoreCase("meteor")) {
-            System.out.println("Meteor!");
-            try {
             Location ploc = player.getLocation();
             Location toSpawn = ploc.toVector()
                     .add(ploc.getDirection().normalize())
                     .toLocation(ploc.getWorld());
             commands.meteor(toTarget, toSpawn);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
             return true;
         } else if (cmd.getName().equalsIgnoreCase("wildfire")) {
             commands.wildfire(toTarget);
@@ -50,11 +44,11 @@ public class Commands implements CommandExecutor {
         } else if (cmd.getName().equalsIgnoreCase("blizzard")) { //Too bad Java doesn't have elif... :-(
             commands.blizzard(player.getWorld());
             return true;
-        } else if (cmd.getName().equalsIgnoreCase("thunderstorm")) { 
+        } else if (cmd.getName().equalsIgnoreCase("thunderstorm")) {
             commands.thunderstorm(player.getWorld());
             return true;
         }
-        
+
         return false;
     }
 
