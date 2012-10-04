@@ -106,13 +106,11 @@ public class BlockTickSelector {
 
             chunk_k.invoke(chunk);
 
-            int x, y, z, i1;
+            int x, y, z;
 
-            if (rand.nextInt(100) <= chan) {
-                val = val << 1 + val + 1013904223;
-                i1 = val >> 2;
-                x = i1 & 15;
-                z = i1 >> 8 & 15;
+            if (rand.nextInt(100) <= chan) {                
+                x = rand.nextInt(15);
+                z = rand.nextInt(15);
                 y = world.g(x + xOffset, z + zOffset);
                 doTick.add(world.getWorld().getBlockAt(x + xOffset, y,
                         z + zOffset));

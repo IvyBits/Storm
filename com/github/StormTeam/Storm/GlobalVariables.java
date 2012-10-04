@@ -38,10 +38,10 @@ public class GlobalVariables extends ReflectConfiguration {
     public int Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks = 100;
     public int Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
     //Thunder Storms
-    public int Thunder__Storm_Thunder__Storm__Chance = 3;
+    public int Thunder__Storm_Thunder__Storm__Chance = 4;
     public String Thunder__Storm_Message__On__Thunder__Storm__Start = "An electrical storm has started! Get inside for safety!";
-    public int Thunder__Storm_Strike__Chance = 70;
-    public int Thunder__Storm_Scheduler_Striker__Calculation__Intervals__In__Ticks = 100;
+    public int Thunder__Storm_Strike__Chance = 5;
+    public int Thunder__Storm_Scheduler_Striker__Calculation__Intervals__In__Ticks = 10;
     //Blizzards
     public int Blizzard_Blizzard__Chance = 20;
     public String Blizzard_Message__On__Blizzard__Start = "It has started to snow violently! Seek a warm biome for safety!";

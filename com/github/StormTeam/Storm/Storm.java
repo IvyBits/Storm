@@ -67,7 +67,7 @@ public class Storm extends JavaPlugin {
             biomes = new BiomeGroups();
             db = Database.Obtain(this, null);
             cmds = new Commands(this);
-
+         
             // Make per-world configuration files
             System.out.println(Bukkit.getWorlds());
             for (World w : Bukkit.getWorlds()) {
