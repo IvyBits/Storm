@@ -46,8 +46,9 @@ public class Storm extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
+            
             pm = getServer().getPluginManager();
-
+            
             String v = getServer().getVersion();
             if (v.contains("1.2.")) {
                 version = 1.2;
@@ -63,7 +64,6 @@ public class Storm extends JavaPlugin {
             }
 
             util = new StormUtil(this);
-
             biomes = new BiomeGroups();
             db = Database.Obtain(this, null);
             cmds = new Commands(this);
@@ -77,13 +77,11 @@ public class Storm extends JavaPlugin {
                 wConfigs.put(w, config);
             }
 
-
             getCommand("meteor").setExecutor(cmds);
             getCommand("wildfire").setExecutor(cmds);
             getCommand("acidrain").setExecutor(cmds);
             getCommand("blizzard").setExecutor(cmds);
-            getCommand("thunderstorm").setExecutor(cmds);
-                    
+            getCommand("thunderstorm").setExecutor(cmds);                    
 
             // Stats
             try {

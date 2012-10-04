@@ -97,7 +97,11 @@ public class EntityMeteor extends EntityFireball {
             }
 
             if ((locY & 0xFFFFFFE0) == 0) { // locy < 32
-                explode();
+                try {
+                    explode();
+                } catch (Exception e) {
+                }; //Throws an NPE if explodes in unloaded chunk (locs are null). Can be ignored without consequence.
+
                 return;
             }
 
@@ -117,8 +121,9 @@ public class EntityMeteor extends EntityFireball {
         }
         makeWinter();
         try {
-        explode();
-        } catch (Exception e) {}; //Throws an NPE if explodes in unloaded chunk (locs are null). Can be ignored without consequence.
+            explode();
+        } catch (Exception e) {
+        }; //Throws an NPE if explodes in unloaded chunk (locs are null). Can be ignored without consequence.
 
     }
 

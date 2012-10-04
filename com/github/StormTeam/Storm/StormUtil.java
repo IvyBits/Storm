@@ -72,10 +72,11 @@ public class StormUtil extends BiomeGroups {
     }
 
     public void setStormNoEvent(World world, boolean flag) {     
-        try {
-            isRaining.set(flag, ((CraftWorld) world).getHandle());
+        try {           
+            isRaining.set(((CraftWorld) world).getHandle().worldData, flag);
         } catch (Exception ex) {
             ex.printStackTrace();
+            world.setStorm(true);
         }
     }
 
@@ -277,12 +278,11 @@ public class StormUtil extends BiomeGroups {
      * @return True if visible, false otherwise.
      */
     public boolean isPlayerUnderSky(Player player) {
+              
         World world = player.getWorld();
         if (world.hasStorm()) {
             Location loc = player.getLocation();
-            if (isRainy(world
-                    .getBiome(loc.getBlockX(), loc.getBlockZ()))
-                    && world.getHighestBlockYAt(loc) <= loc.getBlockY()) {
+            if (world.getHighestBlockYAt(loc) <= loc.getBlockY()) {
                 return true;
             }
         }

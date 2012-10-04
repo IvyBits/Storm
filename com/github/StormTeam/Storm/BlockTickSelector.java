@@ -16,7 +16,6 @@ import net.minecraft.server.ChunkCoordIntPair;
 import net.minecraft.server.EntityHuman;
 import net.minecraft.server.WorldServer;
 import net.minecraft.server.Chunk;
-import net.minecraft.server.ChunkProviderServer;
 
 public class BlockTickSelector {
 
@@ -24,21 +23,13 @@ public class BlockTickSelector {
     private Method a, chunk_k;
     private int chan;    
     private final Random rand = new Random();
-    private int val = rand.nextInt();
 
     public BlockTickSelector(World world, int selChance)
             throws NoSuchMethodException,
             SecurityException, NoSuchFieldException, InstantiationException, IllegalAccessException {
 
         this.world = ((CraftWorld) world).getHandle();
-        this.chan = selChance;
-
-
-        Field que = ChunkProviderServer.class.getDeclaredField("unloadQueue");
-        Class<?> cls = que.getType();
-
-        System.out.println(cls);
-
+        
         if (Storm.version == 1.2) {
             chunk_k = Chunk.class.getDeclaredMethod("o");
 

@@ -43,26 +43,17 @@ public class DamagerTask {
                                 .getPlayers()) {
                             if (!damagee.getGameMode().equals(
                                     GameMode.CREATIVE) && Storm.util
-                                    .isPlayerUnderSky(damagee)) {
+                                    .isPlayerUnderSky(damagee) && Storm.util.isRainy(damagee.getLocation().getBlock().getBiome())) {
 
                                 if (glob.Acid__Rain__Absorbing__Blocks.contains(damagee.getItemInHand().getTypeId()) || Storm.util.isLocationNearBlock(damagee.getLocation(),
                                         glob.Acid__Rain__Absorbing__Blocks, glob.Acid__Rain__Absorbing__Radius)) {
                                     return;
                                 }
 
-
                                 damagee.damage(glob.Acid__Rain_Player_Damage__From__Exposure * 2);
-
                                 damagee.addPotionEffect(hunger, true);
-
-                                Storm.util
-                                        .message(
-                                        damagee,
-                                        glob.Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain);
-
-
-
-                            }
+                                Storm.util.message(damagee,glob.Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain);
+                             }
                         }
                     }
                 },
