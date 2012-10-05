@@ -93,9 +93,9 @@ public class BlockTickSelector {
 
             Chunk chunk = world.getChunkAt(pair.x, pair.z);
 
-            a.invoke(world, xOffset, zOffset, chunk);
+            a.invoke(world, xOffset, zOffset, chunk); //Make sure chunk is loaded (?)
 
-            chunk_k.invoke(chunk);
+            chunk_k.invoke(chunk); //Play ambient sounds
 
             int x, y, z;
 
