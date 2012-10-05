@@ -15,19 +15,19 @@ import com.github.StormTeam.Storm.Storm;
 public class DamagerTask {
 
     private int id;
-    private Random rand = new Random();
     private World affectedWorld;
     private Storm storm;
     private GlobalVariables glob;
-    private PotionEffect hunger = new PotionEffect(
-            PotionEffectType.HUNGER,
-            rand.nextInt(600) + 300,
-            1);
+    private PotionEffect hunger;
 
     public DamagerTask(Storm storm, World affectedWorld) {
         this.storm = storm;
         this.affectedWorld = affectedWorld;
         glob = Storm.wConfigs.get(affectedWorld);
+        hunger = new PotionEffect(
+                PotionEffectType.HUNGER,
+                glob.Acid__Rain_Schedule_Damager__Calculation__Intervals__In__Ticks + 60,
+                1);
     }
 
     public void run() {
@@ -49,16 +49,14 @@ public class DamagerTask {
                                         glob.Acid__Rain__Absorbing__Blocks, glob.Acid__Rain__Absorbing__Radius)) {
                                     return;
                                 }
-
-                                damagee.damage(glob.Acid__Rain_Player_Damage__From__Exposure * 2);
                                 damagee.addPotionEffect(hunger, true);
-                                Storm.util.message(damagee,glob.Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain);
-                             }
+                                Storm.util.damagePlayer(damagee, glob.Acid__Rain_Damager_Message__On__Player__Damaged__By__Acid__Rain, glob.Acid__Rain_Player_Damage__From__Exposure);
+                            }
                         }
                     }
                 },
-                glob.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks,
-                glob.Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks);
+                glob.Acid__Rain_Schedule_Damager__Calculation__Intervals__In__Ticks,
+                glob.Acid__Rain_Schedule_Damager__Calculation__Intervals__In__Ticks);
 
     }
 

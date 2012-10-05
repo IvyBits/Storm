@@ -1,6 +1,5 @@
 package com.github.StormTeam.Storm;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,30 +16,26 @@ import net.minecraft.server.EntityHuman;
 import net.minecraft.server.WorldServer;
 import net.minecraft.server.Chunk;
 
+/*
+ * @author Icyene
+ * My pride and joy :3
+ */
+
 public class BlockTickSelector {
 
     private WorldServer world;
-    private Method a, chunk_k;
-    private int chan;    
+    private Method recheckGaps;
+    private int chan;
     private final Random rand = new Random();
 
     public BlockTickSelector(World world, int selChance)
             throws NoSuchMethodException,
-            SecurityException, NoSuchFieldException, InstantiationException, IllegalAccessException {
+            SecurityException, NoSuchFieldException,
+            InstantiationException, IllegalAccessException {
 
         this.world = ((CraftWorld) world).getHandle();
-        
-        if (Storm.version == 1.2) {
-            chunk_k = Chunk.class.getDeclaredMethod("o");
-
-        } else {
-            chunk_k = Chunk.class.getDeclaredMethod("k");
-        }
-
-        a = net.minecraft.server.World.class.getDeclaredMethod("a", int.class, int.class, Chunk.class);
-        a.setAccessible(true);
-
-        chunk_k.setAccessible(true);
+        recheckGaps = Chunk.class.getDeclaredMethod(Storm.version == 1.3 ? "k" : "o");  //If 1.3.X, method is named "k", else "o".
+        recheckGaps.setAccessible(true); //Is private by default
     }
 
     public ArrayList<ChunkCoordIntPair> getRandomTickedChunks() throws InvocationTargetException, IllegalAccessException {
@@ -54,25 +49,19 @@ public class BlockTickSelector {
         List<org.bukkit.Chunk> loadedChunks = Arrays.asList(world.getWorld().getLoadedChunks());
 
         for (Object ob : world.players) {
+            
             EntityHuman entityhuman = (EntityHuman) ob;
+            int eX = (int) Math.floor(entityhuman.locX / 16), eZ = (int) Math.floor(entityhuman.locZ / 16);
 
-            final int eX = (int) Math.floor(entityhuman.locX / 16),
-                    eZ = (int) Math.floor(entityhuman.locZ / 16);
-
-            byte range = 7;
-            for (int x = -range; x <= range; x++) {
-                for (int z = -range; z <= range; z++) {
-                    if (loadedChunks.contains(world.getChunkAt(x + eX, z + eZ).bukkitChunk)) {
+            for (int x = -7; x <= 7; x++) {
+                for (int z = -7; z <= 7; z++) {
+                    if (loadedChunks.contains(world.getChunkAt(x + eX, z + eZ).bukkitChunk)) { //Check if the bukkit chunk exists
                         doTick.add(new ChunkCoordIntPair(x + eX, z + eZ));
                     }
                 }
-
             }
-
         }
-
-        return doTick;
-
+        return doTick; //Empty list = failiure
     }
 
     public ArrayList<Block> getRandomTickedBlocks()
@@ -80,7 +69,6 @@ public class BlockTickSelector {
             IllegalAccessException, InvocationTargetException {
 
         ArrayList<Block> doTick = new ArrayList<Block>();
-
         ArrayList<ChunkCoordIntPair> ticked = getRandomTickedChunks();
 
         if (ticked.isEmpty()) {
@@ -89,25 +77,16 @@ public class BlockTickSelector {
 
         for (ChunkCoordIntPair pair : ticked) {
 
-            final int xOffset = pair.x << 4, zOffset = pair.z << 4;
-
+            int xOffset = pair.x << 4, zOffset = pair.z << 4; //Multiply by 4, obviously.
             Chunk chunk = world.getChunkAt(pair.x, pair.z);
 
-            a.invoke(world, xOffset, zOffset, chunk); //Make sure chunk is loaded (?)
+            recheckGaps.invoke(chunk); //Recheck gaps
 
-            chunk_k.invoke(chunk); //Play ambient sounds
-
-            int x, y, z;
-
-            if (rand.nextInt(100) <= chan) {                
-                x = rand.nextInt(15);
-                z = rand.nextInt(15);
-                y = world.g(x + xOffset, z + zOffset);
-                doTick.add(world.getWorld().getBlockAt(x + xOffset, y,
-                        z + zOffset));
+            if (rand.nextInt(100) <= chan) {
+                int x = rand.nextInt(15), z = rand.nextInt(15);
+                doTick.add(world.getWorld().getBlockAt(x + xOffset, world.g(x + xOffset, z + zOffset), z + zOffset));
             }
-
-        }     
+        }
         return doTick;
     }
 }

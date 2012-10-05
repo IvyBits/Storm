@@ -29,13 +29,12 @@ import org.bukkit.craftbukkit.CraftWorld;
 
 public class StormUtil extends BiomeGroups {
 
-    public final Logger log = Logger.getLogger("Storm");
     private final Random rand = new Random();
     private WorldGuardPlugin wg;
     private boolean hasWG = false;
     private HashMap<String, BlockTickSelector> blockTickers = new HashMap<String, BlockTickSelector>();
     private Field isRaining;
-    private Class<?> wClass = net.minecraft.server.World.class;
+    private Logger log;
 
     /**
      * Creates a util object.
@@ -69,117 +68,60 @@ public class StormUtil extends BiomeGroups {
             e.printStackTrace();
         }
 
+        log = plugin.getLogger();
+
     }
 
-    public void setStormNoEvent(World world, boolean flag) {     
-        try {           
+    public void setStormNoEvent(World world, boolean flag) {
+        try {
             isRaining.set(((CraftWorld) world).getHandle().worldData, flag);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            world.setStorm(true);
+            world.setStorm(true); //Can still set the storm
         }
     }
 
-    /**
-     * Logs.
-     *
-     * @param logM The message.
-     */
     public void log(String logM) {
         log.log(Level.INFO, logM);
     }
 
-    /**
-     * Logs.
-     *
-     * @param level The severity level.
-     * @param logM The log message.
-     */
     public void log(Level level, String logM) {
         log.log(level, logM);
     }
 
-    /**
-     * Broadcasts a message.
-     *
-     * @param message The message.
-     */
     public void broadcast(String message) {
-        if (message.isEmpty()) {
-            return;
+        if (!message.isEmpty()) {
+            Bukkit.getServer().broadcastMessage(parseColors(message));
         }
-        Bukkit.getServer().broadcastMessage(parseColors(message));
     }
 
-    /**
-     * Send ChatColor formatted message to player.
-     *
-     * @param player The player.
-     * @param message The message.
-     */
     public void message(Player player, String message) {
-        if (message.isEmpty()) {
-            return;
+        if (!message.isEmpty()) {
+            player.sendMessage(parseColors(message));
         }
-
-        player.sendMessage(parseColors(message));
     }
 
-    /**
-     * Parses colors in string.
-     *
-     * @param msg The string.
-     * @return The formatted string.
-     */
     public String parseColors(String msg) {
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
 
-    /**
-     * Damages players in radius from given location.
-     *
-     * @param location The location.
-     * @param radius The radius.
-     * @param damage These values are obvious... The damage.
-     * @param message Message given to the player when damaged.
-     */
-    public void damageNearbyPlayers(Location location, double radius,
-            int damage, String message) {
-
-        ArrayList<Player> damagees = getNearbyPlayers(location, radius);
-
-        for (Player p : damagees) {
-
-            if (p.getGameMode() != GameMode.CREATIVE) {
-
-                p.damage(damage * 2);
-
-                if (!message.isEmpty()) {
-                    this.message(p, message);
-                }
-            }
+    public void damageNearbyPlayers(Location location, double radius, int damage, String message) {
+        for (Player p : getNearbyPlayers(location, radius)) {
+            damagePlayer(p, message, damage);
         }
     }
 
-    /**
-     * Wrapper method around WG to check if any regions apply to given block.
-     *
-     * @param b The block.
-     * @return True if protected, false otherwise.
-     */
+    public void damagePlayer(Player p, String m, int d) {
+        if (p.getGameMode() != GameMode.CREATIVE && p.getHealth() != 0) {
+            p.damage(d * 2);
+            this.message(p, m);
+        }
+    }
+
     public boolean isBlockProtected(Block b) {
-
-        if (hasWG && wg.getGlobalRegionManager().get(b.getWorld()).getApplicableRegions(BukkitUtil.toVector(b.getLocation()))
-                .size() > 0) {
-            return true;
-        }
-
-        return false;
+        return hasWG && wg.getGlobalRegionManager().get(b.getWorld()).getApplicableRegions(BukkitUtil.toVector(b.getLocation())).size() > 0;
     }
 
-    public ArrayList<Player> getNearbyPlayers(Location location,
-            double radius) {
-
+    public ArrayList<Player> getNearbyPlayers(Location location, double radius) {
         ArrayList<Player> playerList = new ArrayList<Player>();
         World locWorld = location.getWorld();
 
@@ -195,7 +137,6 @@ public class StormUtil extends BiomeGroups {
     }
 
     public void transform(Block toTransform, List<List<String>> transformations) {
-
         if (isBlockProtected(toTransform)) {
             return;
         }
@@ -214,8 +155,7 @@ public class StormUtil extends BiomeGroups {
                 }
             }
 
-            final String[] curState = stateIndex.get(0), toState = stateIndex
-                    .get(1);
+            String[] curState = stateIndex.get(0), toState = stateIndex.get(1);
 
             if (Integer.valueOf(curState[0]) == toTransform.getTypeId()
                     && Integer.valueOf(curState[1]) == toTransform.getData()) {
@@ -228,113 +168,45 @@ public class StormUtil extends BiomeGroups {
 
     }
 
-    /**
-     * Gets random chunk in given world.
-     *
-     * @param w The world.
-     * @return a chunk.
-     */
     public Chunk pickChunk(World w) {
         Chunk[] loadedChunks = w.getLoadedChunks();
         return loadedChunks[rand.nextInt(loadedChunks.length)];
-
     }
 
-    /**
-     * Sets a texture on given player.
-     *
-     * @param toSetOn The player.
-     * @param pathToTexture A URL to texture pack. Won't work with https.
-     */
     public void setTexture(Player toSetOn, String pathToTexture) {
-        if (Storm.version < 1.3) {
-            return;
+        if (Storm.version >= 1.3) {
+            ((CraftPlayer) toSetOn).getHandle().netServerHandler.sendPacket(new Packet250CustomPayload("MC|TPack", (pathToTexture + "\0" + 16).getBytes()));
         }
-
-        ((CraftPlayer) toSetOn).getHandle().netServerHandler
-                .sendPacket(new Packet250CustomPayload("MC|TPack",
-                (pathToTexture + "\0" + 16).getBytes()));
     }
 
-    /**
-     * Sets player texture pack to default.
-     *
-     * @param toClear The player to set.
-     */
     public void clearTexture(Player toClear) {
-        if (Storm.version < 1.3) {
-            return;
-        }
-
-        setTexture(
-                toClear,
-                Storm.wConfigs.get(toClear.getWorld()).Textures_Default__Texture__Path);
+        setTexture(toClear, Storm.wConfigs.get(toClear.getWorld()).Textures_Default__Texture__Path);
     }
 
-    /**
-     * Checks if a player is visible to sky.
-     *
-     * @param player The player to check.
-     * @return True if visible, false otherwise.
-     */
     public boolean isPlayerUnderSky(Player player) {
-              
-        World world = player.getWorld();
-        if (world.hasStorm()) {
-            Location loc = player.getLocation();
-            if (world.getHighestBlockYAt(loc) <= loc.getBlockY()) {
-                return true;
-            }
-        }
-        return false;
+        Location loc = player.getLocation();
+        return player.getWorld().getHighestBlockYAt(loc) <= loc.getBlockY();
+
     }
 
-    /**
-     * Interface method against MineCraft block selection. Damn fast.
-     *
-     * @param world The world to return blocks of.
-     * @return Returns an ArrayList<Block> of the ticked blocks. Only 1/16 of
-     * these should be modified.
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     */
     public ArrayList<Block> getRandomTickedBlocks(World world)
             throws IllegalArgumentException, IllegalAccessException,
             InvocationTargetException {
 
         return blockTickers.get(world.getName()).getRandomTickedBlocks();
-
     }
 
     public boolean isLocationNearBlock(Location loc, List<Integer> blocks, int radius) {
-
-        int x = loc.getBlockX();
-        int y = loc.getBlockY();
-        int z = loc.getBlockZ();
         World world = loc.getWorld();
+        int x = (int) loc.getX(), y = (int) loc.getY(), z = (int) loc.getZ();
 
-        for (int cy = 2; cy < 512; cy++) {
-            int testY;
-            if ((cy & 1) == 0) //if even
-            {
-                testY = y + cy / 2;
-                if (testY > 255) {
-                    continue;
+        for (int ox = 0; ox > -radius; ox--) {
+            for (int oz = 0; oz > -radius; oz--) {
+                if (blocks.contains(world.getBlockAt(x + ox, y, z + oz).getTypeId())) {
+                    return true;
                 }
-            } else {
-                testY = y - cy / 2;
-                if (testY < 0) {
-                    continue;
-                }
-            }
-
-            if (blocks.contains(world.getBlockTypeIdAt(x, testY, z))) {
-                return true;
             }
         }
-
         return false;
-
     }
 }

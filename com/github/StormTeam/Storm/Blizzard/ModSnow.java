@@ -20,8 +20,6 @@ public class ModSnow {
                 Class<?> bc = Block.class;
 
                 if (Storm.version == 1.3) {
-
-                    System.out.println("Modded snow for 1.3x");
                     v = Block.class.getDeclaredMethod("v");
                     p = bc.getDeclaredMethod("p");
                     c = bc.getDeclaredMethod("c", float.class);
@@ -38,7 +36,6 @@ public class ModSnow {
                 } else {
 
                     if (Storm.version == 1.2) {
-
                         System.out.println("Modded snow for 1.2x");
                         c = bc.getDeclaredMethod("c", float.class);
                         a = bc.getDeclaredMethod("a", StepSound.class);
@@ -51,7 +48,6 @@ public class ModSnow {
                         h.setAccessible(true);
                         Block.byId[Block.SNOW.id] = null;
                         Block.byId[Block.SNOW.id] = (Block) h.invoke(a.invoke(c.invoke(a_st.invoke((SnowLayer) (new SnowLayer(78, 66)), "snow"), 0.1F), Block.k), 0);
-
                     }
                 }
 

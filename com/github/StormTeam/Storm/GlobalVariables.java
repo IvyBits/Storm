@@ -36,7 +36,7 @@ public class GlobalVariables extends ReflectConfiguration {
     public int Acid__Rain__Absorbing__Radius = 2;
     public int Acid__Rain_Dissolver_Block__Deterioration__Chance = 60;
     public int Acid__Rain_Scheduler_Dissolver__Calculation__Intervals__In__Ticks = 100;
-    public int Acid__Rain_Scheduler_Player__Damager__Calculation__Intervals__In__Ticks = 200;
+    public int Acid__Rain_Schedule_Damager__Calculation__Intervals__In__Ticks = 20;
     //Thunder Storms
     public int Thunder__Storm_Thunder__Storm__Chance = 4;
     public String Thunder__Storm_Message__On__Thunder__Storm__Start = "An electrical storm has started! Get inside for safety!";

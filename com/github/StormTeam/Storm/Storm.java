@@ -37,8 +37,7 @@ public class Storm extends JavaPlugin {
 
     public static HashMap<World, GlobalVariables> wConfigs = new HashMap<World, GlobalVariables>();  
     public static BiomeGroups biomes;
-    public static StormUtil util;
-    public static Commands cmds;
+    public static StormUtil util;  
     private Database db;
     public static PluginManager pm;
     public static double version;
@@ -59,14 +58,12 @@ public class Storm extends JavaPlugin {
                     getLogger().log(Level.INFO, "Loading with MC 1.3.X compatibility.");
                 } else {
                     getLogger().log(Level.SEVERE, "Unsupported MC version detected!");
-
                 }
             }
 
             util = new StormUtil(this);
             biomes = new BiomeGroups();
-            db = Database.Obtain(this, null);
-            cmds = new Commands(this);
+            db = Database.Obtain(this, null);           
          
             // Make per-world configuration files
             System.out.println(Bukkit.getWorlds());
@@ -75,13 +72,7 @@ public class Storm extends JavaPlugin {
                 GlobalVariables config = new GlobalVariables(this, world);
                 config.load();
                 wConfigs.put(w, config);
-            }
-
-            getCommand("meteor").setExecutor(cmds);
-            getCommand("wildfire").setExecutor(cmds);
-            getCommand("acidrain").setExecutor(cmds);
-            getCommand("blizzard").setExecutor(cmds);
-            getCommand("thunderstorm").setExecutor(cmds);                    
+            }           
 
             // Stats
             try {

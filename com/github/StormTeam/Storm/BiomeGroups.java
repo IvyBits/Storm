@@ -7,7 +7,6 @@ import org.bukkit.block.Biome;
 
 public class BiomeGroups // Utility class for storing all biomes.
 {
-
     private final List<Biome> rainBiomes = Arrays.asList(Biome.EXTREME_HILLS,
             Biome.FOREST, Biome.FOREST_HILLS,
             Biome.JUNGLE,
@@ -36,7 +35,6 @@ public class BiomeGroups // Utility class for storing all biomes.
 
     public boolean isTundra(Biome b) {
         return snowBiomes.contains(b);
-
     }
 
     public boolean isSnowy(Biome b) {
