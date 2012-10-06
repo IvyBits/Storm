@@ -65,11 +65,13 @@ public class EntityMeteor extends EntityFireball {
 
     }
 
+    @Override
     public void h_() {
         move();
         super.h_();
     }
 
+    @Override
     public void F_() {
         move();
         super.F_();
@@ -100,7 +102,7 @@ public class EntityMeteor extends EntityFireball {
                 try {
                     explode();
                 } catch (Exception e) {
-                }; //Throws an NPE if explodes in unloaded chunk (locs are null). Can be ignored without consequence.
+                } //Throws an NPE if explodes in unloaded chunk (locs are null). Can be ignored without consequence.
 
                 return;
             }
@@ -112,6 +114,7 @@ public class EntityMeteor extends EntityFireball {
         motZ *= 0.909F;
     }
 
+    @Override
     public void a(MovingObjectPosition movingobjectposition) {
         if (burrowCount > 0) {
             // Not yet dead, so burrow.
@@ -123,7 +126,7 @@ public class EntityMeteor extends EntityFireball {
         try {
             explode();
         } catch (Exception e) {
-        }; //Throws an NPE if explodes in unloaded chunk (locs are null). Can be ignored without consequence.
+        } //Throws an NPE if explodes in unloaded chunk (locs are null). Can be ignored without consequence.
 
     }
 
@@ -252,7 +255,7 @@ public class EntityMeteor extends EntityFireball {
         return m.get(rand.nextInt(m.size()));
     }
 
-    private static final double lengthSq(double x, double y, double z) {
+    private static double lengthSq(double x, double y, double z) {
         return (x * x) + (y * y) + (z * z);
     }
 
