@@ -4,10 +4,16 @@
  */
 package com.github.StormTeam.Storm.API;
 
+import java.util.Set;
+import org.bukkit.World;
+
 /**
- *
- * @author Tudor
+ * Base class of all Weathers
  */
-public abstract class StormWeather implements Weather {
-    
+public abstract class StormWeather {
+    public abstract void setup();
+    public abstract boolean start(World world);
+    public abstract void end();
+    public abstract String getTexture();
+    public Set<String> conflicts;
 }

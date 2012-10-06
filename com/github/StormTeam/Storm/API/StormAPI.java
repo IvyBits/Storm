@@ -1,9 +1,10 @@
 package com.github.StormTeam.Storm.API;
 
-import com.github.StormTeam.Storm.Pair;
-import com.github.StormTeam.Storm.Triplet;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 import org.bukkit.World;
 
@@ -13,52 +14,50 @@ import org.bukkit.World;
  */
 public class StormAPI {
 
-    private ArrayList<Triplet<String, StormWeather, List<String>>> registeredWeathers = new ArrayList<Triplet<String, StormWeather, List<String>>>();
-    private ArrayList<Pair<String, ArrayList<String>>> activeWeather = new ArrayList<Pair<String, ArrayList<String>>>();
+    private Map<String, StormWeather> registeredWeathers = new HashMap<String, StormWeather>();
+    private Map<String, Set<String>> activeWeather = new HashMap<String, Set<String>>();
     private Semaphore mutex = new Semaphore(1);
-    //One ArrayList to hold them. Pairs of World_Name, List<Active_Weather_Names>
 
-    public void registerWeather(Class<? extends StormWeather> weather, String name, List<String> conflicts) {
+    public void registerWeather(StormWeather weather, String name) {
         try {
             mutex.acquire();
-            registeredWeathers.add(new Triplet<String, StormWeather, List<String>>(name, weather.newInstance(), conflicts));
+            registeredWeathers.put(name, weather);
             mutex.release();
         } catch (Exception e) {
-            //Throw new RegistrationException
-        };
-    }
-
-    public ArrayList<String> getActiveWeathers(String world) {
-        for (Pair par : activeWeather) {
-            if (par.LEFT.equals(world)) {
-                return (ArrayList<String>) par.RIGHT;
-            }
+            e.printStackTrace();
         }
-        return new ArrayList<String>();
     }
 
-    public ArrayList<String> getActiveWeathers(World world) {
+    public void registerWeather(Class<? extends StormWeather> weather, String name) {
+        try {
+            registerWeather(weather.newInstance(), name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Set<String> getActiveWeathers(String world) {
+        if (activeWeather.containsKey(world)) {
+            return activeWeather.get(world);
+        } else {
+            return new HashSet<String>();
+        }
+    }
+
+    public Set<String> getActiveWeathers(World world) {
         return getActiveWeathers(world.getName());
     }
 
     public boolean isWeatherRegistered(String weather) {
-
-        for (Triplet par : registeredWeathers) {
-            if (par.x.equals(weather)) {
-                return true;
-            }
-        }
-
-        return false;
+        return registeredWeathers.containsKey(weather);
     }
 
-    public boolean isConflictingWeather(String weather, String conflict) {
-        for (Triplet par : registeredWeathers) {
-            if (par.x.equals(weather)) {
+    public boolean isConflictingWeather(String w1, String w2) {
+        if (!isWeatherRegistered(w1) || !isWeatherRegistered(w2))
+            return false;
+        if (registeredWeathers.get(w1).conflicts.contains(w2) ||
+            registeredWeathers.get(w2).conflicts.contains(w1))
                 return true;
-            }
-        }
-
         return false;
     }
 }
