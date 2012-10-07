@@ -11,9 +11,17 @@ import org.bukkit.World;
  * Base class of all Weathers
  */
 public abstract class StormWeather {
-    public abstract void setup();
-    public abstract boolean start(World world);
+    public StormWeather(String world) {
+        this.world = world;
+    }
+    public abstract void start();
     public abstract void end();
     public abstract String getTexture();
-    public Set<String> conflicts;
+    
+    public static final Boolean conflicts(String other) {
+        return CONFLICTS.contains(other);
+    }
+    
+    public static Set<String> CONFLICTS;
+    public static String world;
 }

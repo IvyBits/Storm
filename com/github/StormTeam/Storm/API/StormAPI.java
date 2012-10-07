@@ -1,5 +1,6 @@
 package com.github.StormTeam.Storm.API;
 
+import com.github.StormTeam.Storm.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,23 +15,19 @@ import org.bukkit.World;
  */
 public class StormAPI {
 
-    private Map<String, StormWeather> registeredWeathers = new HashMap<String, StormWeather>();
+    private Map<String, Pair<Class<? extends StormWeather>, Map<String, StormWeather>>> registeredWeathers = new HashMap<String, Pair<Class<? extends StormWeather>, Map<String, StormWeather>>>();
     private Map<String, Set<String>> activeWeather = new HashMap<String, Set<String>>();
     private Semaphore mutex = new Semaphore(1);
 
-    public void registerWeather(StormWeather weather, String name) {
+    public void registerWeather(Class<? extends StormWeather> weather, String name, Iterable<String> allowedWorlds) {
         try {
             mutex.acquire();
-            registeredWeathers.put(name, weather);
+            Map<String, StormWeather> instances = new HashMap<String, StormWeather>();
+            for (String world : allowedWorlds) {
+                instances.put(world, weather.newInstance());
+            }
+            registeredWeathers.put(name, new Pair<Class<? extends StormWeather>, Map<String, StormWeather>>(weather, instances));
             mutex.release();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void registerWeather(Class<? extends StormWeather> weather, String name) {
-        try {
-            registerWeather(weather.newInstance(), name);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,11 +50,18 @@ public class StormAPI {
     }
 
     public boolean isConflictingWeather(String w1, String w2) {
-        if (!isWeatherRegistered(w1) || !isWeatherRegistered(w2))
-            return false;
-        if (registeredWeathers.get(w1).conflicts.contains(w2) ||
-            registeredWeathers.get(w2).conflicts.contains(w1))
+        try {
+            if (!isWeatherRegistered(w1) || !isWeatherRegistered(w2)) {
+                return false;
+            }
+            if ((Boolean)registeredWeathers.get(w1).LEFT.getDeclaredMethod("conflicts").invoke(w2)
+                    || (Boolean)registeredWeathers.get(w2).LEFT.getDeclaredMethod("conflicts").invoke(w1)) {
                 return true;
-        return false;
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
