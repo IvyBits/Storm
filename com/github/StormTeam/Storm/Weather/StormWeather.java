@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.StormTeam.Storm.API;
+package com.github.StormTeam.Storm.Weather;
 
 import java.util.Set;
-import org.bukkit.World;
 
 /**
  * Base class of all Weathers
@@ -23,5 +22,5 @@ public abstract class StormWeather {
     }
     
     public static Set<String> CONFLICTS;
-    public static String world;
+    public String world;
 }

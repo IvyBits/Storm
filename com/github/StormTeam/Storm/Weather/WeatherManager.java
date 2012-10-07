@@ -1,4 +1,4 @@
-package com.github.StormTeam.Storm.API;
+package com.github.StormTeam.Storm.Weather;
 
 import com.github.StormTeam.Storm.Pair;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import org.bukkit.World;
  *
  * @author Tudor
  */
-public class StormAPI {
+public class WeatherManager {
 
     private Map<String, Pair<Class<? extends StormWeather>, Map<String, StormWeather>>> registeredWeathers = new HashMap<String, Pair<Class<? extends StormWeather>, Map<String, StormWeather>>>();
     private Map<String, Set<String>> activeWeather = new HashMap<String, Set<String>>();
