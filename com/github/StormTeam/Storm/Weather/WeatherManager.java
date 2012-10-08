@@ -11,10 +11,11 @@ import java.util.Map;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 /**
  * Weather Manager for Storm. All members thread-safe unless documented.
- * 
+ *
  * @author Tudor
  * @author xiaomao
  */
@@ -29,7 +30,7 @@ public class WeatherManager {
     public WeatherManager(Storm storm) {
         this.storm = storm;
     }
-    
+
     /**
      * Registers a weather. allowedWorlds is any Iterable<String> that contains
      * the names of the allowed worlds.
@@ -48,7 +49,7 @@ public class WeatherManager {
                 Map<String, StormWeather> instances = new HashMap<String, StormWeather>();
                 Map<String, Pair<Integer, WeatherTrigger>> triggers = new HashMap<String, Pair<Integer, WeatherTrigger>>();
                 for (String world : allowedWorlds) {
-                    instances.put(world, weather.newInstance());
+                    instances.put(world, weather.getConstructor(Storm.class, String.class).newInstance(storm, world));
                     WeatherTrigger trigger = new WeatherTrigger(this, name, world, chance);
                     int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(storm, trigger, recalculationTicks, recalculationTicks);
                     triggers.put(world, new Pair<Integer, WeatherTrigger>(id, trigger));
@@ -63,7 +64,7 @@ public class WeatherManager {
 
     /**
      * Gets all active weathers on world.
-     * 
+     *
      * @param world world name as String
      * @return A newly constructed Set<String> containing the active weathers
      */
@@ -76,7 +77,7 @@ public class WeatherManager {
     /**
      * A getter function for data member activeWeather, with on demand
      * construction.
-     * 
+     *
      * @param world World name
      * @return A Set<String> containing the active weathers.
      */
@@ -89,7 +90,7 @@ public class WeatherManager {
 
     /**
      * Gets all active weathers on world.
-     * 
+     *
      * @param world world object
      * @return A newly constructed Set<String> containing the active weathers
      */
@@ -99,7 +100,7 @@ public class WeatherManager {
 
     /**
      * Determines if a weather is registered.
-     * 
+     *
      * @param weather weather name
      * @return whether the weather is registered
      */
@@ -113,7 +114,7 @@ public class WeatherManager {
      * Determines if a weather conflicts with another. If one weather reports
      * itself to be conflicting with another, they two are considered
      * conflicting.
-     * 
+     *
      * @param w1 weather #1
      * @param w2 weather #2
      * @return whether the two are conflicting
@@ -124,8 +125,8 @@ public class WeatherManager {
                 if (!isWeatherRegistered(w1) || !isWeatherRegistered(w2)) {
                     return false;
                 }
-                if ((Boolean) registeredWeathers.get(w1).LEFT.getDeclaredMethod("conflicts").invoke(w2)
-                        || (Boolean) registeredWeathers.get(w2).LEFT.getDeclaredMethod("conflicts").invoke(w1)) {
+                if ((Boolean) registeredWeathers.get(w1).LEFT.getDeclaredMethod("conflicts").invoke(null, w2)
+                        || (Boolean) registeredWeathers.get(w2).LEFT.getDeclaredMethod("conflicts").invoke(null, w1)) {
                     return true;
                 }
                 return false;
@@ -138,12 +139,12 @@ public class WeatherManager {
 
     /**
      * Starts a weather on a single world with conflict checking.
-     * 
+     *
      * @param name weather name
      * @param world world name
      * @return whether the weather is actually started
      * @throws WeatherNotFoundException
-     * @throws WeatherNotAllowedException 
+     * @throws WeatherNotAllowedException
      */
     public boolean startWeather(String name, String world) throws WeatherNotFoundException, WeatherNotAllowedException {
         Set<String> started = startWeather(name, Arrays.asList(world));
@@ -152,12 +153,12 @@ public class WeatherManager {
 
     /**
      * Starts a world on a collection of worlds with conflict checking.
-     * 
+     *
      * @param name Weather name
      * @param worlds_ Collection of worlds
-     * @return A set of world the weather is actually started on 
+     * @return A set of world the weather is actually started on
      * @throws WeatherNotFoundException
-     * @throws WeatherNotAllowedException 
+     * @throws WeatherNotAllowedException
      */
     public Set<String> startWeather(String name, Collection<String> worlds_) throws WeatherNotFoundException, WeatherNotAllowedException {
         synchronized (this) {
@@ -177,11 +178,11 @@ public class WeatherManager {
 
     /**
      * Starts a weather on a single world *without* conflict checking.
-     * 
+     *
      * @param name weather name
      * @param world world name
      * @throws WeatherNotFoundException
-     * @throws WeatherNotAllowedException 
+     * @throws WeatherNotAllowedException
      */
     public void startWeatherForce(String name, String world) throws WeatherNotFoundException, WeatherNotAllowedException {
         synchronized (this) {
@@ -191,11 +192,11 @@ public class WeatherManager {
 
     /**
      * Starts a world on a collection of worlds *without* conflict checking.
-     * 
+     *
      * @param name Weather name
      * @param worlds_ Collection of worlds
      * @throws WeatherNotFoundException
-     * @throws WeatherNotAllowedException 
+     * @throws WeatherNotAllowedException
      */
     public void startWeatherForce(String name, Collection<String> worlds) throws WeatherNotFoundException, WeatherNotAllowedException {
         synchronized (this) {
@@ -205,11 +206,11 @@ public class WeatherManager {
 
     /**
      * Starts a weather without locking or conflict checking.
-     * 
+     *
      * @param name Weather name
      * @param worlds Collection of worlds
      * @throws WeatherNotFoundException
-     * @throws WeatherNotAllowedException 
+     * @throws WeatherNotAllowedException
      */
     protected void startWeatherReal(String name, Collection<String> worlds) throws WeatherNotFoundException, WeatherNotAllowedException {
         Pair<Class<? extends StormWeather>, Map<String, StormWeather>> weatherData = registeredWeathers.get(name);
@@ -223,7 +224,62 @@ public class WeatherManager {
             }
             if (!getActiveWeathersReal(world).contains(name)) {
                 weather.start();
+                String texture = weather.getTexture();
+                if (texture != null) {
+                    for (Player player : Bukkit.getWorld(world).getPlayers()) {
+                        Storm.util.setTexture(player, texture);
+                    }
+                }
                 getActiveWeathersReal(world).add(name);
+            }
+        }
+    }
+
+    /**
+     * Stops a weather on a single world.
+     *
+     * @param name weather name
+     * @param world world name
+     * @throws WeatherNotFoundException
+     */
+    public void stopWeather(String name, String world) throws WeatherNotFoundException {
+        synchronized (this) {
+            stopWeatherReal(name, Arrays.asList(world));
+        }
+    }
+
+    /**
+     * Stops a world on a collection of worlds.
+     *
+     * @param name Weather name
+     * @param worlds_ Collection of worlds
+     * @throws WeatherNotFoundException
+     */
+    public void stopWeather(String name, Collection<String> worlds) throws WeatherNotFoundException {
+        synchronized (this) {
+            stopWeather(name, worlds);
+        }
+    }
+
+    protected void stopWeatherReal(String name, Collection<String> worlds) throws WeatherNotFoundException {
+        Pair<Class<? extends StormWeather>, Map<String, StormWeather>> weatherData = registeredWeathers.get(name);
+        if (weatherData == null) {
+            throw new WeatherNotFoundException(String.format("Weather %s not found", name));
+        }
+        for (String world : worlds) {
+            StormWeather weather = weatherData.RIGHT.get(world);
+            if (weather == null) {
+                continue;
+            }
+            if (getActiveWeathersReal(world).contains(name)) {
+                weather.end();
+                String texture = weather.getTexture();
+                if (texture != null) {
+                    for (Player player : Bukkit.getWorld(world).getPlayers()) {
+                        Storm.util.clearTexture(player);
+                    }
+                }
+                getActiveWeathersReal(world).remove(name);
             }
         }
     }
