@@ -4,6 +4,7 @@ import com.github.StormTeam.Storm.Pair;
 import com.github.StormTeam.Storm.Storm;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,10 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  * Weather Manager for Storm. All members thread-safe unless documented.
@@ -19,13 +24,14 @@ import org.bukkit.entity.Player;
  * @author Tudor
  * @author xiaomao
  */
-public class WeatherManager {
+public class WeatherManager implements Listener {
 
     private Map<String, Pair<Class<? extends StormWeather>, Map<String, StormWeather>>> registeredWeathers = new HashMap<String, Pair<Class<? extends StormWeather>, Map<String, StormWeather>>>();
     private Map<String, Set<String>> activeWeather = new HashMap<String, Set<String>>();
     private Map<String, Map<String, Pair<Integer, WeatherTrigger>>> weatherTriggers = new HashMap<String, Map<String, Pair<Integer, WeatherTrigger>>>();
     private Storm storm;
     public static Random random = new Random();
+    private Map<String, String> worldTextures = new HashMap<String, String>();
 
     public WeatherManager(Storm storm) {
         this.storm = storm;
@@ -70,7 +76,7 @@ public class WeatherManager {
      */
     public Set<String> getActiveWeathers(String world) {
         synchronized (this) {
-            return new HashSet(getActiveWeathersReal(world));
+            return Collections.unmodifiableSet(getActiveWeathersReal(world));
         }
     }
 
@@ -229,6 +235,7 @@ public class WeatherManager {
                     for (Player player : Bukkit.getWorld(world).getPlayers()) {
                         Storm.util.setTexture(player, texture);
                     }
+                    worldTextures.put(world, texture);
                 }
                 getActiveWeathersReal(world).add(name);
             }
@@ -278,9 +285,48 @@ public class WeatherManager {
                     for (Player player : Bukkit.getWorld(world).getPlayers()) {
                         Storm.util.clearTexture(player);
                     }
+                    worldTextures.put(world, null);
                 }
                 getActiveWeathersReal(world).remove(name);
             }
         }
+    }
+    
+    /**
+     * Event Handler to set appropriate texture for world when player switched
+     * worlds.
+     * 
+     * @param e Event object
+     */
+    @EventHandler
+    public void worldEvent(PlayerChangedWorldEvent e) {
+        final Player hopper = e.getPlayer();
+        final World target = hopper.getWorld();
+        final World source = e.getFrom();
+        
+        if (target.equals(source)) {
+            return;
+        }
+        
+        final String texture = worldTextures.get(target.getName());
+        if (texture == null)
+            Storm.util.clearTexture(hopper);
+        else
+            Storm.util.setTexture(hopper, texture);
+    }
+    
+    /**
+     * Event Handler to set appropriate texture for the weather in the world
+     * the player just logged on to.
+     * 
+     * @param e Event object
+     */
+    @EventHandler
+    public void loginEvent(PlayerJoinEvent e) {
+        final Player player = e.getPlayer();
+        final World world = player.getWorld();
+        final String texture = worldTextures.get(world.getName());
+        if (texture != null)
+            Storm.util.setTexture(player, texture);
     }
 }
