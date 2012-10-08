@@ -1,6 +1,7 @@
 package com.github.StormTeam.Storm.Weather;
 
 import com.github.StormTeam.Storm.Storm;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -36,21 +37,11 @@ public abstract class StormWeather {
     public abstract String getTexture();
     
     /**
-     * Function to check if this weather declares itself to be conflict with
-     * the other.
+     * Gets a Set<String> of conflicting weathers.
      * 
-     * @param other name of other weather
-     * @return boolean of conflict
+     * @return A Set<String> of conflicting weathers.
      */
-    public static final Boolean conflicts(String other) {
-        return CONFLICTS.contains(other);
-    }
-    
-    /**
-     * Initialize this to a Set<String> containing the known conflicting
-     * weathers.
-     */
-    public static Set<String> CONFLICTS;
+    public abstract Set<String> getConflicts();
     
     /**
      * Stores the world name this class manages.

@@ -2,6 +2,8 @@ package com.github.StormTeam.Storm.Weather;
 
 import com.github.StormTeam.Storm.Pair;
 import com.github.StormTeam.Storm.Storm;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,6 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -116,6 +120,25 @@ public class WeatherManager implements Listener {
         }
     }
 
+    private boolean isConflictingWeatherOneWay(String w1, String w2) {
+        StormWeather sampleInstance = registeredWeathers.get(w1).RIGHT.entrySet().iterator().next().getValue();
+        Method getConflicts;
+        Set<String> conflicts;
+        try {
+            getConflicts = sampleInstance.getClass().getDeclaredMethod("getConflicts");
+            conflicts = (Set<String>) getConflicts.invoke(sampleInstance);
+        } catch (IllegalAccessException e) {
+            return false;
+        } catch (IllegalArgumentException e) {
+            return false;
+        } catch (InvocationTargetException e) {
+            return false;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+        return conflicts.contains(w2);
+    }
+
     /**
      * Determines if a weather conflicts with another. If one weather reports
      * itself to be conflicting with another, they two are considered
@@ -131,8 +154,7 @@ public class WeatherManager implements Listener {
                 if (!isWeatherRegistered(w1) || !isWeatherRegistered(w2)) {
                     return false;
                 }
-                if ((Boolean) registeredWeathers.get(w1).LEFT.getDeclaredMethod("conflicts").invoke(null, w2)
-                        || (Boolean) registeredWeathers.get(w2).LEFT.getDeclaredMethod("conflicts").invoke(null, w1)) {
+                if (isConflictingWeatherOneWay(w1, w2) || isConflictingWeatherOneWay(w2, w1)) {
                     return true;
                 }
                 return false;
@@ -291,11 +313,11 @@ public class WeatherManager implements Listener {
             }
         }
     }
-    
+
     /**
      * Event Handler to set appropriate texture for world when player switched
      * worlds.
-     * 
+     *
      * @param e Event object
      */
     @EventHandler
@@ -303,22 +325,23 @@ public class WeatherManager implements Listener {
         final Player hopper = e.getPlayer();
         final World target = hopper.getWorld();
         final World source = e.getFrom();
-        
+
         if (target.equals(source)) {
             return;
         }
-        
+
         final String texture = worldTextures.get(target.getName());
-        if (texture == null)
+        if (texture == null) {
             Storm.util.clearTexture(hopper);
-        else
+        } else {
             Storm.util.setTexture(hopper, texture);
+        }
     }
-    
+
     /**
-     * Event Handler to set appropriate texture for the weather in the world
-     * the player just logged on to.
-     * 
+     * Event Handler to set appropriate texture for the weather in the world the
+     * player just logged on to.
+     *
      * @param e Event object
      */
     @EventHandler
@@ -326,7 +349,8 @@ public class WeatherManager implements Listener {
         final Player player = e.getPlayer();
         final World world = player.getWorld();
         final String texture = worldTextures.get(world.getName());
-        if (texture != null)
+        if (texture != null) {
             Storm.util.setTexture(player, texture);
+        }
     }
 }
