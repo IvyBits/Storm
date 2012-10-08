@@ -8,8 +8,7 @@ import java.util.Set;
  */
 public abstract class StormWeather {
     /**
-     * Constructor, should not be overriden. To execute code on construction,
-     * override initialize().
+     * Constructor. DO NOT CHANGE ARGUMENTS.
      * 
      * @param storm
      * @param world 
@@ -18,11 +17,6 @@ public abstract class StormWeather {
         this.storm = storm;
         this.world = world;
     }
-    
-    /**
-     * Called on initialization of class.
-     */
-    public void initialize() {}
     
     /**
      * Called when the weather is started.
