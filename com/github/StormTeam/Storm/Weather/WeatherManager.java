@@ -1,12 +1,15 @@
 package com.github.StormTeam.Storm.Weather;
 
 import com.github.StormTeam.Storm.Pair;
+import com.github.StormTeam.Storm.Storm;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
+import java.util.Random;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 /**
@@ -19,7 +22,14 @@ public class WeatherManager {
 
     private Map<String, Pair<Class<? extends StormWeather>, Map<String, StormWeather>>> registeredWeathers = new HashMap<String, Pair<Class<? extends StormWeather>, Map<String, StormWeather>>>();
     private Map<String, Set<String>> activeWeather = new HashMap<String, Set<String>>();
+    private Map<String, Map<String, Pair<Integer, WeatherTrigger>>> weatherTriggers = new HashMap<String, Map<String, Pair<Integer, WeatherTrigger>>>();
+    private Storm storm;
+    public static Random random = new Random();
 
+    public WeatherManager(Storm storm) {
+        this.storm = storm;
+    }
+    
     /**
      * Registers a weather. allowedWorlds is any Iterable<String> that contains
      * the names of the allowed worlds.
@@ -29,16 +39,21 @@ public class WeatherManager {
      * @param allowedWorlds Allowed worlds
      * @throws WeatherAlreadyRegisteredException
      */
-    public void registerWeather(Class<? extends StormWeather> weather, String name, Iterable<String> allowedWorlds) throws WeatherAlreadyRegisteredException {
+    public void registerWeather(Class<? extends StormWeather> weather, String name, Iterable<String> allowedWorlds, int chance, int recalculationTicks) throws WeatherAlreadyRegisteredException {
         synchronized (this) {
             if (registeredWeathers.containsKey(name)) {
                 throw new WeatherAlreadyRegisteredException(String.format("Weather %s is already registered", name));
             }
             try {
                 Map<String, StormWeather> instances = new HashMap<String, StormWeather>();
+                Map<String, Pair<Integer, WeatherTrigger>> triggers = new HashMap<String, Pair<Integer, WeatherTrigger>>();
                 for (String world : allowedWorlds) {
                     instances.put(world, weather.newInstance());
+                    WeatherTrigger trigger = new WeatherTrigger(this, name, world, chance);
+                    int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(storm, trigger, recalculationTicks, recalculationTicks);
+                    triggers.put(world, new Pair<Integer, WeatherTrigger>(id, trigger));
                 }
+                weatherTriggers.put(name, triggers);
                 registeredWeathers.put(name, new Pair<Class<? extends StormWeather>, Map<String, StormWeather>>(weather, instances));
             } catch (Exception e) {
                 e.printStackTrace();
