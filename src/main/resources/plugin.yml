@@ -1,0 +1,44 @@
+name: Storm
+authors: [Icyene, Xiaomao]
+version: 2.0.0
+softdepend: [Shield]
+main: com.github.stormproject.storm.Storm
+description: Redefining weather.
+
+permissions:
+    storm.commands.*:
+        description: Gives access to all Storm commands.
+        children:
+            storm.meteor.command: true
+            storm.wildfire.command: true
+            storm.acidrain.command: true
+            storm.blizzard.command: true
+            storm.thunderstorm.command: true
+            storm.stopall.command: true
+    storm.immunity.*:
+        description: Provides full Storm immunity.
+        default: false
+        children:
+            storm.meteor.immune: true
+            storm.acidrain.immune: true
+            storm.blizzard.immune: true
+            storm.lightning.immune: true
+    storm.meteor.command:
+        description: Allows you to fire a meteor.        
+        default: op
+    storm.wildfire.command:
+        description: Allows you to start a wildfire.    
+        default: op
+    storm.acidrain.command:
+        description: Allows you to toggle acid rain.      
+        default: op
+    storm.blizzard.command:
+        description: Allows you to toggle blizzards.
+        default: op
+    storm.thunderstorm.command:
+        description: Allows you to toggle thunder storms.
+        default: op
+    storm.stopall.command:
+        description: Allows you to stop all weather events for a world.
+        default: op
+        
