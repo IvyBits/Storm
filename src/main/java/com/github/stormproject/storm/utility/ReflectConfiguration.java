@@ -219,7 +219,7 @@ public class ReflectConfiguration {
                     outlines.add(line);
 
                 if (comment.location() == Comment.CommentLocation.BOTTOM)
-                    for (String data : comment._())
+                    for (String data : comment.value())
                         outlines.add(indentPrefix + "# " + data);
 
                 modified = true;
