@@ -16,6 +16,13 @@
  */
 package tk.ivybits.storm;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import tk.ivybits.storm.nms.NMS;
 import tk.ivybits.storm.utility.ReflectCommand;
 import tk.ivybits.storm.utility.ReflectConfiguration;
 import tk.ivybits.storm.utility.data.Statistics;
@@ -29,12 +36,6 @@ import tk.ivybits.storm.weather.quake.Earthquake;
 import tk.ivybits.storm.weather.thunderstorm.ThunderStorm;
 import tk.ivybits.storm.weather.volcano.Volcano;
 import tk.ivybits.storm.weather.wildfire.Wildfire;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -92,7 +93,7 @@ public class Storm extends JavaPlugin implements Listener {
             Wildfire.load();
             Blizzard.load();
             ThunderStorm.load();
-            if (isCompatible()) {
+            if (NMS.isSupported()) {
                 Meteor.load();
                 Volcano.load();
                 Earthquake.load();
@@ -104,15 +105,6 @@ public class Storm extends JavaPlugin implements Listener {
             getLogger().log(Level.SEVERE, "Storm failed to start.");
             e.printStackTrace();
             setEnabled(false);
-        }
-    }
-
-    private boolean isCompatible() {
-        try {
-            Class.forName("net.minecraft.server.v1_7_R1.World");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
         }
     }
 

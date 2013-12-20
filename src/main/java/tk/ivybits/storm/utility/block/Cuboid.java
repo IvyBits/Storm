@@ -1,17 +1,13 @@
 package tk.ivybits.storm.utility.block;
 
-import tk.ivybits.storm.Storm;
-import net.minecraft.server.v1_7_R1.ChunkCoordIntPair;
-import net.minecraft.server.v1_7_R1.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_7_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import tk.ivybits.storm.nms.NMS;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,7 +25,7 @@ public class Cuboid {
     public final String worldName;
     public final int x1, y1, z1;
     public final int x2, y2, z2;
-    private Set<ChunkCoordIntPair> chunkCache = new HashSet<ChunkCoordIntPair>();
+    private Set<Chunk> chunkCache = new HashSet<Chunk>();
     int threshold = 0, centerX = 0, centerZ = 0;
     private final Object mutex = new Object();
 
@@ -129,7 +125,7 @@ public class Cuboid {
     }
 
     public boolean contains(Chunk chunk) {
-        return chunkCache.contains(new ChunkCoordIntPair(chunk.getX(), chunk.getZ()));
+        return chunkCache.contains(chunk);
     }
 
     public void loadChunks() {
@@ -143,39 +139,19 @@ public class Cuboid {
                     else
                         world.refreshChunk(xShifted, zShifted);
                     Chunk q = world.getChunkAt(xShifted, zShifted);
-                    ChunkCoordIntPair cc = new ChunkCoordIntPair(q.getX(), q.getZ());
-                    if (!chunkCache.contains(cc))
-                        chunkCache.add(cc);
+                    if (!chunkCache.contains(q))
+                        chunkCache.add(q);
                 }
             }
         }
-    }
-
-    public void setBlockFastDelayed(final Block b, final int id, long delay) {
-        final int pre = b.getTypeId();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Storm.instance, new Runnable() {
-            public void run() {
-                if (pre == b.getTypeId())
-                    setBlockFast(b, id);
-            }
-        }, delay);
-    }
-
-    public void setBlockFast(Block b, int typeId) {
-        setBlockFast(b, typeId, (byte) 0);
-    }
-
-    public void setBlockFast(Block b, int typeId, byte data) {
-        ((CraftChunk) b.getChunk()).getHandle().a(b.getX() & 15, b.getY(), b.getZ() & 15,
-                net.minecraft.server.v1_7_R1.Block.e(typeId), data); //%16
     }
 
     public void sendClientChanges() {
         int threshold = (Bukkit.getServer().getViewDistance() << 4) + 32;
         threshold = threshold * threshold;
 
-        List<ChunkCoordIntPair> pairs = new ArrayList<ChunkCoordIntPair>();
-        for (ChunkCoordIntPair c : chunkCache) {
+        List<Chunk> pairs = new ArrayList<Chunk>();
+        for (Chunk c : chunkCache) {
             pairs.add(c);
         }
         int centerX = getLowerX() + getSizeX() / 2;
@@ -184,19 +160,8 @@ public class Cuboid {
             int px = player.getLocation().getBlockX();
             int pz = player.getLocation().getBlockZ();
             if ((px - centerX) * (px - centerX) + (pz - centerZ) * (pz - centerZ) < threshold) {
-                queueChunks(((CraftPlayer) player).getHandle(), pairs);
-            }
-        }
-    }
-
-    private void queueChunks(EntityPlayer ep, List<ChunkCoordIntPair> pairs) {
-        Set<ChunkCoordIntPair> queued = new HashSet<ChunkCoordIntPair>();
-        for (Object o : ep.chunkCoordIntPairQueue) {
-            queued.add((ChunkCoordIntPair) o);
-        }
-        for (ChunkCoordIntPair pair : pairs) {
-            if (!queued.contains(pair)) {
-                ep.chunkCoordIntPairQueue.add(pair);
+                for (Chunk c : pairs)
+                    NMS.updateChunkClient(player, c.getX(), c.getZ());
             }
         }
     }

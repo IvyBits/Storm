@@ -1,6 +1,6 @@
 name: Storm
-authors: [Icyene, Xiaomao]
-version: 2.2
+authors: [Icyene, Xiaomao, CorruptedHelix]
+version: 3
 softdepend: [Shield]
 main: tk.ivybits.storm.Storm
 description: Redefining weather.

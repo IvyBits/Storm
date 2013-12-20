@@ -21,7 +21,6 @@ package tk.ivybits.storm.utility.block;
 import org.bukkit.block.Block;
 
 public class BlockTransformer {
-
     private final IDBlock from;
     private final IDBlock to;
 

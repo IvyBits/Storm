@@ -1,27 +1,25 @@
 package tk.ivybits.storm.weather.meteor;
 
-import tk.ivybits.storm.Storm;
-import tk.ivybits.storm.WorldVariables;
-import tk.ivybits.storm.utility.ErrorLogger;
-import tk.ivybits.storm.utility.ReflectCommand;
-import tk.ivybits.storm.weather.exc.WeatherNotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import tk.ivybits.storm.Storm;
+import tk.ivybits.storm.WorldVariables;
+import tk.ivybits.storm.nms.NMS;
+import tk.ivybits.storm.utility.ErrorLogger;
+import tk.ivybits.storm.utility.ReflectCommand;
+import tk.ivybits.storm.weather.exc.WeatherNotFoundException;
 
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * A class for loading meteors.
  */
-
 public class Meteor {
 
     public static final Set<Integer> meteors = new HashSet();
@@ -29,11 +27,9 @@ public class Meteor {
     /**
      * Enables meteors.
      */
-
     public static void load() {
         try {
             Storm.pm.registerEvents(new SafeExplosion(), Storm.instance);
-            patchMeteor();
             Storm.manager.registerWeather(MeteorWeather.class, "storm_meteor");
 
             for (World w : Bukkit.getWorlds()) {
@@ -99,31 +95,18 @@ public class Meteor {
     }
 
     private static void trajectoryMeteor(Location targetLoc, Location spawnLoc) {
-        net.minecraft.server.v1_7_R1.WorldServer mcWorld = ((CraftWorld) (spawnLoc.getWorld())).getHandle();
+        WorldVariables glob = Storm.wConfigs.get(spawnLoc.getWorld().getName());
 
-        WorldVariables glob = Storm.wConfigs.get(mcWorld.getWorld().getName());
-        EntityMeteor mm = new EntityMeteor(
-                mcWorld, 15, 15, 15, 60, 100,
+        Fireball meteor = NMS.spawnMeteor(spawnLoc.getWorld(), 15, 15, 15, 60, 100,
                 glob.Natural__Disasters_Meteor_Messages_On__Meteor__Crash, 9,
                 glob.Natural__Disasters_Meteor_Shockwave_Damage__Radius,
                 glob.Natural__Disasters_Meteor_Messages_On__Damaged__By__Shockwave, false, 0);
 
-        mm.spawn();
+        Meteor.meteors.add(meteor.getEntityId());
 
-        Fireball meteor = (Fireball) mm.getBukkitEntity();
         meteor.teleport(spawnLoc);
         meteor.setDirection(targetLoc.toVector().subtract(spawnLoc.toVector()));
         meteor.setBounce(false);
         meteor.setIsIncendiary(true);
-    }
-
-    private static void patchMeteor() {
-        try {
-            Method a = net.minecraft.server.v1_7_R1.EntityTypes.class.getDeclaredMethod("a", Class.class, String.class, int.class);
-            a.setAccessible(true);
-            a.invoke(a, EntityMeteor.class, "StormMeteor", 12);
-        } catch (Exception e) {
-            ErrorLogger.alert(e);
-        }
     }
 }

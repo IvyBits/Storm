@@ -16,7 +16,6 @@ import java.util.List;
  *
  * @author Icyene
  */
-
 public class BlockTickSelector {
     private final World world;
     private int chan;
