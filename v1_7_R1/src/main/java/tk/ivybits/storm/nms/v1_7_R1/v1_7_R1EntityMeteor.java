@@ -37,7 +37,9 @@ public class v1_7_R1EntityMeteor extends EntityLargeFireball {
         super(world);
     }
 
-    public v1_7_R1EntityMeteor(org.bukkit.World world, int burrowCount, int burrowPower, float trailPower, float explosionRadius, float brightness, String crashMessage, int shockwaveDamage, int shockwaveDamageRadius, String damageMessage, boolean spawnOnImpact, int radius) {
+    public v1_7_R1EntityMeteor(org.bukkit.World world, int burrowCount, int burrowPower, float trailPower,
+                               float explosionRadius, float brightness, String crashMessage, int shockwaveDamage,
+                               int shockwaveDamageRadius, String damageMessage, boolean spawnOnImpact, int radius) {
         super(((CraftWorld) world).getHandle());
 
         this.burrowPower = burrowPower;
@@ -155,7 +157,8 @@ public class v1_7_R1EntityMeteor extends EntityLargeFireball {
         makeSphere(explosion, Material.OBSIDIAN.getId(), this.radius, false, false, null);
     }
 
-    void makeSphere(Location pos, Integer block, double radius, boolean filled, boolean random, ArrayList<BlockTransformer.IDBlock> m) {
+    void makeSphere(Location pos, Integer block, double radius, boolean filled,
+                    boolean random, ArrayList<BlockTransformer.IDBlock> m) {
         double radius_ = radius + 0.5D;
         double invRadiusZ;
         double invRadiusY;
