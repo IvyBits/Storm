@@ -151,13 +151,14 @@ public class EarthquakeControl implements Listener {
         }
     }
 
-    public static void crack(Location location, int length, int width, int depth) {
+    public static void crack(Location location, int length, int width, int depth, float theta) {
         Cuboid area = new Cuboid(location, location);
+        int delta = Math.max(width, length / 2);
         area = area.expand(BlockFace.UP, 256).expand(BlockFace.DOWN, 256);
-        area = area.expand(BlockFace.NORTH, length);
-        area = area.expand(BlockFace.EAST, length);
-        area = area.expand(BlockFace.SOUTH, length);
-        area = area.expand(BlockFace.WEST, length);
-        new RuptureTask(area, location, length, width, depth).start();
+        area = area.expand(BlockFace.NORTH, delta);
+        area = area.expand(BlockFace.EAST, delta);
+        area = area.expand(BlockFace.SOUTH, delta);
+        area = area.expand(BlockFace.WEST, delta);
+        new RuptureTask(area, location, length, width, depth, theta).start();
     }
 }

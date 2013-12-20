@@ -18,9 +18,9 @@
 
 package tk.ivybits.storm.utility.math;
 
+import org.bukkit.util.Vector;
 import tk.ivybits.storm.Storm;
 import tk.ivybits.storm.utility.StormUtil;
-import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.sql.*;
@@ -37,13 +37,17 @@ public class Cracker { //As in a chocolate cracker. CHOCOLATE! CHOCOLATE!!!
     private final int size;
     private final int mean;
     private final int halfDepth;
+    private final double theta, sin_theta, cos_theta;
     private int x;
     private int y;
     private int z;
     private final int maxWidth;
     private final int maxDepth;
 
-    public Cracker(int size, int x, int y, int z, int maxWidth, int maxDepth) {
+    public Cracker(int size, int x, int y, int z, int maxWidth, int maxDepth, float theta) {
+        this.theta = Math.toRadians((int) ((theta + 45) / 90) * 90);
+        this.sin_theta = Math.sin(this.theta);
+        this.cos_theta = Math.cos(this.theta);
         this.size = size;
         this.x = x;
         this.y = y;
@@ -71,21 +75,24 @@ public class Cracker { //As in a chocolate cracker. CHOCOLATE! CHOCOLATE!!!
         }
     }
 
+    private void insert(int x, int y, int z, int dx) throws SQLException {
+        insert.setInt(1, (int) (this.x + x * cos_theta - z * sin_theta));
+        insert.setInt(2, this.y + y);
+        insert.setInt(3, (int) (this.z + x * sin_theta + z * cos_theta));
+        insert.setInt(4, Math.abs(dx));
+        insert.addBatch();
+    }
+
     public void plot() {
         try {
-            for (int i = 0; i < size; ++i) {
-                x += Storm.random.nextInt(3) - 1;
-                ++z;
-                insert.setInt(3, z);
-                int k = maxWidth + 2 - Math.abs(mean - i) / (mean / maxWidth);
-                int min = -intGauss(k, 1), max = intGauss(k, 1);
+            int x = 0;
+            for (int z = -mean; z < mean; ++z) {
+                x += random.nextInt(3) - 1;
+                int k = maxWidth - Math.abs(z) / (mean / maxWidth);
+                int min = Math.min(-1, -intGauss(k, 1)), max = Math.max(intGauss(k, 1), 1);
                 for (int dx = min; dx < max; ++dx) {
-                    //Force the value to stay within half depth
                     int dy = maxDepth - (int) ((Math.abs(dx) * halfDepth / (dx < 0 ? -min : max)) * random.gauss(1, 0.25));
-                    insert.setInt(1, x + dx);
-                    insert.setInt(2, y - dy);
-                    insert.setInt(4, Math.abs(dx));
-                    insert.addBatch();
+                    insert(x + dx, -dy, z, dx);
                 }
                 insert.executeBatch();
             }

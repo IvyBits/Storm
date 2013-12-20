@@ -29,7 +29,7 @@ public class Quake {
         quaker.start();
 
         // Get cracking!
-        EarthquakeControl.crack(new Location(world, epicenter.getBlockX(), epicenter.getBlockY(), epicenter.getBlockZ()), (int) Math.sqrt(radius) * 3, magnitude, 32 + magnitude);
+        EarthquakeControl.crack(new Location(world, epicenter.getBlockX(), epicenter.getBlockY(), epicenter.getBlockZ()), (int) Math.sqrt(radius) * 3, magnitude, 32 + magnitude, (float) (Math.random() * 360));
     }
 
     public void stop() {

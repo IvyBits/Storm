@@ -60,7 +60,7 @@ public class Earthquake {
             permission = "storm.earthquake.crack.command"
     )
     public static boolean crack(Player p) {
-        EarthquakeControl.crack(p.getTargetBlock(null, 200).getLocation(), 90, 10, 60);
+        EarthquakeControl.crack(p.getTargetBlock(null, 200).getLocation(), 90, 10, 60, p.getLocation().getYaw());
         return true;
     }
 
@@ -70,7 +70,7 @@ public class Earthquake {
             permission = "storm.earthquake.crack.command"
     )
     public static boolean crack(Player p, String length, String width, String depth) {
-        EarthquakeControl.crack(p.getTargetBlock(null, 200).getLocation(), Integer.parseInt(length), Integer.parseInt(width), Integer.parseInt(depth));
+        EarthquakeControl.crack(p.getTargetBlock(null, 200).getLocation(), Integer.parseInt(length), Integer.parseInt(width), Integer.parseInt(depth), p.getLocation().getYaw());
         return true;
     }
 }

@@ -28,7 +28,7 @@ public class RuptureTask implements Runnable {
     private World world;
     private WorldVariables glob;
 
-    public RuptureTask(Cuboid cube, Location loc, int ruptureLength, int ruptureWidth, int depth) {
+    public RuptureTask(Cuboid cube, Location loc, int ruptureLength, int ruptureWidth, int depth, float theta) {
         location = loc;
         world = location.getWorld();
         length = ruptureLength;
@@ -36,7 +36,7 @@ public class RuptureTask implements Runnable {
         area = cube;
         glob = Storm.wConfigs.get(world.getName());
 
-        cracker = new Cracker(length, location.getBlockX(), location.getBlockY(), location.getBlockZ(), width, depth);
+        cracker = new Cracker(length, location.getBlockX(), location.getBlockY(), location.getBlockZ(), width, depth, theta);
         cracker.plot();
     }
 
