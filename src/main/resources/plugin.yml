@@ -1,8 +1,8 @@
 name: Storm
 authors: [Icyene, Xiaomao]
-version: 2.0.0
+version: 2.2
 softdepend: [Shield]
-main: com.github.stormproject.storm.Storm
+main: tk.ivybits.storm.Storm
 description: Redefining weather.
 
 permissions:
