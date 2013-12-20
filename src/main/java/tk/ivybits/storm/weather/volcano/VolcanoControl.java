@@ -19,8 +19,6 @@
 
 package tk.ivybits.storm.weather.volcano;
 
-import tk.ivybits.storm.Storm;
-import tk.ivybits.storm.utility.ErrorLogger;
 import com.google.common.io.Files;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -35,6 +33,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
+import tk.ivybits.storm.Storm;
+import tk.ivybits.storm.utility.ErrorLogger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -91,7 +91,7 @@ public class VolcanoControl implements Listener {
     static void solidify(VolcanoWorker vulc, Block lava, int idTo) {
         int data;
         if ((data = lava.getData()) != 0x9)
-            vulc.area.setBlockFastDelayed(lava, idTo, ((data & 0x8) == 0x8 ? 1 : 4 - data / 2) * 20 * 2);
+            vulc.area.setBlockFastDelayed(lava, idTo, (byte) 0, ((data & 0x8) == 0x8 ? 1 : 4 - data / 2) * 20 * 2);
     }
 
     static ArrayList<Integer> getVolcanoBlock(String world) {

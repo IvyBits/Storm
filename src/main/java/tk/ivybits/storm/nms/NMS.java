@@ -1,6 +1,7 @@
 package tk.ivybits.storm.nms;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -60,9 +61,10 @@ public class NMS {
                                            final int id,
                                            final byte data,
                                            long delay) {
+        final int pre = world.getBlockTypeIdAt(x, y, z);
         Bukkit.getScheduler().scheduleSyncDelayedTask(Storm.instance, new Runnable() {
             public void run() {
-                if (id == world.getBlockTypeIdAt(x, y, z))
+                if (pre == world.getBlockTypeIdAt(x, y, z))
                     setBlockFast(world, x, y, z, id, data);
             }
         }, delay);
@@ -106,5 +108,9 @@ public class NMS {
                                 crashMessage, shockwaveDamage, shockwaveDamageRadius, damageMessage, spawnOnImpact, radius))
                 .withReturnType(Fireball.class)
                 .invoke();
+    }
+
+    public static int createExplosion(Location exp, float power) {
+        return NMS.createExplosion(exp, power);
     }
 }

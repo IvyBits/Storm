@@ -1,21 +1,19 @@
 package tk.ivybits.storm.weather.meteor;
 
-import tk.ivybits.storm.Storm;
-import tk.ivybits.storm.WorldVariables;
-import tk.ivybits.storm.utility.StormUtil;
-import tk.ivybits.storm.weather.StormWeather;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.World;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.entity.Fireball;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import tk.ivybits.storm.Storm;
+import tk.ivybits.storm.WorldVariables;
+import tk.ivybits.storm.nms.NMS;
+import tk.ivybits.storm.utility.StormUtil;
+import tk.ivybits.storm.weather.StormWeather;
 
 /**
  * A meteor weather object.
  */
-
 public class MeteorWeather extends StormWeather {
 
     private final WorldVariables glob;
@@ -43,14 +41,13 @@ public class MeteorWeather extends StormWeather {
 
     @Override
     public void start() {
-
         Chunk chunk = StormUtil.pickChunk(Bukkit.getWorld(world));
 
         if (chunk == null) {
             return;
         }
         Block b = chunk.getBlock(Storm.random.nextInt(16), 4, Storm.random.nextInt(16));
-        spawnMeteorNaturallyAndRandomly(chunk.getWorld(), b.getX(), b.getZ());
+        spawnMeteorNaturallyAndRandomly(b.getX(), b.getZ());
     }
 
     @Override
@@ -58,11 +55,9 @@ public class MeteorWeather extends StormWeather {
 
     }
 
-    private void spawnMeteorNaturallyAndRandomly(World world, double x, double z) {
-        net.minecraft.server.v1_7_R1.World meteoriteWorld = ((CraftWorld) bukkitWorld).getHandle();
-
-        EntityMeteor meteor = new EntityMeteor(
-                meteoriteWorld,
+    private void spawnMeteorNaturallyAndRandomly(double x, double z) {
+        Fireball meteor = NMS.spawnMeteor(
+                bukkitWorld,
                 Storm.random.nextInt(7) + 1,
                 10,
                 Storm.random.nextInt(5) + 5,
@@ -74,18 +69,13 @@ public class MeteorWeather extends StormWeather {
                 glob.Natural__Disasters_Meteor_Messages_On__Damaged__By__Shockwave,
                 glob.Natural__Disasters_Meteor_Meteor__Spawn,
                 Storm.random.nextInt(6) + 3);
-
-        meteor.spawn();
-
-        meteor.setPosition(
-                x,
+        meteor.teleport(new Location(
+                bukkitWorld,
+                (int) x,
                 Storm.random.nextInt(100) + 156,
-                z);
-        meteor.yaw = (float) Storm.random.nextInt(360);
-        meteor.pitch = -9;
-        meteoriteWorld.addEntity(meteor, CreatureSpawnEvent.SpawnReason.DEFAULT);
-
-        Fireball fireMeteor = (Fireball) meteor.getBukkitEntity();
-        fireMeteor.setDirection(fireMeteor.getDirection().setY(-1));
+                (int) z,
+                (float) Storm.random.nextInt(360),
+                -9));
+        meteor.setDirection(meteor.getDirection().setY(-1));
     }
 }

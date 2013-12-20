@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.util.Vector;
+import tk.ivybits.storm.nms.NMS;
 
 /**
  * @author Icyene, xiaomao
@@ -29,7 +30,7 @@ public class EruptTask implements Runnable {
         er.setY(volcano.center.getBlockY() + volcano.layer);
 
         if (Storm.random.nextInt(100) > 95)
-            volcano.explode(er, volcano.layer / 10 + 2);
+            NMS.createExplosion(er, volcano.layer / 10 + 2);
         int rand = Storm.random.nextInt(1) + 1;
         for (int i = 0; i != rand; i++) {
             FallingBlock b = volcano.world.spawnFallingBlock(er, 11, (byte) 0);

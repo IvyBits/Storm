@@ -18,18 +18,17 @@
 
 package tk.ivybits.storm.weather.volcano;
 
-import tk.ivybits.storm.Storm;
-import tk.ivybits.storm.WorldVariables;
-import tk.ivybits.storm.utility.StormUtil;
-import tk.ivybits.storm.utility.Verbose;
-import tk.ivybits.storm.utility.block.Cuboid;
-import net.minecraft.server.v1_7_R1.EntityTNTPrimed;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
+import tk.ivybits.storm.Storm;
+import tk.ivybits.storm.WorldVariables;
+import tk.ivybits.storm.nms.NMS;
+import tk.ivybits.storm.utility.StormUtil;
+import tk.ivybits.storm.utility.Verbose;
+import tk.ivybits.storm.utility.block.Cuboid;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -81,7 +80,7 @@ public class VolcanoWorker {
         z = center.getBlockZ();
 
         if (!isExternal) {
-            explode(center, 10F);
+            explosionIDs.add(NMS.createExplosion(center, 10F));
             active = true;
         }
 
@@ -115,13 +114,6 @@ public class VolcanoWorker {
     public void recalculateLayer() {
         while (world.getBlockTypeIdAt(x, y + layer, z) == 0) layer--;
         Verbose.log("Recalculated layer to " + layer);
-    }
-
-    public void explode(final Location exp, final float power) {
-        net.minecraft.server.v1_7_R1.World nw = ((CraftWorld) world).getHandle();
-        EntityTNTPrimed dummy = new EntityTNTPrimed(nw); //Entity is abstract, and really, we just need the id...
-        explosionIDs.add(dummy.getId());
-        nw.createExplosion(dummy, exp.getX(), exp.getY(), exp.getZ(), power, true, true);
     }
 
     @Override

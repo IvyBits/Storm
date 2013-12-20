@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import tk.ivybits.storm.Storm;
 import tk.ivybits.storm.nms.NMS;
 
 import java.util.ArrayList;
@@ -164,5 +165,14 @@ public class Cuboid {
                     NMS.updateChunkClient(player, c.getX(), c.getZ());
             }
         }
+    }
+
+
+    public void setBlockFastDelayed(Block b, int id, byte data, long delay) {
+        NMS.setBlockFastDelayed(b.getWorld(), b.getX(), b.getY(), b.getZ(), id, data, delay);
+    }
+
+    public void setBlockFast(Block b, int typeId, byte data) {
+        NMS.setBlockFast(b.getWorld(), b.getX(), b.getY(), b.getZ(), typeId, data);
     }
 }
